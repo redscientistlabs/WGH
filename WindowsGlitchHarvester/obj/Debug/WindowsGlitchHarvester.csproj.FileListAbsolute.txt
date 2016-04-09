@@ -1,0 +1,12 @@
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Debug\WindowsGlitchHarvester.exe.config
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Debug\WindowsGlitchHarvester.exe
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Debug\WindowsGlitchHarvester.pdb
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Debug\WindowsGlitchHarvester.Properties.Resources.resources
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Debug\WindowsGlitchHarvester.csproj.GenerateResource.Cache
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Debug\WindowsGlitchHarvester.exe
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Debug\WindowsGlitchHarvester.pdb
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Debug\WindowsGlitchHarvester.WGH_MainForm.resources
+c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Users\Philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Debug\WindowsGlitchHarvester.WGH_SelectMultiple.resources
+C:\Users\Philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Debug\WindowsGlitchHarvester.csprojResolveAssemblyReference.cache
+C:\Users\Philippe\Documents\Visual Studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Debug\Delimon.Win32.IO.dll
