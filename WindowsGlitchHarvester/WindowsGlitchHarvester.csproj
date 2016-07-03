@@ -56,6 +56,10 @@
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Crc32, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crc32.1.0.0\lib\net45\Crc32.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Delimon.Win32.IO, Version=4.0.4764.1936, Culture=neutral, PublicKeyToken=6f601db60ebd9657, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Delimon\Delimon.Win32.IO\Delimon.Win32.IO.dll</HintPath>

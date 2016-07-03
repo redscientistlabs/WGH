@@ -24,6 +24,14 @@ namespace WindowsGlitchHarvester
 
     }
 
+	public class RefreshingListBox : ListBox
+	{
+		public void RefreshItemsReal()
+		{
+			base.RefreshItems();
+		}
+	}
+
     public class MenuButton : Button
     {
         [DefaultValue(null)]
@@ -68,8 +76,9 @@ namespace WindowsGlitchHarvester
 
         public string Filename;
         public string ShortFilename;
+		public string WghVersion;
 
-        public string descrip = "";
+		public string descrip = "";
 
         public string Name;
         public string CloudCorruptID = null;
@@ -128,13 +137,21 @@ namespace WindowsGlitchHarvester
                 sks.ShortFilename = WGH_Core.currentStockpile.ShortFilename;
             }
 
+			//Watermarking WGH Version
+			sks.WghVersion = WGH_Core.WghVersion;
 
-            System.IO.FileStream FS;
+
+			System.IO.FileStream FS;
             BinaryFormatter bformatter = new BinaryFormatter();
 
             //creater master.sk to temp folder from stockpile object
-            FS = File.Open(WGH_Core.currentDir + "\\TEMP\\master.sk", FileMode.OpenOrCreate);
-            bformatter.Serialize(FS, sks);
+
+			if(File.Exists(WGH_Core.currentDir + "\\TEMP\\master.sk"))
+				FS = File.Open(WGH_Core.currentDir + "\\TEMP\\master.sk", FileMode.Open);
+			else
+				FS = File.Open(WGH_Core.currentDir + "\\TEMP\\master.sk", FileMode.Create);
+
+			bformatter.Serialize(FS, sks);
             FS.Close();
 
 
@@ -142,16 +159,16 @@ namespace WindowsGlitchHarvester
             string[] stringargs = { "-c", sks.Filename, WGH_Core.currentDir + "\\TEMP\\" };
             FastZipProgram.Exec(stringargs);
 
-            Load(sks.Filename, true); //Reload file after for test and clean
+            Load(sks.Filename); //Reload file after for test and clean
 
         }
 
         public static void Load()
         {
-            Load(null, false);
+            Load(null);
         }
 
-        public static void Load(string Filename, bool CorruptCloud)
+        public static void Load(string Filename)
         {
 
             //clean temp folder
@@ -202,7 +219,7 @@ namespace WindowsGlitchHarvester
 
             try
             {
-                FS = File.Open(WGH_Core.currentDir + "\\TEMP\\master.sk", FileMode.OpenOrCreate);
+                FS = File.Open(WGH_Core.currentDir + "\\TEMP\\master.sk", FileMode.Open);
                 sks = (Stockpile)bformatter.Deserialize(FS);
                 FS.Close();
             }
@@ -228,7 +245,15 @@ namespace WindowsGlitchHarvester
             WGH_Core.ghForm.btnSaveStockpile.BackColor = Color.Tomato;
             sks.Filename = Filename;
 
-        }
+			if (sks.WghVersion != WGH_Core.WghVersion)
+			{
+				if (sks.WghVersion == null)
+					MessageBox.Show("WARNING: You have loaded a pre-0.09 stockpile using WGH " + WGH_Core.WghVersion + "\n Items might not appear identical to how they when they were created.");
+				else
+					MessageBox.Show("WARNING: You have loaded a stockpile created with WGH " + sks.WghVersion + " using WGH " + WGH_Core.WghVersion + "\n Items might not appear identical to how they when they were created.");
+			}
+
+		}
 
         public static void Import()
         {
@@ -286,7 +311,7 @@ namespace WindowsGlitchHarvester
 
             try
             {
-                FS = File.Open(WGH_Core.currentDir + "\\TEMP3\\master.sk", FileMode.OpenOrCreate);
+                FS = File.Open(WGH_Core.currentDir + "\\TEMP3\\master.sk", FileMode.Open);
                 sks = (Stockpile)bformatter.Deserialize(FS);
                 FS.Close();
             }

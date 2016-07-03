@@ -56,7 +56,11 @@ namespace WindowsGlitchHarvester
                     WGH_Core.lastBlastLayerBackup = new BlastLayer();
                 }
             }
-        }
+
+			lbStashHistory.Items.Clear();
+			lbStockpile.Items.Clear();
+
+		}
 
         private void lbTargetName_Click(object sender, EventArgs e)
         {
@@ -119,9 +123,9 @@ namespace WindowsGlitchHarvester
                     {
                         processTemp.Start();
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        throw;
+                        throw ex;
                     }
 
                     Thread.Sleep(300);
@@ -140,7 +144,10 @@ namespace WindowsGlitchHarvester
             cbCorruptionEngine.SelectedIndex = 0;
             cbBlastType.SelectedIndex = 0;
 
-        }
+			this.Text = "Windows Glitch Harvester " + WGH_Core.WghVersion;
+
+
+		}
 
         private void nmIntensity_ValueChanged(object sender, EventArgs e)
         {
@@ -213,14 +220,22 @@ namespace WindowsGlitchHarvester
 
         private void btnResetBackup_Click(object sender, EventArgs e)
         {
-            if (WGH_Core.currentMemoryInterface != null)
+			if (MessageBox.Show(
+@"This resets the backup of the current target by using the current data from it.
+If you override a clean backup uaing a corrupted file,
+you won't be able to restore the original file using it.
+
+Are you sure you want to reset the current target's backup?", "WARNING", MessageBoxButtons.YesNo) == DialogResult.No)
+				return;
+
+			if (WGH_Core.currentMemoryInterface != null)
                 WGH_Core.currentMemoryInterface.ResetBackup(true);
 
         }
 
         private void btnClearAllBackups_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to clear all the backups?", "WARNING", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show("Are you sure you want to clear ALL THE BACKUPS\n from the Glitch Harvester's cache?", "WARNING", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
 
 
@@ -307,10 +322,16 @@ namespace WindowsGlitchHarvester
             }
         }
 
-        private void btnClearStockpile_Click(object sender, EventArgs e)
-        {
-            lbStockpile.Items.Clear();
-        }
+        private void btnClearStockpile_Click(object sender, EventArgs e) =>ClearStockpile();
+		public void ClearStockpile(bool force = false)
+		{
+			if (force || MessageBox.Show("Are you sure you want to clear the stockpile?", "Clearing stockpile", MessageBoxButtons.YesNo) == DialogResult.Yes)
+			{
+				lbStockpile.Items.Clear();
+
+				//RTC_Restore.SaveRestore();
+			}
+		}
 
         private void cbWriteCopyMode_CheckedChanged(object sender, EventArgs e)
         {
@@ -413,10 +434,12 @@ namespace WindowsGlitchHarvester
             WGH_Executor.RefreshLabel();
         }
 
-        private void btnAddStashToStockpile_Click(object sender, EventArgs e)
+		private void btnAddStashToStockpile_Click(object sender, EventArgs e)
         {
-            AddStashToStockpile();
 
+			AddStashToStockpile();
+
+			//RTC_Restore.SaveRestore();
         }
 
         public void AddStashToStockpile()
@@ -440,7 +463,7 @@ namespace WindowsGlitchHarvester
             }
 
 
-            if (Name != "")
+            if (!String.IsNullOrWhiteSpace(Name))
                 WGH_Core.currentStashkey.Alias = Name;
             else
                 WGH_Core.currentStashkey.Alias = WGH_Core.currentStashkey.Key;
@@ -529,15 +552,26 @@ namespace WindowsGlitchHarvester
                 btnInjectSelected_Click(sender, e);
         }
 
-        private void btnRemoveSelected_Click(object sender, EventArgs e)
-        {
-            if (lbStockpile.SelectedIndex != -1)
-                lbStockpile.Items.RemoveAt(lbStockpile.SelectedIndex);
-        }
+        private void btnRemoveSelected_Click(object sender, EventArgs e) => RemoveSelected();
+		public void RemoveSelected(bool force = false)
+		{
+			if (lbStockpile.SelectedIndex != -1)
+				if(force || MessageBox.Show($"Are you sure you want to remove item \"{lbStockpile.SelectedItem.ToString()}\" from Stockpile?", "Remove Item", MessageBoxButtons.YesNo) == DialogResult.Yes)
+				{
+					lbStockpile.Items.RemoveAt(lbStockpile.SelectedIndex);
+					//RTC_Restore.SaveRestore();
+				}
+		}
 
         private void btnLoadStockpile_Click(object sender, EventArgs e)
         {
-            Stockpile.Load();
+			if (WGH_Core.currentMemoryInterface == null)
+			{
+				MessageBox.Show("No target is loaded");
+				return;
+			}
+
+			Stockpile.Load();
         }
 
         private void btnSaveStockpileAs_Click(object sender, EventArgs e)
@@ -630,5 +664,148 @@ namespace WindowsGlitchHarvester
                              .ToArray();
         }
 
-    }
+		private void btnStashHistoryUp_Click(object sender, EventArgs e)
+		{
+			if (lbStashHistory.SelectedIndex == -1)
+				return;
+
+			if (lbStashHistory.SelectedIndex == lbStashHistory.Items.Count - 1)
+				lbStashHistory.SelectedIndex = 0;
+			else
+				lbStashHistory.SelectedIndex++;
+
+			//RTC_Restore.SaveRestore();
+		}
+
+		private void btnStashHistoryDown_Click(object sender, EventArgs e)
+		{
+			if (lbStashHistory.SelectedIndex == -1)
+				return;
+
+			if (lbStashHistory.SelectedIndex == lbStashHistory.Items.Count - 1)
+				lbStashHistory.SelectedIndex = 0;
+			else
+				lbStashHistory.SelectedIndex++;
+
+			//RTC_Restore.SaveRestore();
+		}
+
+		private void btnStockpileUp_Click(object sender, EventArgs e)
+		{
+			if (lbStockpile.SelectedIndex == -1)
+				return;
+
+			if (lbStockpile.SelectedIndex == 0)
+				lbStockpile.SelectedIndex = lbStockpile.Items.Count - 1;
+			else
+				lbStockpile.SelectedIndex--;
+
+			//RTC_Restore.SaveRestore();
+		}
+
+		private void btnStockpileDown_Click(object sender, EventArgs e)
+		{
+			if (lbStockpile.SelectedIndex == -1)
+				return;
+
+			if (lbStockpile.SelectedIndex == lbStockpile.Items.Count - 1)
+				lbStockpile.SelectedIndex = 0;
+			else
+				lbStockpile.SelectedIndex++;
+
+			//RTC_Restore.SaveRestore();
+		}
+
+		private void btnStockpileMoveDown_Click(object sender, EventArgs e)
+		{
+			if (lbStockpile.Items.Count < 2)
+				return;
+
+			object o = lbStockpile.SelectedItem;
+			int pos = lbStockpile.SelectedIndex;
+			int count = lbStockpile.Items.Count;
+			lbStockpile.Items.RemoveAt(pos);
+
+			DontLoadSelectedStockpile = true;
+
+			if (pos == count - 1)
+			{
+				lbStockpile.Items.Insert(0, o);
+				lbStockpile.SelectedIndex = 0;
+			}
+			else
+			{
+				lbStockpile.Items.Insert(pos + 1, o);
+				lbStockpile.SelectedIndex = pos + 1;
+			}
+
+			//RTC_Restore.SaveRestore();
+		}
+
+		private void btnStockpileMoveUp_Click(object sender, EventArgs e)
+		{
+
+			if (lbStockpile.Items.Count < 2)
+				return;
+
+			object o = lbStockpile.SelectedItem;
+			int pos = lbStockpile.SelectedIndex;
+			int count = lbStockpile.Items.Count;
+			lbStockpile.Items.RemoveAt(pos);
+
+			DontLoadSelectedStockpile = true;
+
+
+			if (pos == 0)
+			{
+				lbStockpile.Items.Add(o);
+				lbStockpile.SelectedIndex = count - 1;
+			}
+			else
+			{
+				lbStockpile.Items.Insert(pos - 1, o);
+				lbStockpile.SelectedIndex = pos - 1;
+			}
+
+			//RTC_Restore.SaveRestore();
+
+		}
+
+		private void btnRenameSelected_Click(object sender, EventArgs e)
+		{
+			if (lbStockpile.SelectedIndex != -1)
+			{
+
+				string Name = "";
+				string value = "";
+
+				if (this.InputBox("Harvester", "Enter the new Stash name:", ref value) == DialogResult.OK)
+				{
+					Name = value.Trim();
+				}
+				else
+				{
+					return;
+				}
+
+				(lbStockpile.SelectedItem as StashKey).Alias = Name;
+				lbStockpile.RefreshItemsReal();
+
+			}
+
+		}
+
+		private void btnImportStockpile_Click(object sender, EventArgs e)
+		{
+			if (WGH_Core.currentMemoryInterface == null)
+			{
+				MessageBox.Show("No target is loaded");
+				return;
+			}
+
+			Stockpile.Import();
+
+			//RTC_Restore.SaveRestore();
+		}
+	}
 }

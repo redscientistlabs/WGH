@@ -12,8 +12,9 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
+		public static string WghVersion = "0.09";
 
-        public static Random RND = new Random();
+		public static Random RND = new Random();
         public static string[] args;
 
         public static Timer ResizeTimer;
