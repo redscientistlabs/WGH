@@ -32,8 +32,7 @@ namespace WindowsGlitchHarvester
     public enum CorruptionEngine
     {
         NIGHTMARE,
-        DOT,
-        PATCH,
+		VECTOR,
         NONE
     }
 

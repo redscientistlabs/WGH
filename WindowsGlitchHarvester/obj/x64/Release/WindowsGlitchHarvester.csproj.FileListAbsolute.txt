@@ -7,3 +7,10 @@ c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\W
 c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.csproj.GenerateResource.Cache
 c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.exe
 c:\users\philippe\documents\visual studio 2015\Projects\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.pdb
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\x64\Release\WindowsGlitchHarvester.exe.config
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.exe
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.pdb
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.WGH_MainForm.resources
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.Properties.Resources.resources
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.WGH_SelectMultiple.resources
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\x64\Release\WindowsGlitchHarvester.csproj.GenerateResource.Cache

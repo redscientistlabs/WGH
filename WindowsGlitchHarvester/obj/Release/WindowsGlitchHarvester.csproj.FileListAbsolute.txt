@@ -1,0 +1,12 @@
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Release\WindowsGlitchHarvester.exe.config
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Release\WindowsGlitchHarvester.WGH_MainForm.resources
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Release\WindowsGlitchHarvester.Properties.Resources.resources
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Release\WindowsGlitchHarvester.csproj.GenerateResource.Cache
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Release\WindowsGlitchHarvester.WGH_HookProcessForm.resources
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Release\WindowsGlitchHarvester.WGH_SelectMultipleForm.resources
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Release\WindowsGlitchHarvester.exe
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Release\WindowsGlitchHarvester.pdb
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Release\Crc32.dll
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\bin\Release\ICSharpCode.SharpZipLib.dll
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Release\WindowsGlitchHarvester.exe
+C:\Users\philt\Documents\PROJECTS\WindowsGlitchHarvester\WindowsGlitchHarvester\obj\Release\WindowsGlitchHarvester.pdb

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using Delimon.Win32.IO;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,19 +16,21 @@ namespace WindowsGlitchHarvester
     public partial class WGH_MainForm : Form
     {
 
+		BlastLayer LastBlastLayer = null;
+
         public bool DontLoadSelectedStash = false;
         public bool DontLoadSelectedStockpile = false;
 
         int oysterClick = 0;
 
-        ProcessHijack hijack = new ProcessHijack();
+		ProcessHijacker hijack;
 
         public WGH_MainForm()
         {
-            WGH_Core.Start(this);
-
             InitializeComponent();
-        }
+
+			WGH_Core.Start(this);
+		}
 
         private void btnBrowseTarget_Click(object sender, EventArgs e)
         {
@@ -40,18 +42,33 @@ namespace WindowsGlitchHarvester
 
                 if (mi.lastMemorySize != null)
                 {
-                    if (tbStartingAddress.Value > mi.lastMemorySize && tbStartingAddress.Maximum > mi.lastMemorySize)
+					if (mi.lastMemorySize >= int.MaxValue)
+					{
+						tbStartingAddress.Visible = false;
+						tbBlastRange.Visible = false;
+					}
+					else
+					{
+						tbStartingAddress.Visible = true;
+						tbBlastRange.Visible = true;
+					}
+
+
+					if (tbStartingAddress.Visible && tbStartingAddress.Value > mi.lastMemorySize && tbStartingAddress.Maximum > mi.lastMemorySize)
                         tbStartingAddress.Value = (int)mi.lastMemorySize;
 
-                    nmStartingAddress.Maximum = (int)mi.lastMemorySize;
+                    nmStartingAddress.Maximum = (long)mi.lastMemorySize;
 
-                    if (tbBlastRange.Value > mi.lastMemorySize && tbBlastRange.Maximum > mi.lastMemorySize)
+                    if (tbBlastRange.Visible && tbBlastRange.Value > mi.lastMemorySize && tbBlastRange.Maximum > mi.lastMemorySize)
                         tbBlastRange.Value = (int)mi.lastMemorySize;
 
-                    nmBlastRange.Maximum = (int)mi.lastMemorySize;
+                    nmBlastRange.Maximum = (long)mi.lastMemorySize;
 
-                    tbStartingAddress.Maximum = (int)mi.lastMemorySize;
-                    tbBlastRange.Maximum = (int)mi.lastMemorySize;
+					if (tbStartingAddress.Visible)
+					{
+						tbStartingAddress.Maximum = (int)mi.lastMemorySize;
+						tbBlastRange.Maximum = (int)mi.lastMemorySize;
+					}
 
                     WGH_Core.lastBlastLayerBackup = new BlastLayer();
                 }
@@ -69,37 +86,49 @@ namespace WindowsGlitchHarvester
 
         private void btnBlastTarget_Click(object sender, EventArgs e)
         {
+			BlastTarget(1);
 
-            if (WGH_Core.currentMemoryInterface == null)
-            {
-                MessageBox.Show("No target is loaded");
-                return;
-            }
+		}
 
-            TerminateIfNeeded();
+		public void BlastTarget(int times = 1, bool untilFound = false, bool stashBlastLayer = true)
+		{
+			if (WGH_Core.currentMemoryInterface == null)
+			{
+				MessageBox.Show("No target is loaded");
+				return;
+			}
 
-            if (WGH_Core.currentMemoryInterface == null)
-                return;
+			TerminateIfNeeded();
+
+			if (WGH_Core.currentMemoryInterface == null)
+				return;
 
 
-            WGH_Core.RestoreTarget();
+			WGH_Core.RestoreTarget();
 
+			for (int i = 0; i < times; i++)
+			{
+				var bl = WGH_Core.Blast();
 
-            var bl = WGH_Core.Blast();
+				if (bl != null)
+				{
+					WGH_Core.currentStashkey = new StashKey(WGH_Core.GetRandomKey(), bl);
 
-            if (bl != null)
-            {
-                WGH_Core.currentStashkey = new StashKey(WGH_Core.GetRandomKey(), bl);
+					if(stashBlastLayer)
+					{ 
+					DontLoadSelectedStash = true;
+					lbStashHistory.Items.Add(WGH_Core.currentStashkey);
+					lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
+					lbStockpile.ClearSelected();
+						}
 
-                DontLoadSelectedStash = true;
-                lbStashHistory.Items.Add(WGH_Core.currentStashkey);
-                lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
-                lbStockpile.ClearSelected();
-            }
+					if (untilFound)
+						break;
+				}
+			}
 
-            WGH_Executor.Execute();
-
-        }
+			WGH_Executor.Execute();
+		}
 
         private void TerminateIfNeeded()
         {
@@ -144,6 +173,18 @@ namespace WindowsGlitchHarvester
             cbCorruptionEngine.SelectedIndex = 0;
             cbBlastType.SelectedIndex = 0;
 
+			cbVectorLimiterList.SelectedIndex = 0;
+			cbVectorValueList.SelectedIndex = 0;
+
+			Controls.Remove(gbNightmareEngineSettings);
+			Controls.Remove(gbVectorEngineSettings);
+
+			pnCorruptionEngine.Controls.Add(gbNightmareEngineSettings);
+			pnCorruptionEngine.Controls.Add(gbVectorEngineSettings);
+
+			gbNightmareEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
+			gbVectorEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
+
 			this.Text = "Windows Glitch Harvester " + WGH_Core.WghVersion;
 
 
@@ -169,7 +210,7 @@ namespace WindowsGlitchHarvester
         {
             WGH_Core.StartingAddress = Convert.ToInt32(nmStartingAddress.Value);
 
-            if (tbStartingAddress.Value != WGH_Core.StartingAddress)
+            if (tbStartingAddress.Visible && tbStartingAddress.Value != WGH_Core.StartingAddress)
                 tbStartingAddress.Value = WGH_Core.StartingAddress;
         }
 
@@ -190,7 +231,7 @@ namespace WindowsGlitchHarvester
         {
             WGH_Core.BlastRange = Convert.ToInt32(nmBlastRange.Value);
 
-            if (tbBlastRange.Value != WGH_Core.BlastRange)
+            if (tbBlastRange.Visible && tbBlastRange.Value != WGH_Core.BlastRange)
                 tbBlastRange.Value = WGH_Core.BlastRange;
         }
 
@@ -204,17 +245,22 @@ namespace WindowsGlitchHarvester
 
         private void cbCorruptionEngine_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch(cbCorruptionEngine.SelectedText)
+
+			gbNightmareEngineSettings.Visible = false;
+			gbVectorEngineSettings.Visible = false;
+
+            switch(cbCorruptionEngine.SelectedItem.ToString())
             {
-                case "NIGHTMARE":
-                case "CHAOS":
-                case "DOTS":
+                case "Nightmare Engine":
                     WGH_Core.selectedEngine = CorruptionEngine.NIGHTMARE;
-                    break;
-                
-                case "PATCH":
-                    WGH_Core.selectedEngine = CorruptionEngine.PATCH;
-                    break;
+					gbNightmareEngineSettings.Visible = true;
+					break;
+
+				case "Vector Engine":
+					WGH_Core.selectedEngine = CorruptionEngine.VECTOR;
+					gbVectorEngineSettings.Visible = true;
+					break;
+
             }
         }
 
@@ -343,15 +389,18 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             lbStashHistory.Items.Clear();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnHookToProcess_Click(object sender, EventArgs e)
         {
-            WGH_Core.ProcessHookName = tbProcessName.Text;
-            if (tbProcessName.Text.Trim() == "")
+
+
+
+			WGH_Core.ProcessHookName = "SOMETHING";// tbProcessName.Text;
+            if (WGH_Core.ProcessHookName.Trim() == "")
                 return;
 
             var allProcesses = Process.GetProcesses();
 
-            hijack.HookToProcess(WGH_Core.ProcessHookName);
+			hijack = new ProcessHijacker(WGH_Core.ProcessHookName);
             
 
             MessageBox.Show("hooked to process named " + WGH_Core.ProcessHookName + ", MemorySize: " + hijack.processSize.ToString());
@@ -359,7 +408,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnDumpProcess_Click(object sender, EventArgs e)
         {
             var data = hijack.ReadAllData();
             File.WriteAllBytes(WGH_Core.ProcessHookName + ".txt", data);
@@ -396,16 +445,6 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 sk.Run();
                 WGH_Executor.Execute();
             }
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-
-            for(int i = 0; i<100; i++)
-                hijack.WriteByte((byte)WGH_Core.RND.Next(0, 255), WGH_Core.LongRandom(0, hijack.processSize));
-
 
         }
 
@@ -599,12 +638,18 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 if(btnEnableCaching.Text == "Enable caching on current target")
                 {
                     WGH_Core.currentMemoryInterface.getMemoryDump();
+					if (WGH_Core.currentMemoryInterface is ProcessInterface)
+						(WGH_Core.currentMemoryInterface as ProcessInterface).useCaching = true;
+
                     btnEnableCaching.Text = "Disable caching on current target";
                 }
                 else
                 {
                     WGH_Core.currentMemoryInterface.lastMemoryDump = null;
-                    btnEnableCaching.Text = "Enable caching on current target";
+					if (WGH_Core.currentMemoryInterface is ProcessInterface)
+						(WGH_Core.currentMemoryInterface as ProcessInterface).useCaching = false;
+
+					btnEnableCaching.Text = "Enable caching on current target";
                 }
         }
 
@@ -623,38 +668,6 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 }
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void pictureBox1_DoubleClick(object sender, EventArgs e)
-        {
-            pictureBox1.Image = null;
-        }
-
-        private void btn4d3d3d3_Click(object sender, EventArgs e)
-        {
-            oysterClick++;
-
-            if (oysterClick > 10)
-            {
-                btn4d3d3d3.Visible = false;
-                pictureBox1.Image = global::WindowsGlitchHarvester.Properties.Resources.oyster;
-                return;
-            }
-
-            if (pictureBox1.Image == null)
-                pictureBox1.Image = global::WindowsGlitchHarvester.Properties.Resources.tayne_flarhgunnstow;
-            else
-                pictureBox1.Image = global::WindowsGlitchHarvester.Properties.Resources._4d3d3d3;
-        }
-
-        private void btnExecCosmo_Click(object sender, EventArgs e)
-        {
-
-
-
-        }
 
         public static byte[] StringToByteArray(string hex)
         {
@@ -806,6 +819,191 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 			Stockpile.Import();
 
 			//RTC_Restore.SaveRestore();
+		}
+
+		private void btnRerollInject_Click(object sender, EventArgs e)
+		{
+			if (WGH_Core.currentMemoryInterface == null)
+			{
+				MessageBox.Show("No target is loaded");
+				return;
+			}
+
+			TerminateIfNeeded();
+
+			StashKey sk = null;
+
+			if (lbStashHistory.SelectedIndex != -1)
+			{
+				sk = (StashKey)lbStashHistory.SelectedItem;
+			}
+			else if (lbStockpile.SelectedIndex != -1)
+			{
+				sk = (StashKey)lbStockpile.SelectedItem;
+			}
+
+			if (sk != null)
+			{
+
+				foreach(BlastUnit bu in sk.blastlayer.Layer)
+				{
+					var bb = (bu as BlastByte);
+					if (bb.Type == BlastByteType.SET)
+					{
+						bb.Value = WGH_Core.RND.Next(0, 255);
+					}
+					else if (bb.Type == BlastByteType.ADD || bb.Type == BlastByteType.SUBSTRACT)
+					{
+						int result = WGH_Core.RND.Next(1, 3);
+						switch (result)
+						{
+							case 1:
+								bb.Type = BlastByteType.ADD;
+								break;
+
+							case 2:
+								bb.Type = BlastByteType.SUBSTRACT;
+								break;
+
+						}
+					}
+				}
+
+				WGH_Core.RestoreTarget();
+
+				sk.Run();
+				WGH_Executor.Execute();
+			}
+		}
+
+		private void cbVectorLimiterList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			string selectedText = (sender as ComboBox).SelectedItem.ToString();
+
+			switch (selectedText)
+			{
+				case "Extended":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.extendedListOfConstants;
+					break;
+				case "Extended+":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfPositiveConstants;
+					break;
+				case "Extended-":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfNegativeConstants;
+					break;
+				case "Whole":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfWholeConstants;
+					break;
+				case "Whole+":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfWholePositiveConstants;
+					break;
+				case "Tiny":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfTinyConstants;
+					break;
+				case "One":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.constantPositiveOne;
+					break;
+				case "One*":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.constantOne;
+					break;
+				case "Two":
+					WGH_VectorEngine.limiterList = WGH_VectorEngine.constantPositiveTwo;
+					break;
+
+
+			}
+		}
+
+		private void cbVectorValueList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			string selectedText = (sender as ComboBox).SelectedItem.ToString();
+
+			switch (selectedText)
+			{
+				case "Extended":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.extendedListOfConstants;
+					break;
+				case "Extended+":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.listOfPositiveConstants;
+					break;
+				case "Extended-":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.listOfNegativeConstants;
+					break;
+				case "Whole":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.listOfWholeConstants;
+					break;
+				case "Whole+":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.listOfWholePositiveConstants;
+					break;
+				case "Tiny":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.listOfTinyConstants;
+					break;
+				case "One":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.constantPositiveOne;
+					break;
+				case "One*":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.constantOne;
+					break;
+				case "Two":
+					WGH_VectorEngine.valueList = WGH_VectorEngine.constantPositiveTwo;
+					break;
+				case "AnyFloat":
+					WGH_VectorEngine.valueList = null;
+					break;
+			}
+		}
+
+		private void btnBlastTarget_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				Point locate = new Point((sender as Control).Location.X + e.Location.X, (sender as Control).Location.Y + e.Location.Y);
+
+				ContextMenuStrip columnsMenu = new ContextMenuStrip();
+				columnsMenu.Items.Add("Run 3 times", null, new EventHandler((ob, ev) => { BlastTarget(5); }));
+				columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { BlastTarget(10); }));
+				columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { BlastTarget(20); }));
+				columnsMenu.Items.Add("Run 30 times", null, new EventHandler((ob, ev) => { BlastTarget(30); }));
+				columnsMenu.Items.Add("Run 50 times", null, new EventHandler((ob, ev) => { BlastTarget(50); }));
+				columnsMenu.Items.Add("Run 75 times", null, new EventHandler((ob, ev) => { BlastTarget(75); }));
+				columnsMenu.Items.Add("Run 100 times", null, new EventHandler((ob, ev) => { BlastTarget(100); }));
+				columnsMenu.Show(this, locate);
+			}
+
+		}
+
+		private void btnBlastUntilEffect_Click(object sender, EventArgs e)
+		{
+			BlastTarget(int.MaxValue, true);
+		}
+
+		private void btnBlastUntilEffect_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				Point locate = new Point((sender as Control).Location.X + e.Location.X, (sender as Control).Location.Y + e.Location.Y);
+
+				ContextMenuStrip columnsMenu = new ContextMenuStrip();
+				columnsMenu.Items.Add("Run 3 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(5); }));
+				columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(10); }));
+				columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(20); }));
+				columnsMenu.Items.Add("Run 30 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(30); }));
+				columnsMenu.Items.Add("Run 50 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(50); }));
+				columnsMenu.Items.Add("Run 75 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(75); }));
+				columnsMenu.Items.Add("Run 100 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(100); }));
+				columnsMenu.Show(this, locate);
+			}
+		}
+
+		private void GuaranteedBlastTarget(int v)
+		{
+			for (int i = 0; i < v; i++)
+				BlastTarget(int.MaxValue, true);
+		}
+
+		private void cbBigEndian_CheckedChanged(object sender, EventArgs e)
+		{
+			WGH_VectorEngine.BigEndian = cbBigEndian.Checked;
 		}
 	}
 }

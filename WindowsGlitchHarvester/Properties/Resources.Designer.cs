@@ -63,29 +63,9 @@ namespace WindowsGlitchHarvester.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _4d3d3d3 {
+        internal static System.Drawing.Bitmap logortc {
             get {
-                object obj = ResourceManager.GetObject("4d3d3d3", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap oyster {
-            get {
-                object obj = ResourceManager.GetObject("oyster", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap tayne_flarhgunnstow {
-            get {
-                object obj = ResourceManager.GetObject("tayne_flarhgunnstow", resourceCulture);
+                object obj = ResourceManager.GetObject("logortc", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

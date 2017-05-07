@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Delimon.Win32.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Drawing;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace WindowsGlitchHarvester
 {
@@ -409,16 +409,22 @@ namespace WindowsGlitchHarvester
         {
             WGH_Core.lastBlastLayerBackup = GetBackup();
 
-            foreach (BlastUnit bb in Layer)
-                bb.Apply();
+			foreach (BlastUnit bb in Layer)
+				if (bb == null || !bb.Apply())
+					return;
+                
         }
 
         public BlastLayer GetBackup()
         {
             List<BlastUnit> BackupLayer = new List<BlastUnit>(); ;
 
-            foreach (BlastUnit bb in Layer)
-                BackupLayer.Add(bb.GetBackup());
+			foreach (BlastUnit bb in Layer)
+			{
+				var bu = bb.GetBackup();
+				if(bu != null)
+					BackupLayer.Add(bu);
+			}
 
             BlastLayer Recovery = new BlastLayer(BackupLayer);
 
@@ -430,7 +436,7 @@ namespace WindowsGlitchHarvester
     [Serializable()]
     public abstract class BlastUnit
     {
-        public abstract void Apply();
+        public abstract bool Apply();
         public abstract BlastUnit GetBackup();
     }
 
@@ -452,34 +458,34 @@ namespace WindowsGlitchHarvester
             IsEnabled = _isEnabled;
         }
 
-        public override void Apply()
+        public override bool Apply()
         {
             if (!IsEnabled)
-                return;
+                return false;
 
             try
             {
                 MemoryInterface mi = WGH_Core.currentMemoryInterface;
 
                 if (mi == null)
-                    return;
+                    return false;
 
                 switch (Type)
                 {
                     case BlastByteType.SET:
-                        mi.setByte(Address, (byte)Value);
+                        mi.PokeByte(Address, (byte)Value);
                         break;
 
                     case BlastByteType.ADD:
-                        mi.setByte(Address, (byte)(mi.getByte(Address) + Value));
+                        mi.PokeByte(Address, (byte)(mi.PeekByte(Address) + Value));
                         break;
 
                     case BlastByteType.SUBSTRACT:
-                        mi.setByte(Address, (byte)(mi.getByte(Address) - Value));
+                        mi.PokeByte(Address, (byte)(mi.PeekByte(Address) - Value));
                         break;
 
                     case BlastByteType.NONE:
-                        return;
+                        return false;
                 }
 
             }
@@ -487,9 +493,10 @@ namespace WindowsGlitchHarvester
             {
                 MessageBox.Show("The BlastByte apply() function threw up. \n\n" +
                 ex.ToString());
-                return;
+                return false;
             }
 
+			return true;
         }
 
         public override BlastUnit GetBackup()
@@ -501,10 +508,10 @@ namespace WindowsGlitchHarvester
             {
                 MemoryInterface mi = WGH_Core.currentMemoryInterface;
 
-                if (mi == null || Type == BlastByteType.NONE)
+                if (mi == null || Type == BlastByteType.NONE || mi is ProcessInterface)
                     return null;
 
-                return new BlastByte(Domain, Address, BlastByteType.SET, (int)mi.getByte(Address), true);
+                return new BlastByte(Domain, Address, BlastByteType.SET, (int)mi.PeekByte(Address), true);
 
             }
             catch (Exception ex)
@@ -528,18 +535,115 @@ namespace WindowsGlitchHarvester
         }
     }
 
-    [Serializable()]
+	[Serializable()]
+	public class BlastVector : BlastUnit
+	{
+		public string Domain;
+		public long Address;
+		public BlastByteType Type;
+
+		public byte[] Values;
+
+
+		public bool IsEnabled;
+
+		public BlastVector(string _domain, long _address, byte[] _values, bool _isEnabled)
+		{
+			Domain = _domain;
+			Address = (_address - (_address % 4));
+			Values = _values;
+			IsEnabled = _isEnabled;
+		}
+
+		public BlastVector()
+		{
+
+		}
+
+		public override bool Apply()
+		{
+			if (!IsEnabled)
+				return true;
+
+			try
+			{
+				MemoryInterface mi = WGH_Core.currentMemoryInterface;
+				//MemoryDomainProxy md = RTC_MemoryDomains.getProxyFromString(Domain);
+
+				if (mi == null)
+					return true;
+
+				mi.PokeByte(Address, Values[0]);
+				mi.PokeByte(Address + 1, Values[1]);
+				mi.PokeByte(Address + 2, Values[2]);
+				mi.PokeByte(Address + 3, Values[3]);
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("The BlastVector apply() function threw up. \n" +
+				"This is not a BizHawk error so you should probably send a screenshot of this to the devs\n\n" +
+				ex.ToString());
+			}
+
+			return true;
+
+		}
+
+		public override BlastUnit GetBackup()
+		{
+			if (!IsEnabled)
+				return null;
+
+			try
+			{
+				//MemoryInterface md = RTC_MemoryDomains.getProxyFromString(Domain);
+				MemoryInterface mi = WGH_Core.currentMemoryInterface;
+
+				if (mi == null)
+					return null;
+
+				return new BlastVector(Domain, Address, WGH_VectorEngine.read32bits(mi, Address), true);
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("The BlastVector GetBackup() function threw up. \n" +
+				"This is not a BizHawk error so you should probably send a screenshot of this to the devs\n\n" +
+				ex.ToString());
+			}
+
+		}
+		/*
+		public override void Reroll()
+		{
+			Values = WGH_VectorEngine.getRandomConstant(WGH_VectorEngine.valueList);
+		}
+		*/
+		public override string ToString()
+		{
+			string EnabledString = "[ ] ";
+			if (IsEnabled)
+				EnabledString = "[x] ";
+
+			string cleanDomainName = Domain.Replace("(nametables)", ""); //Shortens the domain name if it contains "(nametables)"
+			return (EnabledString + cleanDomainName + "(" + Convert.ToInt32(Address).ToString() + ")." + Type.ToString() + "(" + WGH_VectorEngine.ByteArrayToString(Values) + ")");
+		}
+	}
+
+
+	[Serializable()]
     public abstract class MemoryInterface
     {
         public abstract byte[] getMemoryDump();
         public abstract byte[] lastMemoryDump { get; set; }
-        public abstract int getMemorySize();
-        public abstract int? lastMemorySize{ get; set; }
+        public abstract long getMemorySize();
+        public abstract long? lastMemorySize{ get; set; }
 
-        public abstract void setByte(long address, byte data);
-        public abstract void setBytes(long address, byte[] data);
-        public abstract byte? getByte(long address);
-        public abstract byte[] getBytes(long address, long range);
+        public abstract void PokeByte(long address, byte data);
+        public abstract void PokeBytes(long address, byte[] data);
+        public abstract byte? PeekByte(long address);
+        public abstract byte[] PeekBytes(long address, int range);
 
         public abstract void SetBackup();
         public abstract void ResetBackup(bool askConfirmation = true);
@@ -691,23 +795,23 @@ namespace WindowsGlitchHarvester
         public override byte[] getMemoryDump()
         {
             lastMemoryDump = File.ReadAllBytes(getBackupFilename());
-            return lastMemoryDump;
+            return lastMemoryDump.ToArray();
         }
         public override byte[] lastMemoryDump { get; set; } = null;
 
-        public override int getMemorySize()
+        public override long getMemorySize()
         {
             if (lastMemorySize != null)
-                return (int)lastMemorySize;
+                return (long)lastMemorySize;
 
-            lastMemorySize = (int)new FileInfo(filename).Length;
-            return (int)lastMemorySize;
+            lastMemorySize = new FileInfo(filename).Length;
+            return (long)lastMemorySize;
             
         }
 
-        public override int? lastMemorySize { get; set; }
+        public override long? lastMemorySize { get; set; }
 
-        public override void setBytes(long address, byte[] data)
+        public override void PokeBytes(long address, byte[] data)
         {
             if (stream == null)
                 stream = File.Open(SetWorkingFile(), FileMode.Open);
@@ -721,7 +825,7 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public override void setByte(long address, byte data)
+        public override void PokeByte(long address, byte data)
         {
             if (stream == null)
                 stream = File.Open(SetWorkingFile(), FileMode.Open);
@@ -733,7 +837,7 @@ namespace WindowsGlitchHarvester
                 lastMemoryDump[address] = data;
         }
 
-        public override byte? getByte(long address)
+        public override byte? PeekByte(long address)
         {
 
             if (lastMemoryDump != null)
@@ -752,7 +856,7 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public override byte[] getBytes(long address, long range)
+        public override byte[] PeekBytes(long address, int range)
         {
 
             if (lastMemoryDump == null)
@@ -763,7 +867,7 @@ namespace WindowsGlitchHarvester
 
             byte[] readBytes = new byte[range];
             stream.Position = address;
-            stream.Read(readBytes, 0, (int)range);
+            stream.Read(readBytes, 0, range);
 
             //fs.Close();
 
@@ -887,23 +991,23 @@ namespace WindowsGlitchHarvester
         }
         public override byte[] lastMemoryDump { get; set; } = null;
 
-        public override int getMemorySize()
+        public override long getMemorySize()
         {
-            int size = 0;
+            long size = 0;
 
             foreach (var fi in fileInterfaces)
                 size += fi.getMemorySize();
 
             lastMemorySize = size;
-            return (int)lastMemorySize;
+            return (long)lastMemorySize;
 
         }
 
-        public override int? lastMemorySize { get; set; }
+        public override long? lastMemorySize { get; set; }
 
-        public override void setBytes(long address, byte[] data)
+        public override void PokeBytes(long address, byte[] data)
         {
-            int addressPad = 0;
+            long addressPad = 0;
             FileInterface targetInterface = null;
 
             foreach(var fi in fileInterfaces)
@@ -919,7 +1023,7 @@ namespace WindowsGlitchHarvester
             }
 
             if (targetInterface != null)
-                targetInterface.setBytes(address - addressPad, data);
+                targetInterface.PokeBytes(address - addressPad, data);
 
             if (lastMemoryDump != null)
                 for (int i = 0; i < data.Length; i++)
@@ -927,10 +1031,10 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public override void setByte(long address, byte data)
+        public override void PokeByte(long address, byte data)
         {
 
-            int addressPad = 0;
+            long addressPad = 0;
             FileInterface targetInterface = null;
 
             foreach (var fi in fileInterfaces)
@@ -946,19 +1050,19 @@ namespace WindowsGlitchHarvester
             }
 
             if (targetInterface != null)
-                targetInterface.setByte(address - addressPad, data);
+                targetInterface.PokeByte(address - addressPad, data);
 
             if (lastMemoryDump != null)
                 lastMemoryDump[address] = data;
         }
 
-        public override byte? getByte(long address)
+        public override byte? PeekByte(long address)
         {
 
             if (lastMemoryDump != null)
                 return lastMemoryDump[address];
 
-            int addressPad = 0;
+            long addressPad = 0;
             FileInterface targetInterface = null;
 
             foreach (var fi in fileInterfaces)
@@ -974,21 +1078,21 @@ namespace WindowsGlitchHarvester
             }
 
             if (targetInterface != null)
-                return targetInterface.getByte(address - addressPad);
+                return targetInterface.PeekByte(address - addressPad);
             else
                 return null;
 
 
         }
 
-        public override byte[] getBytes(long address, long range)
+        public override byte[] PeekBytes(long address, int range)
         {
             
             if (lastMemoryDump != null)
                 return lastMemoryDump.SubArray(address, range);
             
 
-            int addressPad = 0;
+            long addressPad = 0;
             FileInterface targetInterface = null;
 
             foreach (var fi in fileInterfaces)
@@ -1004,7 +1108,7 @@ namespace WindowsGlitchHarvester
             }
 
             if (targetInterface != null)
-                return targetInterface.getBytes(address - addressPad,range);
+                return targetInterface.PeekBytes(address - addressPad,range);
             else
                 return null;
 
@@ -1016,42 +1120,43 @@ namespace WindowsGlitchHarvester
     [Serializable()]
     public class ProcessInterface : MemoryInterface
     {
-        string filename;
+        public string processName;
+		ProcessHijacker hijack = null;
+		public bool Hooked;
 
-        //Memory mem
+		public bool useCaching = false;
 
-        public ProcessInterface(string _targetId)
+        public ProcessInterface(string _processName)
         {
-            string[] targetId = _targetId.Split(':');
-            filename = targetId[1];
-            getMemoryDump();
+			hijack = new ProcessHijacker(_processName);
+			Hooked = hijack.Hooked;
+			processName = _processName;
+
+            //getMemoryDump();
             getMemorySize();
         }
 
         public override byte[] getMemoryDump()
         {
-            //HOOK CHEATENGINE API HERE
-            //lastMemoryDump = File.ReadAllBytes(filename);
-            return lastMemoryDump;
+			lastMemoryDump = hijack.ReadAllData();
+			return lastMemoryDump;
         }
         public override byte[] lastMemoryDump { get; set; } = null;
 
-        public override int getMemorySize()
+        public override long getMemorySize()
         {
-            if (lastMemoryDump == null)
-                getMemoryDump();
-
-            if (lastMemoryDump == null)
+            if (hijack == null)
                 return 0;
 
-            lastMemorySize = lastMemoryDump.Length;
-            return (int)lastMemorySize;
+			lastMemorySize = hijack.processSize;
+
+            return (long)lastMemorySize;
 
         }
 
-        public override int? lastMemorySize { get; set; }
+        public override long? lastMemorySize { get; set; }
 
-        public override void setBytes(long address, byte[] data)
+        public override void PokeBytes(long address, byte[] data)
         {
 
             //HOOK CHEATENGINE API HERE
@@ -1063,19 +1168,23 @@ namespace WindowsGlitchHarvester
             }
             */
 
-            if (lastMemoryDump == null)
-                getMemoryDump();
+           // if (lastMemoryDump == null)
+           //     getMemoryDump();
 
-            if (lastMemoryDump == null)
+            if (hijack == null)
                 return;
 
-            for (int i = 0; i < data.Length; i++)
-            {
-                lastMemoryDump[address + i] = data[i];
-            }
+			hijack.WriteBytes(data, address);
+
+            //for (int i = 0; i < data.Length; i++)
+           // {
+              //  lastMemoryDump[address + i] = data[i];
+            //}
+
+
         }
 
-        public override void setByte(long address, byte data)
+        public override void PokeByte(long address, byte data)
         {
 
             //HOOK CHEATENGINE API HERE
@@ -1087,36 +1196,52 @@ namespace WindowsGlitchHarvester
             }
             */
 
-            if (lastMemoryDump == null)
-                getMemoryDump();
+            //if (hijack == null)
+                //getMemoryDump();
 
-            if (lastMemoryDump == null)
+            if (hijack == null)
                 return;
 
-            lastMemoryDump[address] = data;
+			hijack.WriteByte(data, address);
         }
 
-        public override byte? getByte(long address)
+        public override byte? PeekByte(long address)
         {
-            if (lastMemoryDump == null)
-                getMemoryDump();
-
-            if (lastMemoryDump == null)
+            if (hijack == null)
                 return null;
 
-            return lastMemoryDump[address];
-        }
+			if (useCaching)
+			{
+				if (lastMemoryDump == null)
+					getMemoryDump();
 
-        public override byte[] getBytes(long address, long range)
+				if (lastMemoryDump == null)
+					return null;
+
+				return lastMemoryDump[address];
+			}
+			else
+				return hijack.ReadByte(address);
+		}
+
+        public override byte[] PeekBytes(long address, int range)
         {
-            if (lastMemoryDump == null)
-                getMemoryDump();
+			if (hijack == null)
+				return null;
 
-            if (lastMemoryDump == null)
-                return null;
+			if(useCaching)
+			{
+				if (lastMemoryDump == null)
+					getMemoryDump();
 
-            return lastMemoryDump.SubArray(address, range);
-        }
+				if (lastMemoryDump == null)
+					return null;
+
+				return lastMemoryDump.SubArray(address, range);
+			}
+			else
+				return hijack.ReadBytes(address, range);
+		}
 
         public override void SetBackup()
         {

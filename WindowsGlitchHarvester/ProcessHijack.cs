@@ -4,12 +4,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using Delimon.Win32.IO;
 using System.Collections.Generic;
 
 namespace WindowsGlitchHarvester
 {
-    public class ProcessHijack
+    public class ProcessHijacker
     {
 
         //C# Signature for the FindWindow() API 
@@ -132,6 +131,8 @@ namespace WindowsGlitchHarvester
 
         public long processSize;
 
+		public bool Hooked;
+
 
         //Memory indexing
         List<long> allMemoryChunkSizes;
@@ -142,16 +143,26 @@ namespace WindowsGlitchHarvester
         // http://www.codeproject.com/Articles/716227/Csharp-How-to-Scan-a-Process-Memory
         // http://www.codeproject.com/Articles/670373/Csharp-Read-Write-another-Process-Memory
 
-        public void WriteBytes(byte[] byteArray, long startAddress)
-        {
 
-            for (long i = startAddress; i < byteArray.Length + startAddress; i++)
-                WriteProcessMemory(ProcessWriteHandle, (IntPtr)(startAddress + i) /*Target address*/, new byte[] { 0 } /*Byte array call*/, (UIntPtr)1 /*Byte array size*/, out bytesout);
+		public ProcessHijacker(string processName)
+		{
+			Hooked = HookToProcess(processName);
+		}
+
+        public void WriteBytes(byte[] byteArray, long address)
+        {
+			long _address = GetRealAddressFromVirtual(address);
+
+
+			for (long i = _address; i < byteArray.Length + _address; i++)
+                WriteProcessMemory(ProcessWriteHandle, (IntPtr)(_address + i) /*Target address*/, new byte[] { 0 } /*Byte array call*/, (UIntPtr)1 /*Byte array size*/, out bytesout);
         }
 
         public void WriteByte(byte byteValue, long address)
         {
-                WriteProcessMemory(ProcessWriteHandle, (IntPtr)address /*Target address*/, new byte[] { byteValue } /*Byte array call*/, (UIntPtr)1 /*Byte array size*/, out bytesout);
+			long _address = GetRealAddressFromVirtual(address);
+
+			WriteProcessMemory(ProcessWriteHandle, (IntPtr)_address /*Target address*/, new byte[] { byteValue } /*Byte array call*/, (UIntPtr)1 /*Byte array size*/, out bytesout);
         }
 
         public long GetRealAddressFromVirtual(long virtualAddress)
@@ -176,7 +187,7 @@ namespace WindowsGlitchHarvester
             return address;
         }
 
-        public long GetProcessSizeAndIndexChunks()
+        public long? GetProcessSizeAndIndexChunks()
         {
             //returns memory size
 
@@ -220,12 +231,170 @@ namespace WindowsGlitchHarvester
                 proc_min_address = new IntPtr(proc_min_address_l);
             }
 
+			if(fullMemSize == 0)
+			{
+				MessageBox.Show("The process refused being hooked");
+				return null;
+			}
+
             return fullMemSize;
 
         }
 
+		public byte ReadByte(long address)
+		{
+			int bytesRead = 0;
+			byte[] buffer = new byte[1];
 
-        public byte[] ReadAllData()
+			ReadProcessMemory((int)ProcessReadHandle, (int)address, buffer, buffer.Length, ref bytesRead);
+
+			return buffer[0];
+		}
+
+
+		public byte[] ReadBytes(long address, long amount)
+		{
+			int bytesRead = 0;
+			byte[] buffer = new byte[amount];
+
+			ReadProcessMemory((int)ProcessReadHandle, (int)address, buffer, buffer.Length, ref bytesRead);
+
+			return buffer;
+		}
+
+
+
+		/*
+		public byte ReadByte(long address)
+		{
+
+			long _address = GetRealAddressFromVirtual(address);
+
+
+			// getting minimum & maximum address
+
+			SYSTEM_INFO sys_info = new SYSTEM_INFO();
+			GetSystemInfo(out sys_info);
+
+			IntPtr proc_min_address = sys_info.minimumApplicationAddress;
+			IntPtr proc_max_address = sys_info.maximumApplicationAddress;
+
+			// saving the values as long ints so I won't have to do a lot of casts later
+			long proc_min_address_l = _address;
+			long proc_max_address_l = _address + 1;
+
+
+			// notepad better be runnin'
+			//Process process = Process.GetProcessesByName("notepad")[0];
+
+			// opening the process with desired access level
+			//IntPtr processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_WM_READ, false, process.Id);
+
+			//StreamWriter sw = new StreamWriter("dump.txt");
+
+			// this will store any information we get from VirtualQueryEx()
+			MEMORY_BASIC_INFORMATION mem_basic_info = new MEMORY_BASIC_INFORMATION();
+
+			int bytesRead = 0;  // number of bytes read with ReadProcessMemory
+
+			List<byte> outputBytes = new List<byte>();
+
+			while (proc_min_address_l < proc_max_address_l)
+			{
+				// 28 = sizeof(MEMORY_BASIC_INFORMATION)
+				VirtualQueryEx(ProcessReadHandle, proc_min_address, out mem_basic_info, 28);
+
+				// if this memory chunk is accessible
+				if (mem_basic_info.Protect == PAGE_READWRITE && mem_basic_info.State == MEM_COMMIT)
+				{
+
+					byte[] buffer = new byte[mem_basic_info.RegionSize];
+
+					// read everything in the buffer above
+					ReadProcessMemory((int)ProcessReadHandle, mem_basic_info.BaseAddress, buffer, mem_basic_info.RegionSize, ref bytesRead);
+
+					// then output this in the file
+					//for (int i = 0; i < mem_basic_info.RegionSize; i++)
+					//sw.WriteLine("0x{0} : {1}", (mem_basic_info.BaseAddress + i).ToString("X"), (char)buffer[i]);
+
+					outputBytes.AddRange(buffer);
+				}
+
+				// move to the next memory chunk
+				proc_min_address_l += mem_basic_info.RegionSize;
+				proc_min_address = new IntPtr(proc_min_address_l);
+			}
+
+			return outputBytes[0];
+
+		}
+
+		public byte[] ReadBytes(long address, long amount)
+		{
+
+			long _address = GetRealAddressFromVirtual(address);
+
+			// getting minimum & maximum address
+
+			SYSTEM_INFO sys_info = new SYSTEM_INFO();
+			GetSystemInfo(out sys_info);
+
+			IntPtr proc_min_address = sys_info.minimumApplicationAddress;
+			IntPtr proc_max_address = sys_info.maximumApplicationAddress;
+
+			// saving the values as long ints so I won't have to do a lot of casts later
+			long proc_min_address_l = _address;
+			long proc_max_address_l = _address + amount;
+
+
+			// notepad better be runnin'
+			//Process process = Process.GetProcessesByName("notepad")[0];
+
+			// opening the process with desired access level
+			//IntPtr processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_WM_READ, false, process.Id);
+
+			//StreamWriter sw = new StreamWriter("dump.txt");
+
+			// this will store any information we get from VirtualQueryEx()
+			MEMORY_BASIC_INFORMATION mem_basic_info = new MEMORY_BASIC_INFORMATION();
+
+			int bytesRead = 0;  // number of bytes read with ReadProcessMemory
+
+			List<byte> outputBytes = new List<byte>();
+
+			while (proc_min_address_l < proc_max_address_l)
+			{
+				// 28 = sizeof(MEMORY_BASIC_INFORMATION)
+				VirtualQueryEx(ProcessReadHandle, proc_min_address, out mem_basic_info, 28);
+
+				// if this memory chunk is accessible
+				if (mem_basic_info.Protect == PAGE_READWRITE && mem_basic_info.State == MEM_COMMIT)
+				{
+
+					byte[] buffer = new byte[mem_basic_info.RegionSize];
+
+					// read everything in the buffer above
+					ReadProcessMemory((int)ProcessReadHandle, mem_basic_info.BaseAddress, buffer, mem_basic_info.RegionSize, ref bytesRead);
+
+					// then output this in the file
+					//for (int i = 0; i < mem_basic_info.RegionSize; i++)
+					//sw.WriteLine("0x{0} : {1}", (mem_basic_info.BaseAddress + i).ToString("X"), (char)buffer[i]);
+
+					outputBytes.AddRange(buffer);
+				}
+
+				// move to the next memory chunk
+				proc_min_address_l += mem_basic_info.RegionSize;
+				proc_min_address = new IntPtr(proc_min_address_l);
+			}
+
+			return outputBytes.ToArray();
+
+		}
+
+	*/
+
+		public byte[] ReadAllData()
         {
 
             // getting minimum & maximum address
@@ -252,7 +421,7 @@ namespace WindowsGlitchHarvester
             // this will store any information we get from VirtualQueryEx()
             MEMORY_BASIC_INFORMATION mem_basic_info = new MEMORY_BASIC_INFORMATION();
 
-            int bytesRead = 0;  // number of bytes read with ReadProcessMemory
+			int bytesRead = 0;  // number of bytes read with ReadProcessMemory
 
             List<byte> outputBytes = new List<byte>();
 
@@ -260,6 +429,8 @@ namespace WindowsGlitchHarvester
             {
                 // 28 = sizeof(MEMORY_BASIC_INFORMATION)
                 VirtualQueryEx(ProcessReadHandle, proc_min_address, out mem_basic_info, 28);
+
+
 
                 // if this memory chunk is accessible
                 if (mem_basic_info.Protect == PAGE_READWRITE && mem_basic_info.State == MEM_COMMIT)
@@ -286,7 +457,7 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public void HookToWindow(string windowClass, string windowTitle)
+        public bool HookToWindow(string windowClass, string windowTitle)
         {
             //WindowHandle = FindWindow("WindowClass", "WindowTitle"); // Establish a Window Handle (hWnd) 
             WindowHandle = FindWindow(windowClass, windowTitle); // Establish a Window Handle (hWnd) 
@@ -294,27 +465,38 @@ namespace WindowsGlitchHarvester
             GetWindowThreadProcessId(WindowHandle, out ProcID); // Get the Process ID (PID) from the targeted window/window class 
             ProcessReadHandle = OpenProcess(PROCESS_ALL_ACCESS, 1, ProcID); // Gain access to the process memory with OpenProcess() using Process ID as an entry
 
-            processSize = GetProcessSizeAndIndexChunks();
+			var pSize = GetProcessSizeAndIndexChunks();
+
+			if (pSize == null)
+				return false;
+			else
+			{
+				processSize = (long)pSize;
+				return true;
+			}
         }
 
         public bool HookToProcess(string processName)
         {
 
-            var processes = Process.GetProcessesByName(processName);
+			string[] processData = processName.Split(':');
 
-            if (processes.Length == 0)
-                return false;
-
-            Process process = processes[0];
+			Process process = Process.GetProcessById(Convert.ToInt32(processData[1]));
 
             // opening the process with desired access level
             ProcessReadHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_WM_READ, false, process.Id);
             ProcessWriteHandle = OpenProcess(0x1F0FFF, false, process.Id);
-            //ProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_ALL_ACCESS, true, process.Id);
+			//ProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_ALL_ACCESS, true, process.Id);
 
-            processSize = GetProcessSizeAndIndexChunks();
+			var pSize = GetProcessSizeAndIndexChunks();
 
-            return true;
+			if(pSize == null)
+				return false;
+			else
+			{
+				processSize = (long)pSize;
+				return true;
+			}
         }
 
     }

@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Windows.Forms;
-using Delimon.Win32.IO;
 using System.Drawing;
+using System.IO;
 
 namespace WindowsGlitchHarvester
 {
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.09";
+		public static string WghVersion = "0.14";
 
 		public static Random RND = new Random();
         public static string[] args;
@@ -47,16 +47,19 @@ namespace WindowsGlitchHarvester
 
         //Forms
         public static WGH_MainForm ghForm;
-        public static WGH_SelectMultiple smForm = null;
+        public static WGH_SelectMultipleForm smForm = null;
+		public static WGH_HookProcessForm hpForm = null;
+		public static WGH_AutoCorruptForm acForm = new WGH_AutoCorruptForm();
 
         //Object references
         public static MemoryInterface currentMemoryInterface = null;
         public static Stockpile currentStockpile = null;
         public static StashKey currentStashkey = null;
         public static BlastLayer lastBlastLayerBackup = null;
-        
 
-        public static void Start(WGH_MainForm _ghForm)
+		public static int ErrorDelay = 100;
+
+		public static void Start(WGH_MainForm _ghForm)
         {
 
             bool Expires = false;
@@ -70,35 +73,31 @@ namespace WindowsGlitchHarvester
             }
 
             ghForm = _ghForm;
-            //coreForm.Show();
-            //RTC_RPC.Start();
+			acForm = new WGH_AutoCorruptForm();
+			acForm.TopLevel = false;
+			ghForm.pnBottom.Controls.Add(acForm);
+			acForm.Location = new Point(240, 0);
+			acForm.Show();
+			acForm.BringToFront();
 
-        }
 
-        public static long LongRandom(long max)
+			if (File.Exists(currentDir + "\\params\\COLOR.TXT"))
+			{
+				string[] bytes = File.ReadAllText(currentDir + "\\params\\COLOR.TXT").Split(',');
+				SetWGHColor(Color.FromArgb(Convert.ToByte(bytes[0]), Convert.ToByte(bytes[1]), Convert.ToByte(bytes[2])));
+			}
+			else
+				SetWGHColor(Color.FromArgb(127, 120, 165));
+
+		}
+
+        public static long RandomLong(long max)
         {
-            return LongRandom(0, max);
+            return RND.RandomLong(0, max);
         }
 
-        public static long LongRandom(long min, long max)
-        {
-            if (max > 2147483647)
-            {
-                /*
-            byte[] buf = new byte[8];
-            RND.NextBytes(buf);
-            long longRand = BitConverter.ToInt64(buf, 0);
 
-            return (Math.Abs(longRand % (max - min)) + min);
-                 * */
-                return (long)RND.Next((int)min, 2147483647);
-
-            }
-            else
-                return (long)RND.Next((int)min, (int)max);
-        }
-
-        public static BlastUnit getBlastUnit(string _target, long _address)
+		public static BlastUnit getBlastUnit(string _target, long _address)
         {
 
             BlastUnit bu = null;
@@ -108,12 +107,10 @@ namespace WindowsGlitchHarvester
                 case CorruptionEngine.NIGHTMARE:
                     bu = WGH_NightmareEngine.GenerateUnit(_target, _address);
                     break;
-                case CorruptionEngine.DOT:
-                    //bu = WGH_DotEngine.GenerateUnit(_target, _address);
+                case CorruptionEngine.VECTOR:
+                    bu = WGH_VectorEngine.GenerateUnit(_target, _address);
                     break;
-                case CorruptionEngine.PATCH:
-                    //bu = WGH_PatchEngine.GenerateUnit(_target, _address);
-                    break;
+
                 case CorruptionEngine.NONE:
                     return null;
             }
@@ -148,7 +145,7 @@ namespace WindowsGlitchHarvester
                     TargetType = currentTargetType;
                     StartingAddress = WGH_Core.StartingAddress;
                     BlastRange = WGH_Core.BlastRange;
-                    MaxAddress = (int)currentMemoryInterface.lastMemorySize;
+                    MaxAddress = (long)(currentMemoryInterface.lastMemorySize ?? 0 );
 
                     if (!WGH_Core.useBlastRange)
                         BlastRange = MaxAddress - StartingAddress;
@@ -159,7 +156,7 @@ namespace WindowsGlitchHarvester
 
                     for (int i = 0; i < Intensity; i++)
                     {
-                        RandomAdress = StartingAddress + LongRandom(BlastRange);
+                        RandomAdress = StartingAddress + RandomLong(BlastRange);
 
                         bu = getBlastUnit(TargetType, RandomAdress);
                         if (bu != null)
@@ -236,7 +233,7 @@ namespace WindowsGlitchHarvester
                 if(smForm != null)
                    smForm.Close();
 
-                smForm = new WGH_SelectMultiple();
+                smForm = new WGH_SelectMultipleForm();
 
                 if (smForm.ShowDialog() != DialogResult.OK)
                 {
@@ -251,8 +248,22 @@ namespace WindowsGlitchHarvester
             }
             else if (WGH_Core.ghForm.rbTargetProcess.Checked)
             {
-                currentMemoryInterface = new ProcessInterface(currentTargetId);
-            }
+				if (hpForm != null)
+					hpForm.Close();
+
+				hpForm = new WGH_HookProcessForm();
+
+				if (hpForm.ShowDialog() != DialogResult.OK)
+				{
+					WGH_Core.currentMemoryInterface = null;
+					return;
+				}
+
+				currentTargetType = "Process";
+				var mfi = (ProcessInterface)WGH_Core.currentMemoryInterface;
+				currentTargetName = mfi.processName;
+				ghForm.lbTarget.Text = mfi.processName + "|MemorySize:" + mfi.lastMemorySize.ToString();
+			}
         }
 
         public static void RestoreTarget()
@@ -273,5 +284,171 @@ namespace WindowsGlitchHarvester
             }
         }
 
-    }
+
+		/// <summary>
+		/// Creates color with corrected brightness.
+		/// </summary>
+		/// <param name="color">Color to correct.</param>
+		/// <param name="correctionFactor">The brightness correction factor. Must be between -1 and 1. 
+		/// Negative values produce darker colors.</param>
+		/// <returns>
+		/// Corrected <see cref="Color"/> structure.
+		/// </returns>
+		public static Color ChangeColorBrightness(Color color, float correctionFactor)
+		{
+			float red = (float)color.R;
+			float green = (float)color.G;
+			float blue = (float)color.B;
+
+			if (correctionFactor < 0)
+			{
+				correctionFactor = 1 + correctionFactor;
+				red *= correctionFactor;
+				green *= correctionFactor;
+				blue *= correctionFactor;
+			}
+			else
+			{
+				red = (255 - red) * correctionFactor + red;
+				green = (255 - green) * correctionFactor + green;
+				blue = (255 - blue) * correctionFactor + blue;
+			}
+
+			return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
+		}
+
+		private static List<Control> FindTag(Control.ControlCollection controls)
+		{
+			List<Control> allControls = new List<Control>();
+
+			foreach (Control c in controls)
+			{
+				if (c.Tag != null)
+					allControls.Add(c);
+
+				if (c.HasChildren)
+					allControls.AddRange(FindTag(c.Controls)); //Recursively check all children controls as well; ie groupboxes or tabpages
+			}
+
+			return allControls;
+		}
+
+		public static void SetWGHColor(Color color, Form form = null)
+		{
+			List<Control> allControls = new List<Control>();
+
+			if (form == null)
+			{
+				if (ghForm != null)
+				{
+					allControls.AddRange(FindTag(ghForm.Controls));
+					allControls.Add(ghForm);
+				}
+
+				
+				if (acForm != null)
+				{
+					allControls.AddRange(FindTag(acForm.Controls));
+					allControls.Add(acForm);
+				}
+				
+
+			}
+			else
+				allControls.AddRange(FindTag(form.Controls));
+
+			var lightColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:light"));
+			var normalColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:normal"));
+			var darkColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:dark"));
+			var darkerColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:darker"));
+
+			foreach (Control c in lightColorControls)
+				c.BackColor = ChangeColorBrightness(color, 0.30f);
+
+			foreach (Control c in normalColorControls)
+				c.BackColor = color;
+
+			//spForm.dgvStockpile.BackgroundColor = color;
+			//ghForm.dgvStockpile.BackgroundColor = color;
+
+			foreach (Control c in darkColorControls)
+				c.BackColor = ChangeColorBrightness(color, -0.30f);
+
+			foreach (Control c in darkerColorControls)
+				c.BackColor = ChangeColorBrightness(color, -0.75f);
+
+		}
+
+		public static void SetAndSaveColorWGH()
+		{
+			// Show the color dialog.
+			Color color;
+			ColorDialog cd = new ColorDialog();
+			DialogResult result = cd.ShowDialog();
+			// See if user pressed ok.
+			if (result == DialogResult.OK)
+			{
+				// Set form background to the selected color.
+				color = cd.Color;
+			}
+			else
+				return;
+
+			SetWGHColor(color);
+
+			if (File.Exists(currentDir + "\\params\\COLOR.TXT"))
+				File.Delete(currentDir + "\\params\\COLOR.TXT");
+
+			File.WriteAllText(currentDir + "\\params\\COLOR.TXT", color.R.ToString() + "," + color.G.ToString() + "," + color.B.ToString());
+		}
+
+	}
+
+	static class RandomExtensions
+	{
+		public static long RandomLong(this Random rnd)
+		{
+			byte[] buffer = new byte[8];
+			rnd.NextBytes(buffer);
+			return BitConverter.ToInt64(buffer, 0);
+		}
+
+		public static long RandomLong(this Random rnd, long min, long max)
+		{
+			EnsureMinLEQMax(ref min, ref max);
+			long numbersInRange = unchecked(max - min + 1);
+			if (numbersInRange < 0)
+				throw new ArgumentException("Size of range between min and max must be less than or equal to Int64.MaxValue");
+
+			long randomOffset = RandomLong(rnd);
+			if (IsModuloBiased(randomOffset, numbersInRange))
+				return RandomLong(rnd, min, max); // Try again
+			else
+				return min + PositiveModuloOrZero(randomOffset, numbersInRange);
+		}
+
+		static bool IsModuloBiased(long randomOffset, long numbersInRange)
+		{
+			long greatestCompleteRange = numbersInRange * (long.MaxValue / numbersInRange);
+			return randomOffset > greatestCompleteRange;
+		}
+
+		static long PositiveModuloOrZero(long dividend, long divisor)
+		{
+			long mod;
+			Math.DivRem(dividend, divisor, out mod);
+			if (mod < 0)
+				mod += divisor;
+			return mod;
+		}
+
+		static void EnsureMinLEQMax(ref long min, ref long max)
+		{
+			if (min <= max)
+				return;
+			long temp = min;
+			min = max;
+			max = temp;
+		}
+	}
 }

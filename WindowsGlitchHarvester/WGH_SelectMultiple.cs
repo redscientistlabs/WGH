@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using Delimon.Win32.IO;
 using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace WindowsGlitchHarvester
 {
-    public partial class WGH_SelectMultiple : Form
+    public partial class WGH_SelectMultipleForm : Form
     {
         OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-        public WGH_SelectMultiple()
+        public WGH_SelectMultipleForm()
         {
             InitializeComponent();
         }
