@@ -72,7 +72,40 @@ namespace WindowsGlitchHarvester
 
                     WGH_Core.lastBlastLayerBackup = new BlastLayer();
                 }
+
+
+				if(mi is ProcessInterface)
+				{
+					cbTerminateOnReExec.Visible = false;
+					cbWriteCopyMode.Visible = false;
+					rbExecuteWith.Visible = false;
+					rbExecuteScript.Visible = false;
+					rbExecuteOtherProgram.Visible = false;
+					rbExecuteCorruptedFile.Visible = false;
+					rbNoExecution.Visible = false;
+					btnEditExec.Visible = false;
+					lbExecution.Visible = false;
+					cbInjectOnSelect.Visible = false;
+
+					WGH_Core.acForm.Visible = true;
+				}
+				else
+				{
+					cbTerminateOnReExec.Visible = true;
+					cbWriteCopyMode.Visible = true;
+					rbExecuteWith.Visible = true;
+					rbExecuteScript.Visible = true;
+					rbExecuteOtherProgram.Visible = true;
+					rbExecuteCorruptedFile.Visible = true;
+					rbNoExecution.Visible = true;
+					btnEditExec.Visible = true;
+					lbExecution.Visible = true;
+					cbInjectOnSelect.Visible = true;
+
+					WGH_Core.acForm.Visible = false;
+				}
             }
+
 
 			lbStashHistory.Items.Clear();
 			lbStockpile.Items.Clear();
@@ -92,6 +125,10 @@ namespace WindowsGlitchHarvester
 
 		public void BlastTarget(int times = 1, bool untilFound = false, bool stashBlastLayer = true)
 		{
+			if (WGH_Core.currentMemoryInterface is ProcessInterface)
+				(WGH_Core.currentMemoryInterface as ProcessInterface).RefreshSize();
+
+
 			if (WGH_Core.currentMemoryInterface == null)
 			{
 				MessageBox.Show("No target is loaded");
@@ -387,33 +424,6 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
         private void btnClearStashHistory_Click(object sender, EventArgs e)
         {
             lbStashHistory.Items.Clear();
-        }
-
-        private void btnHookToProcess_Click(object sender, EventArgs e)
-        {
-
-
-
-			WGH_Core.ProcessHookName = "SOMETHING";// tbProcessName.Text;
-            if (WGH_Core.ProcessHookName.Trim() == "")
-                return;
-
-            var allProcesses = Process.GetProcesses();
-
-			hijack = new ProcessHijacker(WGH_Core.ProcessHookName);
-            
-
-            MessageBox.Show("hooked to process named " + WGH_Core.ProcessHookName + ", MemorySize: " + hijack.processSize.ToString());
-            new object();
-
-        }
-
-        private void btnDumpProcess_Click(object sender, EventArgs e)
-        {
-            var data = hijack.ReadAllData();
-            File.WriteAllBytes(WGH_Core.ProcessHookName + ".txt", data);
-            MessageBox.Show($"Extracted process named {WGH_Core.ProcessHookName} to {WGH_Core.ProcessHookName}.txt");
-            new object();
         }
 
         private void btnInjectSelected_Click(object sender, EventArgs e)
@@ -957,7 +967,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 		{
 			if (e.Button == MouseButtons.Right)
 			{
-				Point locate = new Point((sender as Control).Location.X + e.Location.X, (sender as Control).Location.Y + e.Location.Y);
+				Point locate = new Point((sender as Control).Location.X + e.Location.X + pnBottom.Location.X, (sender as Control).Location.Y + e.Location.Y + pnBottom.Location.Y);
 
 				ContextMenuStrip columnsMenu = new ContextMenuStrip();
 				columnsMenu.Items.Add("Run 3 times", null, new EventHandler((ob, ev) => { BlastTarget(5); }));
@@ -981,7 +991,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 		{
 			if (e.Button == MouseButtons.Right)
 			{
-				Point locate = new Point((sender as Control).Location.X + e.Location.X, (sender as Control).Location.Y + e.Location.Y);
+				Point locate = new Point((sender as Control).Location.X + e.Location.X + pnBottom.Location.X, (sender as Control).Location.Y + e.Location.Y + pnBottom.Location.Y);
 
 				ContextMenuStrip columnsMenu = new ContextMenuStrip();
 				columnsMenu.Items.Add("Run 3 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(5); }));
@@ -995,9 +1005,9 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 			}
 		}
 
-		private void GuaranteedBlastTarget(int v)
+		private void GuaranteedBlastTarget(int amount)
 		{
-			for (int i = 0; i < v; i++)
+			for (int i = 0; i < amount; i++)
 				BlastTarget(int.MaxValue, true);
 		}
 

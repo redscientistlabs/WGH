@@ -45,7 +45,7 @@
 			this.btnStartAutoCorrupt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnStartAutoCorrupt.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
 			this.btnStartAutoCorrupt.ForeColor = System.Drawing.Color.OrangeRed;
-			this.btnStartAutoCorrupt.Location = new System.Drawing.Point(302, 9);
+			this.btnStartAutoCorrupt.Location = new System.Drawing.Point(6, 9);
 			this.btnStartAutoCorrupt.Name = "btnStartAutoCorrupt";
 			this.btnStartAutoCorrupt.Size = new System.Drawing.Size(312, 28);
 			this.btnStartAutoCorrupt.TabIndex = 1;
@@ -61,7 +61,7 @@
 			this.nmAutoCorruptDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.nmAutoCorruptDelay.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.nmAutoCorruptDelay.ForeColor = System.Drawing.Color.White;
-			this.nmAutoCorruptDelay.Location = new System.Drawing.Point(441, 43);
+			this.nmAutoCorruptDelay.Location = new System.Drawing.Point(145, 43);
 			this.nmAutoCorruptDelay.Name = "nmAutoCorruptDelay";
 			this.nmAutoCorruptDelay.Size = new System.Drawing.Size(86, 25);
 			this.nmAutoCorruptDelay.TabIndex = 20;
@@ -80,7 +80,7 @@
 			this.label5.AutoSize = true;
 			this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.label5.ForeColor = System.Drawing.Color.White;
-			this.label5.Location = new System.Drawing.Point(299, 45);
+			this.label5.Location = new System.Drawing.Point(3, 45);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(138, 17);
 			this.label5.TabIndex = 21;
@@ -92,7 +92,7 @@
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.label1.ForeColor = System.Drawing.Color.White;
-			this.label1.Location = new System.Drawing.Point(535, 46);
+			this.label1.Location = new System.Drawing.Point(239, 46);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(79, 17);
 			this.label1.TabIndex = 22;
@@ -102,7 +102,7 @@
 			// 
 			this.pbRTC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.pbRTC.Image = global::WindowsGlitchHarvester.Properties.Resources.logortc;
-			this.pbRTC.Location = new System.Drawing.Point(226, 8);
+			this.pbRTC.Location = new System.Drawing.Point(337, 9);
 			this.pbRTC.Name = "pbRTC";
 			this.pbRTC.Size = new System.Drawing.Size(66, 69);
 			this.pbRTC.TabIndex = 23;

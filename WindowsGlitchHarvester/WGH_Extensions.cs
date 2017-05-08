@@ -11,6 +11,10 @@ namespace WindowsGlitchHarvester
         public static T[] SubArray<T>(this T[] data, long index, long length)
         {
             T[] result = new T[length];
+
+			if (data == null)
+				return null;
+
             Array.Copy(data, index, result, 0, length);
             return result;
         }

@@ -12,7 +12,7 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.14";
+		public static string WghVersion = "0.15";
 
 		public static Random RND = new Random();
         public static string[] args;
@@ -49,7 +49,7 @@ namespace WindowsGlitchHarvester
         public static WGH_MainForm ghForm;
         public static WGH_SelectMultipleForm smForm = null;
 		public static WGH_HookProcessForm hpForm = null;
-		public static WGH_AutoCorruptForm acForm = new WGH_AutoCorruptForm();
+		public static WGH_AutoCorruptForm acForm = null;
 
         //Object references
         public static MemoryInterface currentMemoryInterface = null;
@@ -76,10 +76,13 @@ namespace WindowsGlitchHarvester
 			acForm = new WGH_AutoCorruptForm();
 			acForm.TopLevel = false;
 			ghForm.pnBottom.Controls.Add(acForm);
+			acForm.Anchor = AnchorStyles.Left;
 			acForm.Location = new Point(240, 0);
-			acForm.Show();
-			acForm.BringToFront();
 
+			acForm.Show();
+			
+			acForm.BringToFront();
+			acForm.Visible = false;
 
 			if (File.Exists(currentDir + "\\params\\COLOR.TXT"))
 			{

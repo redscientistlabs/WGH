@@ -135,13 +135,14 @@ namespace WindowsGlitchHarvester
 
 
         //Memory indexing
-        List<long> allMemoryChunkSizes;
-        List<long> allMemoryChunkAddresses;
+        long[] allMemoryChunkSizes;
+		long[] allMemoryChunkAddresses;
+		private string processName;
 
 
-        // thx these for info
-        // http://www.codeproject.com/Articles/716227/Csharp-How-to-Scan-a-Process-Memory
-        // http://www.codeproject.com/Articles/670373/Csharp-Read-Write-another-Process-Memory
+		// thx these for info
+		// http://www.codeproject.com/Articles/716227/Csharp-How-to-Scan-a-Process-Memory
+		// http://www.codeproject.com/Articles/670373/Csharp-Read-Write-another-Process-Memory
 
 
 		public ProcessHijacker(string processName)
@@ -170,7 +171,7 @@ namespace WindowsGlitchHarvester
             long address = 0;
             long blockVirtualAddress = 0;
 
-            for(int i = 0; i < allMemoryChunkAddresses.Count; i++)
+            for(int i = 0; i < allMemoryChunkAddresses.Length; i++)
             {
 
                 if (virtualAddress < blockVirtualAddress + allMemoryChunkSizes[i])
@@ -183,7 +184,6 @@ namespace WindowsGlitchHarvester
 
             }
 
-            new object();
             return address;
         }
 
@@ -209,8 +209,8 @@ namespace WindowsGlitchHarvester
 
             int fullMemSize = 0;
 
-            allMemoryChunkSizes = new List<long>();
-            allMemoryChunkAddresses = new List<long>();
+            var _allMemoryChunkSizes = new List<long>();
+            var _allMemoryChunkAddresses = new List<long>();
 
             while (proc_min_address_l < proc_max_address_l)
             {
@@ -220,8 +220,8 @@ namespace WindowsGlitchHarvester
                 // if this memory chunk is accessible
                 if (mem_basic_info.Protect == PAGE_READWRITE && mem_basic_info.State == MEM_COMMIT)
                 {
-                    allMemoryChunkSizes.Add(mem_basic_info.RegionSize);
-                    allMemoryChunkAddresses.Add(proc_min_address_l);
+					_allMemoryChunkSizes.Add(mem_basic_info.RegionSize);
+					_allMemoryChunkAddresses.Add(proc_min_address_l);
 
                     fullMemSize += mem_basic_info.RegionSize;
                 }
@@ -237,7 +237,10 @@ namespace WindowsGlitchHarvester
 				return null;
 			}
 
-            return fullMemSize;
+			allMemoryChunkSizes = _allMemoryChunkSizes.ToArray();
+			allMemoryChunkAddresses = _allMemoryChunkAddresses.ToArray();
+
+			return fullMemSize;
 
         }
 
@@ -476,8 +479,12 @@ namespace WindowsGlitchHarvester
 			}
         }
 
-        public bool HookToProcess(string processName)
+        public bool HookToProcess(string _processName = null)
         {
+			if(_processName!= null)
+				processName = _processName;
+
+
 
 			string[] processData = processName.Split(':');
 
@@ -499,5 +506,9 @@ namespace WindowsGlitchHarvester
 			}
         }
 
-    }
+		public void refreshProcessSize()
+		{
+			HookToProcess();
+		}
+	}
 }

@@ -859,7 +859,7 @@ namespace WindowsGlitchHarvester
         public override byte[] PeekBytes(long address, int range)
         {
 
-            if (lastMemoryDump == null)
+            if (lastMemoryDump != null)
                 return lastMemoryDump.SubArray(address, range);
 
             if (stream == null)
@@ -1148,6 +1148,7 @@ namespace WindowsGlitchHarvester
             if (hijack == null)
                 return 0;
 
+			hijack.refreshProcessSize();
 			lastMemorySize = hijack.processSize;
 
             return (long)lastMemorySize;
@@ -1268,5 +1269,9 @@ namespace WindowsGlitchHarvester
             //CAN'T DO THAT WITH PROCESSES
         }
 
-    }
+		public void RefreshSize()
+		{
+			getMemorySize();
+		}
+	}
 }

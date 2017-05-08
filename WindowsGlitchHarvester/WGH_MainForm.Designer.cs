@@ -72,8 +72,6 @@
 			this.btnResetBackup = new System.Windows.Forms.Button();
 			this.cbWriteCopyMode = new System.Windows.Forms.CheckBox();
 			this.btnInjectSelected = new System.Windows.Forms.Button();
-			this.btnHookToProcess = new System.Windows.Forms.Button();
-			this.btnDumpProcess = new System.Windows.Forms.Button();
 			this.btnDisableAutoUncorrupt = new System.Windows.Forms.Button();
 			this.btnEnableCaching = new System.Windows.Forms.Button();
 			this.pnBottom = new System.Windows.Forms.Panel();
@@ -89,7 +87,6 @@
 			this.lbExecution = new System.Windows.Forms.Label();
 			this.cbInjectOnSelect = new System.Windows.Forms.CheckBox();
 			this.btnRenameSelected = new System.Windows.Forms.Button();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.gbVectorEngineSettings = new System.Windows.Forms.GroupBox();
 			this.cbBigEndian = new System.Windows.Forms.CheckBox();
 			this.cbVectorValueList = new System.Windows.Forms.ComboBox();
@@ -302,14 +299,14 @@
 			this.btnStockpileMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
 			this.btnStockpileMoveDown.FlatAppearance.BorderSize = 0;
 			this.btnStockpileMoveDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnStockpileMoveDown.Font = new System.Drawing.Font("Segoe UI Semibold", 13F, System.Drawing.FontStyle.Bold);
-			this.btnStockpileMoveDown.Location = new System.Drawing.Point(815, 404);
+			this.btnStockpileMoveDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.btnStockpileMoveDown.Location = new System.Drawing.Point(815, 405);
 			this.btnStockpileMoveDown.Name = "btnStockpileMoveDown";
 			this.btnStockpileMoveDown.Size = new System.Drawing.Size(39, 32);
 			this.btnStockpileMoveDown.TabIndex = 13;
 			this.btnStockpileMoveDown.TabStop = false;
 			this.btnStockpileMoveDown.Tag = "color:light";
-			this.btnStockpileMoveDown.Text = "⤋";
+			this.btnStockpileMoveDown.Text = "▼▼";
 			this.btnStockpileMoveDown.UseVisualStyleBackColor = false;
 			this.btnStockpileMoveDown.Click += new System.EventHandler(this.btnStockpileMoveDown_Click);
 			// 
@@ -319,14 +316,14 @@
 			this.btnStockpileMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
 			this.btnStockpileMoveUp.FlatAppearance.BorderSize = 0;
 			this.btnStockpileMoveUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnStockpileMoveUp.Font = new System.Drawing.Font("Segoe UI Semibold", 13F, System.Drawing.FontStyle.Bold);
-			this.btnStockpileMoveUp.Location = new System.Drawing.Point(774, 404);
+			this.btnStockpileMoveUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.btnStockpileMoveUp.Location = new System.Drawing.Point(774, 405);
 			this.btnStockpileMoveUp.Name = "btnStockpileMoveUp";
 			this.btnStockpileMoveUp.Size = new System.Drawing.Size(39, 32);
 			this.btnStockpileMoveUp.TabIndex = 14;
 			this.btnStockpileMoveUp.TabStop = false;
 			this.btnStockpileMoveUp.Tag = "color:light";
-			this.btnStockpileMoveUp.Text = "⤊";
+			this.btnStockpileMoveUp.Text = "▲▲";
 			this.btnStockpileMoveUp.UseVisualStyleBackColor = false;
 			this.btnStockpileMoveUp.Click += new System.EventHandler(this.btnStockpileMoveUp_Click);
 			// 
@@ -447,7 +444,7 @@
 			this.btnAddStashToStockpile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
 			this.btnAddStashToStockpile.FlatAppearance.BorderSize = 0;
 			this.btnAddStashToStockpile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnAddStashToStockpile.Font = new System.Drawing.Font("Segoe UI", 26F);
+			this.btnAddStashToStockpile.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
 			this.btnAddStashToStockpile.Location = new System.Drawing.Point(383, 187);
 			this.btnAddStashToStockpile.Name = "btnAddStashToStockpile";
 			this.btnAddStashToStockpile.Padding = new System.Windows.Forms.Padding(0, 0, 0, 13);
@@ -791,40 +788,6 @@
 			this.btnInjectSelected.UseVisualStyleBackColor = false;
 			this.btnInjectSelected.Click += new System.EventHandler(this.btnInjectSelected_Click);
 			// 
-			// btnHookToProcess
-			// 
-			this.btnHookToProcess.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-			this.btnHookToProcess.FlatAppearance.BorderSize = 0;
-			this.btnHookToProcess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnHookToProcess.Font = new System.Drawing.Font("Segoe UI", 8F);
-			this.btnHookToProcess.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.btnHookToProcess.Location = new System.Drawing.Point(330, 6);
-			this.btnHookToProcess.Name = "btnHookToProcess";
-			this.btnHookToProcess.Size = new System.Drawing.Size(97, 24);
-			this.btnHookToProcess.TabIndex = 32;
-			this.btnHookToProcess.TabStop = false;
-			this.btnHookToProcess.Tag = "color:darker";
-			this.btnHookToProcess.Text = "hook process";
-			this.btnHookToProcess.UseVisualStyleBackColor = false;
-			this.btnHookToProcess.Click += new System.EventHandler(this.btnHookToProcess_Click);
-			// 
-			// btnDumpProcess
-			// 
-			this.btnDumpProcess.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-			this.btnDumpProcess.FlatAppearance.BorderSize = 0;
-			this.btnDumpProcess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnDumpProcess.Font = new System.Drawing.Font("Segoe UI", 8F);
-			this.btnDumpProcess.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.btnDumpProcess.Location = new System.Drawing.Point(330, 32);
-			this.btnDumpProcess.Name = "btnDumpProcess";
-			this.btnDumpProcess.Size = new System.Drawing.Size(97, 24);
-			this.btnDumpProcess.TabIndex = 32;
-			this.btnDumpProcess.TabStop = false;
-			this.btnDumpProcess.Tag = "color:darker";
-			this.btnDumpProcess.Text = "dump process";
-			this.btnDumpProcess.UseVisualStyleBackColor = false;
-			this.btnDumpProcess.Click += new System.EventHandler(this.btnDumpProcess_Click);
-			// 
 			// btnDisableAutoUncorrupt
 			// 
 			this.btnDisableAutoUncorrupt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
@@ -832,7 +795,7 @@
 			this.btnDisableAutoUncorrupt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnDisableAutoUncorrupt.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.btnDisableAutoUncorrupt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.btnDisableAutoUncorrupt.Location = new System.Drawing.Point(8, 14);
+			this.btnDisableAutoUncorrupt.Location = new System.Drawing.Point(8, 11);
 			this.btnDisableAutoUncorrupt.Name = "btnDisableAutoUncorrupt";
 			this.btnDisableAutoUncorrupt.Size = new System.Drawing.Size(103, 41);
 			this.btnDisableAutoUncorrupt.TabIndex = 36;
@@ -849,9 +812,9 @@
 			this.btnEnableCaching.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnEnableCaching.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.btnEnableCaching.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.btnEnableCaching.Location = new System.Drawing.Point(113, 14);
+			this.btnEnableCaching.Location = new System.Drawing.Point(120, 11);
 			this.btnEnableCaching.Name = "btnEnableCaching";
-			this.btnEnableCaching.Size = new System.Drawing.Size(104, 40);
+			this.btnEnableCaching.Size = new System.Drawing.Size(107, 40);
 			this.btnEnableCaching.TabIndex = 35;
 			this.btnEnableCaching.TabStop = false;
 			this.btnEnableCaching.Tag = "color:darker";
@@ -1071,19 +1034,6 @@
 			this.btnRenameSelected.UseVisualStyleBackColor = false;
 			this.btnRenameSelected.Click += new System.EventHandler(this.btnRenameSelected_Click);
 			// 
-			// checkBox1
-			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Font = new System.Drawing.Font("Segoe UI", 8F);
-			this.checkBox1.ForeColor = System.Drawing.Color.White;
-			this.checkBox1.Location = new System.Drawing.Point(223, 37);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(107, 17);
-			this.checkBox1.TabIndex = 43;
-			this.checkBox1.TabStop = false;
-			this.checkBox1.Text = "Pack files in SKS";
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
 			// gbVectorEngineSettings
 			// 
 			this.gbVectorEngineSettings.Controls.Add(this.cbBigEndian);
@@ -1240,11 +1190,8 @@
 			// 
 			this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel3.BackColor = System.Drawing.Color.Gray;
-			this.panel3.Controls.Add(this.checkBox1);
 			this.panel3.Controls.Add(this.btnDisableAutoUncorrupt);
 			this.panel3.Controls.Add(this.btnEnableCaching);
-			this.panel3.Controls.Add(this.btnHookToProcess);
-			this.panel3.Controls.Add(this.btnDumpProcess);
 			this.panel3.Location = new System.Drawing.Point(418, 475);
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(436, 61);
@@ -1344,7 +1291,6 @@
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.panel3.ResumeLayout(false);
-			this.panel3.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1395,8 +1341,6 @@
         private System.Windows.Forms.ComboBox cbBlastType;
         private System.Windows.Forms.CheckBox cbWriteCopyMode;
         private System.Windows.Forms.Button btnInjectSelected;
-        private System.Windows.Forms.Button btnHookToProcess;
-        private System.Windows.Forms.Button btnDumpProcess;
         private System.Windows.Forms.CheckBox cbInjectOnSelect;
         public System.Windows.Forms.RadioButton rbExecuteOtherProgram;
         public System.Windows.Forms.RadioButton rbExecuteCorruptedFile;
@@ -1410,7 +1354,6 @@
         private System.Windows.Forms.Button btnEnableCaching;
         private System.Windows.Forms.Button btnDisableAutoUncorrupt;
 		private System.Windows.Forms.Button btnRenameSelected;
-		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.Button btnRerollInject;
 		private System.Windows.Forms.GroupBox gbVectorEngineSettings;
 		public System.Windows.Forms.ComboBox cbVectorValueList;
