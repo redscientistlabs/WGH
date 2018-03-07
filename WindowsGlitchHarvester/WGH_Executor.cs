@@ -32,7 +32,7 @@ namespace WindowsGlitchHarvester
                     if (OpenFileDialog1.FileName.ToString().Contains('^'))
                     {
                         MessageBox.Show("You can't use a file that contains the character ^ ");
-                        goto SelectExecutorAgain;
+                        return;
                     }
 
                     otherProgram = OpenFileDialog1.FileName.ToString();
@@ -53,8 +53,28 @@ namespace WindowsGlitchHarvester
         {
             var gh = WGH_Core.ghForm;
 
+            //Hijack no execution for the Netcore executor
             if (gh.rbNoExecution.Checked)
-                return;
+            {
+                if (WGH_Core.currentMemoryInterface is DolphinInterface) { 
+                    if (WGH_Core.ssForm != null && WGH_Core.ssForm.isNetcoreRunning())
+                    {
+                        WGH_Core.ssForm.btnLoadState.PerformClick();
+                    }
+                    else 
+                    {
+                        if (MessageBox.Show("Netcore isn't running! Do you want to start it?", "Alert", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            WGH_Core.ssForm?.Close();
+                            WGH_Core.ssForm = new WGH_SavestateInfoForm();
+                            WGH_Core.ssForm.btnStartNetCore.PerformClick(); 
+                        }
+                    }
+                }
+                
+                else
+                    return;
+            }
             else if (gh.rbExecuteCorruptedFile.Checked)
             {
                 if (WGH_Core.currentTargetType == "File")
@@ -62,7 +82,7 @@ namespace WindowsGlitchHarvester
                     var fi = (FileInterface)WGH_Core.currentMemoryInterface;
                     //Process.Start(fi.filename);
 
-                    string fullPath = fi.filename;
+                    string fullPath = fi.Filename;
                     ProcessStartInfo psi = new ProcessStartInfo();
                     psi.FileName = Path.GetFileName(fullPath);
                     psi.WorkingDirectory = Path.GetDirectoryName(fullPath);
@@ -84,7 +104,7 @@ namespace WindowsGlitchHarvester
                     ProcessStartInfo psi = new ProcessStartInfo();
                     psi.FileName = Path.GetFileName(fullPath);
                     psi.WorkingDirectory = Path.GetDirectoryName(fullPath);
-                    psi.Arguments = "\"" + fi.filename + "\"";
+                    psi.Arguments = "\"" + fi.Filename + "\"";
                     Process.Start(psi);
 
                 }
@@ -100,7 +120,10 @@ namespace WindowsGlitchHarvester
                     ProcessStartInfo psi = new ProcessStartInfo();
                     psi.FileName = Path.GetFileName(fullPath);
                     psi.WorkingDirectory = Path.GetDirectoryName(fullPath);
-                    //psi.Arguments = "\"" + fi.filename + "\"";
+
+                    if (!string.IsNullOrWhiteSpace(WGH_Core.ghForm.tbArgs.Text))
+                        psi.Arguments = WGH_Core.ghForm.tbArgs.Text.Trim(); ;
+
                     Process.Start(psi);
 
                 }
@@ -116,6 +139,9 @@ namespace WindowsGlitchHarvester
         public static void RefreshLabel()
         {
             var gh = WGH_Core.ghForm;
+
+            gh.lbArgs.Visible = false;
+            gh.tbArgs.Visible = false;
 
             if (gh.rbNoExecution.Checked)
                 gh.lbExecution.Text = "No execution set";
@@ -134,6 +160,9 @@ namespace WindowsGlitchHarvester
             }
             else if (gh.rbExecuteOtherProgram.Checked)
             {
+                gh.lbArgs.Visible = true;
+                gh.tbArgs.Visible = true;
+
                 if (otherProgram == null)
                 {
                     gh.lbExecution.Text = "No program selected for execution";

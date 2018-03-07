@@ -12,15 +12,9 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.15";
+		public static string WghVersion = "0.93b";
 
 		public static Random RND = new Random();
-        public static string[] args;
-
-        public static Timer ResizeTimer;
-        public static Size ResizeSize;
-
-        public static Timer HexEditorTimer;
 
         //Values
         public static bool isLoaded = false;
@@ -40,6 +34,7 @@ namespace WindowsGlitchHarvester
         public static string currentDir = System.IO.Directory.GetCurrentDirectory();
         public static string currentTargetType = "";
         public static string currentTargetName = "";
+        public static string currentTargetFullName = "";
         public static string currentTargetId = "";
 
         public static bool writeCopyMode = false;
@@ -50,8 +45,10 @@ namespace WindowsGlitchHarvester
         public static WGH_SelectMultipleForm smForm = null;
 		public static WGH_HookProcessForm hpForm = null;
 		public static WGH_AutoCorruptForm acForm = null;
+        public static WGH_BlastEditorForm beForm = null;
+        public static WGH_SavestateInfoForm ssForm = null;
 
-        //Object references
+        //object references
         public static MemoryInterface currentMemoryInterface = null;
         public static Stockpile currentStockpile = null;
         public static StashKey currentStashkey = null;
@@ -84,15 +81,32 @@ namespace WindowsGlitchHarvester
 			acForm.BringToFront();
 			acForm.Visible = false;
 
-			if (File.Exists(currentDir + "\\params\\COLOR.TXT"))
+            if (!Directory.Exists(WGH_Core.currentDir + "\\TEMP\\"))
+                Directory.CreateDirectory(WGH_Core.currentDir + "\\TEMP\\");
+
+            if (!Directory.Exists(WGH_Core.currentDir + "\\TEMP2\\"))
+                Directory.CreateDirectory(WGH_Core.currentDir + "\\TEMP2\\");
+
+            if (!Directory.Exists(WGH_Core.currentDir + "\\PARAMS\\"))
+                Directory.CreateDirectory(WGH_Core.currentDir + "\\PARAMS\\");
+
+
+            if (File.Exists(currentDir + "\\PARAMS\\COLOR.TXT"))
 			{
-				string[] bytes = File.ReadAllText(currentDir + "\\params\\COLOR.TXT").Split(',');
+				string[] bytes = File.ReadAllText(currentDir + "\\PARAMS\\COLOR.TXT").Split(',');
 				SetWGHColor(Color.FromArgb(Convert.ToByte(bytes[0]), Convert.ToByte(bytes[1]), Convert.ToByte(bytes[2])));
 			}
 			else
 				SetWGHColor(Color.FromArgb(127, 120, 165));
 
-		}
+            if (File.Exists(currentDir + "\\LICENSES\\DISCLAIMER.TXT"))
+            {
+                MessageBox.Show(File.ReadAllText(currentDir + "\\LICENSES\\DISCLAIMER.TXT").Replace("[ver]", WGH_Core.WghVersion), "WGH", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                File.Delete(currentDir + "\\LICENSES\\DISCLAIMER.TXT");
+            }
+
+
+        }
 
         public static long RandomLong(long max)
         {
@@ -154,12 +168,10 @@ namespace WindowsGlitchHarvester
                         BlastRange = MaxAddress - StartingAddress;
                     else if (StartingAddress + BlastRange > MaxAddress)
                         BlastRange = MaxAddress - StartingAddress;
-
-
-
+                    
                     for (int i = 0; i < Intensity; i++)
                     {
-                        RandomAdress = StartingAddress + RandomLong(BlastRange);
+                        RandomAdress = StartingAddress + RandomLong(BlastRange -1);
 
                         bu = getBlastUnit(TargetType, RandomAdress);
                         if (bu != null)
@@ -198,11 +210,9 @@ namespace WindowsGlitchHarvester
 
         public static void LoadTarget()
         {
-
             if (WGH_Core.ghForm.rbTargetFile.Checked)
             {
                 OpenFileDialog OpenFileDialog1;
-                LoadTargetAgain:
                 OpenFileDialog1 = new OpenFileDialog();
 
                 OpenFileDialog1.Title = "Open File";
@@ -213,23 +223,31 @@ namespace WindowsGlitchHarvester
                     if(OpenFileDialog1.FileName.ToString().Contains('^'))
                     {
                         MessageBox.Show("You can't use a file that contains the character ^ ");
-                        goto LoadTargetAgain;
+                        return;
                     }
 
                     currentTargetId = "File|" + OpenFileDialog1.FileName.ToString();
+                    currentTargetFullName = OpenFileDialog1.FileName.ToString();
                 }
                 else
                     return;
 
-                if (currentMemoryInterface != null && (currentTargetType == "File" || currentTargetType == "MultipleFiles"))
-                    WGH_Core.RestoreTarget();
+                //Disable caching of the previously loaded file if it was enabled
+                if (ghForm.btnEnableCaching.Text == "Disable caching on current target")
+                    ghForm.btnEnableCaching.PerformClick();
 
+                if (currentMemoryInterface != null && (currentTargetType == "Dolphin" || currentTargetType == "File" || currentTargetType == "MultipleFiles"))
+                {
+                    WGH_Core.RestoreTarget();
+                    currentMemoryInterface.stream?.Dispose();
+                }
+                
                 currentTargetType = "File";
                 var fi = new FileInterface(currentTargetId);
-                currentTargetName = fi.shortFilename;
+                currentTargetName = fi.ShortFilename;
+
                 currentMemoryInterface = fi;
                 ghForm.lbTarget.Text = currentTargetId + "|MemorySize:" + fi.lastMemorySize.ToString();
-
             }
             else if (WGH_Core.ghForm.rbTargetMultipleFiles.Checked)
             {
@@ -246,27 +264,85 @@ namespace WindowsGlitchHarvester
 
                 currentTargetType = "MultipleFiles";
                 var mfi = (MultipleFileInterface)WGH_Core.currentMemoryInterface;
-                currentTargetName = mfi.shortFilename;
-                ghForm.lbTarget.Text = mfi.shortFilename + "|MemorySize:" + mfi.lastMemorySize.ToString();
+                currentTargetName = mfi.ShortFilename;
+                ghForm.lbTarget.Text = mfi.ShortFilename + "|MemorySize:" + mfi.lastMemorySize.ToString();
             }
             else if (WGH_Core.ghForm.rbTargetProcess.Checked)
             {
-				if (hpForm != null)
-					hpForm.Close();
+                if (hpForm != null)
+                    hpForm.Close();
 
-				hpForm = new WGH_HookProcessForm();
+                hpForm = new WGH_HookProcessForm();
 
-				if (hpForm.ShowDialog() != DialogResult.OK)
-				{
-					WGH_Core.currentMemoryInterface = null;
-					return;
-				}
+                if (hpForm.ShowDialog() != DialogResult.OK)
+                {
+                    WGH_Core.currentMemoryInterface = null;
+                    return;
+                }
 
-				currentTargetType = "Process";
-				var mfi = (ProcessInterface)WGH_Core.currentMemoryInterface;
-				currentTargetName = mfi.processName;
-				ghForm.lbTarget.Text = mfi.processName + "|MemorySize:" + mfi.lastMemorySize.ToString();
-			}
+                currentTargetType = "Process";
+                var mfi = (ProcessInterface)WGH_Core.currentMemoryInterface;
+                currentTargetName = mfi.ProcessName;
+                ghForm.lbTarget.Text = mfi.ProcessName + "|MemorySize:" + mfi.lastMemorySize.ToString();
+            }
+            if (WGH_Core.ghForm.rbTargetDolphin.Checked)
+            {
+                OpenFileDialog OpenFileDialog1;
+                OpenFileDialog1 = new OpenFileDialog();
+
+                OpenFileDialog1.Title = "Open File";
+                OpenFileDialog1.Filter = "Dolphin Savestates|*.state;*.s01;*.s02;*.s03;*.s04;*.s05;*.s06;*.s07;*.s08;*.s09;*.sav|All Files|*.*";
+                OpenFileDialog1.RestoreDirectory = true;
+                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    if (OpenFileDialog1.FileName.ToString().Contains('^'))
+                    {
+                        MessageBox.Show("You can't use a file that contains the character ^ ");
+                    }
+
+                    currentTargetId = "Dolphin|" + OpenFileDialog1.FileName.ToString();
+                    currentTargetFullName = OpenFileDialog1.FileName.ToString();
+                }
+                else
+                    return;
+
+                //Disable caching of the previously loaded file if it was enabled
+                if (ghForm.btnEnableCaching.Text == "Disable caching on current target")
+                    ghForm.btnEnableCaching.PerformClick();
+
+                if (currentMemoryInterface != null && (currentTargetType == "Dolphin" || currentTargetType == "File" || currentTargetType == "MultipleFiles"))
+                {
+                    WGH_Core.RestoreTarget();
+                    currentMemoryInterface.stream?.Dispose();
+                }
+
+
+                currentTargetType = "Dolphin";
+                var di = new DolphinInterface(currentTargetId);
+                currentTargetName = di.ShortFilename;
+
+                currentMemoryInterface = di;
+                ghForm.lbTarget.Text = currentTargetId + "|MemorySize:" + di.lastMemorySize.ToString();
+
+                //Cache the new file 
+                ghForm.btnEnableCaching.PerformClick();
+
+                //Update the savestate info. 
+                if (WGH_Core.ssForm != null)
+                    WGH_Core.ssForm.GetSavestateInfo();
+
+            }
+            /*
+            else if (WGH_Core.ghForm.rbTargetDolphin.Checked)
+            {
+
+                currentTargetType = "Dolphin";
+                //var mfi = (DolphinInterface)WGH_Core.currentMemoryInterface;
+                WGH_Core.currentMemoryInterface = new DolphinInterface("Test");
+                currentTargetName = "Dolphin";
+                ghForm.lbTarget.Text = currentTargetName + "|MemorySize:" + WGH_Core.currentMemoryInterface.lastMemorySize.ToString();
+            }*/
+
         }
 
         public static void RestoreTarget()
@@ -399,10 +475,10 @@ namespace WindowsGlitchHarvester
 
 			SetWGHColor(color);
 
-			if (File.Exists(currentDir + "\\params\\COLOR.TXT"))
-				File.Delete(currentDir + "\\params\\COLOR.TXT");
+			if (File.Exists(currentDir + "\\PARAMS\\COLOR.TXT"))
+				File.Delete(currentDir + "\\PARAMS\\COLOR.TXT");
 
-			File.WriteAllText(currentDir + "\\params\\COLOR.TXT", color.R.ToString() + "," + color.G.ToString() + "," + color.B.ToString());
+			File.WriteAllText(currentDir + "\\PARAMS\\COLOR.TXT", color.R.ToString() + "," + color.G.ToString() + "," + color.B.ToString());
 		}
 
 	}
