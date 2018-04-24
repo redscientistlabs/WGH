@@ -181,13 +181,17 @@ namespace WindowsGlitchHarvester
                 btnStartNetCore.Text = "Restart NetCore Server";
             }
 
-
         }
 
         public void btnLoadState_Click(object sender, EventArgs e)
         {
-            dolphinConn.connector.SendMessage("LOADSTATE", WGH_Core.currentTargetFullName);
-            Console.WriteLine(WGH_Core.currentTargetFullName);
+            if (WGH_Core.currentDolphinSavestate != "")
+            {
+                dolphinConn.connector.SendMessage("LOADSTATE", WGH_Core.currentDolphinSavestate);
+                ConsoleEx.WriteLine(WGH_Core.currentDolphinSavestate);
+            }
+            else
+                MessageBox.Show("There is no savestate to load! Are you sure you're using Target Dolphin?");
             //This will send a NetCoreAdvancedMessage
         }
 
@@ -195,8 +199,8 @@ namespace WindowsGlitchHarvester
         {
             //dolphinConn.connector.SendMessage("SAVESTATE");
             //This will send a NetCoreSimpleMessage
-
-            dolphinConn.connector.SendMessage("SAVESTATE", WGH_Core.currentTargetFullName);
+            WGH_Core.currentDolphinSavestate = WGH_Core.GetRandomKey();
+            dolphinConn.connector.SendMessage("SAVESTATE", WGH_Core.currentDolphinSavestate);
             //If you want to send an advanced message or if you want to specify a filename for example
         }
 

@@ -36,6 +36,7 @@ namespace WindowsGlitchHarvester
         public static string currentTargetName = "";
         public static string currentTargetFullName = "";
         public static string currentTargetId = "";
+        public static string currentDolphinSavestate= "";
 
         public static bool writeCopyMode = false;
         public static bool AutoUncorrupt = true;
@@ -323,6 +324,7 @@ namespace WindowsGlitchHarvester
 
                 currentMemoryInterface = di;
                 ghForm.lbTarget.Text = currentTargetId + "|MemorySize:" + di.lastMemorySize.ToString();
+                currentDolphinSavestate = di.getCorruptFilename();
 
                 //Cache the new file 
                 ghForm.btnEnableCaching.PerformClick();

@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.IO;
 
+
 namespace WindowsGlitchHarvester
 {
 
@@ -129,7 +130,6 @@ namespace WindowsGlitchHarvester
             BinaryFormatter bformatter = new BinaryFormatter();
 
             //creater master.sk to temp folder from stockpile object
-
 			if(File.Exists(WGH_Core.currentDir + "\\TEMP2\\master.sk"))
 				FS = File.Open(WGH_Core.currentDir + "\\TEMP2\\master.sk", FileMode.Open);
 			else
@@ -138,13 +138,25 @@ namespace WindowsGlitchHarvester
 			bformatter.Serialize(FS, sks);
             FS.Close();
 
-
+            /*
             //7z the temp folder to destination filename
             string[] stringargs = { "-c", sks.Filename, WGH_Core.currentDir + "\\TEMP2\\" };
             FastZipProgram.Exec(stringargs);
+            */
+            //string[] stringargs = { "-c", sks.Filename, RTC_Core.rtcDir + "\\TEMP\\" };
+            //FastZipProgram.Exec(stringargs);
+
+            string tempFilename = sks.Filename + ".temp";
+
+            var comp = System.IO.Compression.CompressionLevel.Fastest;
+            System.IO.Compression.ZipFile.CreateFromDirectory(WGH_Core.currentDir + "\\TEMP2\\", tempFilename, comp, false);
+
+            if (File.Exists(sks.Filename))
+                File.Delete(sks.Filename);
+
+            File.Move(tempFilename, sks.Filename);
 
             Load(sks.Filename); //Reload file after for test and clean
-
         }
 
         public static void Load()
@@ -180,11 +192,16 @@ namespace WindowsGlitchHarvester
                 return;
             }
 
+            /*
             //7z extract part
 
             string[] stringargs = { "-x", Filename, WGH_Core.currentDir + "\\TEMP2\\" };
 
             FastZipProgram.Exec(stringargs);
+            */
+
+                        
+            System.IO.Compression.ZipFile.ExtractToDirectory(Filename, WGH_Core.currentDir + "\\TEMP2\\");
 
             if (!File.Exists(WGH_Core.currentDir + "\\TEMP2\\master.sk"))
             {
@@ -273,19 +290,19 @@ namespace WindowsGlitchHarvester
             }
 
             //7z extract part
-
+            /*
             string[] stringargs = { "-x", Filename, WGH_Core.currentDir + "\\TEMP3\\" };
 
             FastZipProgram.Exec(stringargs);
+            */
+
+            System.IO.Compression.ZipFile.ExtractToDirectory(Filename, WGH_Core.currentDir + "\\TEMP2\\");
 
             if (!File.Exists(WGH_Core.currentDir + "\\TEMP3\\master.sk"))
             {
                 MessageBox.Show("The file could not be read properly");
                 return;
             }
-
-
-
             //stockpile part
             System.IO.FileStream FS;
             BinaryFormatter bformatter = new BinaryFormatter();
@@ -1317,15 +1334,19 @@ public class ProcessInterface : MemoryInterface
 		}
     }
 
-
-
+    
+    //Since we don't need to corrupt in place for dolphin, we can corrupt a copied file
+    //This also means that copy mode doesn't need to work
+    //Because of this, we're using the code intended for copy mode to provide the working file which'll be corrupted
+    //Then, the original file will never be touched
     [Serializable()]
     public class DolphinInterface : MemoryInterface
     {
         public string Filename;
         public string ShortFilename;
-
-
+        public string OriginalFilename;
+        public string OriginalShortFilename;
+        
         public DolphinInterface(string _targetId)
         {
             try
@@ -1333,6 +1354,9 @@ public class ProcessInterface : MemoryInterface
                 string[] targetId = _targetId.Split('|');
                 Filename = targetId[1];
                 ShortFilename = Filename.Substring(Filename.LastIndexOf("\\") + 1, Filename.Length - (Filename.LastIndexOf("\\") + 1));
+
+                OriginalFilename = Filename;
+                OriginalShortFilename = ShortFilename;
 
                 SetBackup();
 
@@ -1356,19 +1380,16 @@ public class ProcessInterface : MemoryInterface
 
         public string getCorruptFilename(bool overrideWriteCopyMode = false)
         {
-            if (overrideWriteCopyMode || WGH_Core.writeCopyMode)
-                return WGH_Core.currentDir + "\\TEMP\\" + getCompositeFilename("CORRUPT");
-            else
-                return Filename;
+            return WGH_Core.currentDir + "\\TEMP\\" + getCompositeFilename("CORRUPT");
         }
+        //We don't actually use the backup at all for Target Dolphin
         public string getBackupFilename()
         {
-            return WGH_Core.currentDir + "\\TEMP\\" + getCompositeFilename("BACKUP");
+            return Filename;
         }
 
         public override void ResetWorkingFile()
         {
-
             try
             {
                 if (File.Exists(getCorruptFilename()))
@@ -1384,9 +1405,7 @@ public class ProcessInterface : MemoryInterface
 
         public string SetWorkingFile()
         {
-            if (!File.Exists(getCorruptFilename()))
-                File.Copy(getBackupFilename(), getCorruptFilename(), true);
-
+            File.Copy(Filename, getCorruptFilename(), true);
             return getCorruptFilename();
         }
 
@@ -1397,52 +1416,25 @@ public class ProcessInterface : MemoryInterface
                 stream.Close();
                 stream = null;
             }
-
-            if (WGH_Core.writeCopyMode)
-            {
-
-                tryApplyWorkingFileAgain:
-                try
-                {
-                    if (File.Exists(Filename))
-                        File.Delete(Filename);
-
-                    if (File.Exists(getCorruptFilename()))
-                        File.Move(getCorruptFilename(), Filename);
-                }
-                catch
-                {
-                    MessageBox.Show($"Could not get access to {Filename} because some other program is probably using it. \n\nClose the file then try again", "WARNING");
-                }
-
-            }
+            //Copy mode wont work here as we're always working on a copied file
         }
 
         public override void SetBackup()
         {
-            if (!File.Exists(getBackupFilename()))
-                File.Copy(Filename, getBackupFilename(), true);
+            SetWorkingFile();
         }
 
         public override void ResetBackup(bool askConfirmation = true)
         {
-            if (askConfirmation && MessageBox.Show("Are you sure you want to reset the backup using the target file?", "WARNING", MessageBoxButtons.YesNo) == DialogResult.No)
-                return;
-
-            if (File.Exists(getBackupFilename()))
-                File.Delete(getBackupFilename());
-
-            SetBackup();
-
+            MessageBox.Show("Backups aren't used for Target Dolphin so you can't reset the backup!");
         }
 
         public override void RestoreBackup(bool announce = true)
         {
-
-            if (File.Exists(getBackupFilename()))
+            if (File.Exists(Filename))
             {
-                File.Delete(Filename);
-                File.Copy(getBackupFilename(), Filename, true);
+                File.Delete(getCorruptFilename());
+                SetWorkingFile();
 
                 if (announce)
                     MessageBox.Show("Backup of " + ShortFilename + " was restored");
@@ -1520,7 +1512,6 @@ public class ProcessInterface : MemoryInterface
             if (lastMemoryDump != null)
                 for (int i = 0; i < data.Length; i++)
                     lastMemoryDump[address + i] = data[i];
-
         }
 
         public override void PokeByte(long address, byte data)
