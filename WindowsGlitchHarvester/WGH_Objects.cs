@@ -126,17 +126,14 @@ namespace WindowsGlitchHarvester
 			sks.WghVersion = WGH_Core.WghVersion;
 
 
-			System.IO.FileStream FS;
             BinaryFormatter bformatter = new BinaryFormatter();
 
             //creater master.sk to temp folder from stockpile object
-			if(File.Exists(WGH_Core.currentDir + "\\TEMP2\\master.sk"))
-				FS = File.Open(WGH_Core.currentDir + "\\TEMP2\\master.sk", FileMode.Open);
-			else
-				FS = File.Open(WGH_Core.currentDir + "\\TEMP2\\master.sk", FileMode.Create);
-
-			bformatter.Serialize(FS, sks);
-            FS.Close();
+            using (FileStream FS = File.Open(WGH_Core.currentDir + "\\TEMP2\\master.sk", FileMode.OpenOrCreate))
+            {
+                bformatter.Serialize(FS, sks);
+                FS.Close();
+            }
 
             /*
             //7z the temp folder to destination filename
@@ -212,7 +209,6 @@ namespace WindowsGlitchHarvester
 
 
             //stockpile part
-            System.IO.FileStream FS;
             BinaryFormatter bformatter = new BinaryFormatter();
 
             Stockpile sks;
@@ -220,9 +216,11 @@ namespace WindowsGlitchHarvester
 
             try
             {
-                FS = File.Open(WGH_Core.currentDir + "\\TEMP2\\master.sk", FileMode.Open);
-                sks = (Stockpile)bformatter.Deserialize(FS);
-                FS.Close();
+                using (FileStream FS = File.Open(WGH_Core.currentDir + "\\TEMP2\\master.sk", FileMode.Open))
+                {
+                    sks = (Stockpile)bformatter.Deserialize(FS);
+                    FS.Close();
+                }
             }
             catch
             {
@@ -303,18 +301,20 @@ namespace WindowsGlitchHarvester
                 MessageBox.Show("The file could not be read properly");
                 return;
             }
-            //stockpile part
-            System.IO.FileStream FS;
-            BinaryFormatter bformatter = new BinaryFormatter();
 
+
+            //stockpile part
+            BinaryFormatter bformatter = new BinaryFormatter();
             Stockpile sks;
             bformatter = new BinaryFormatter();
 
             try
             {
-                FS = File.Open(WGH_Core.currentDir + "\\TEMP3\\master.sk", FileMode.Open);
-                sks = (Stockpile)bformatter.Deserialize(FS);
-                FS.Close();
+                using (FileStream FS = File.Open(WGH_Core.currentDir + "\\TEMP3\\master.sk", FileMode.Open))
+                {
+                    sks = (Stockpile)bformatter.Deserialize(FS);
+                    FS.Close();
+                }
             }
             catch
             {
