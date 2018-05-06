@@ -31,7 +31,7 @@ namespace WindowsGlitchHarvester
         public static string lastOpenTarget = null;
 
         //General Values
-        public static string currentDir = System.IO.Directory.GetCurrentDirectory();
+        public static string currentDir = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
         public static string currentTargetType = "";
         public static string currentTargetName = "";
         public static string currentTargetFullName = "";
