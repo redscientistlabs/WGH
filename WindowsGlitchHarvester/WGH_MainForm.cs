@@ -1302,6 +1302,11 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         private void rbTargetDolphin_CheckedChanged(object sender, EventArgs e)
         {
+            if (!File.Exists(WGH_Core.currentDir + "\\PARAMS\\DOLPHINWARNINGREAD") && File.Exists(WGH_Core.currentDir + "\\LICENSES\\DOLPHINWARNING.TXT"))
+            {
+                MessageBox.Show(File.ReadAllText(WGH_Core.currentDir + "\\LICENSES\\DOLPHINWARNING.TXT"), "WGH", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                File.Create(WGH_Core.currentDir + "\\PARAMS\\DOLPHINWARNINGREAD");
+            }
 
             btnResetBackup.Enabled = true;
             btnRestoreFileBackup.Enabled = true;

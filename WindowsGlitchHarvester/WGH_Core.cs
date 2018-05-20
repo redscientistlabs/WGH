@@ -12,7 +12,7 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.94";
+		public static string WghVersion = "0.94b";
 
 		public static Random RND = new Random();
 
@@ -100,10 +100,10 @@ namespace WindowsGlitchHarvester
 			else
 				SetWGHColor(Color.FromArgb(127, 120, 165));
 
-            if (File.Exists(currentDir + "\\LICENSES\\DISCLAIMER.TXT"))
+            if (File.Exists(currentDir + "\\LICENSES\\DISCLAIMER.TXT") && !File.Exists(currentDir + "\\PARAMS\\DISCLAIMERREAD"))
             {
                 MessageBox.Show(File.ReadAllText(currentDir + "\\LICENSES\\DISCLAIMER.TXT").Replace("[ver]", WGH_Core.WghVersion), "WGH", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                File.Delete(currentDir + "\\LICENSES\\DISCLAIMER.TXT");
+                File.Create(currentDir + "\\PARAMS\\DISCLAIMERREAD");
             }
 
 

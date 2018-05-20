@@ -611,6 +611,7 @@
             this.rbTargetProcess.TabIndex = 31;
             this.rbTargetProcess.Text = "Target Process (EXPERIMENTAL)";
             this.rbTargetProcess.UseVisualStyleBackColor = false;
+            this.rbTargetProcess.Visible = false;
             this.rbTargetProcess.CheckedChanged += new System.EventHandler(this.rbTargetProcess_CheckedChanged);
             // 
             // btnRemoveSelected

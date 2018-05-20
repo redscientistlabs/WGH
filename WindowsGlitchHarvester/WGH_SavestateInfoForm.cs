@@ -314,5 +314,21 @@ namespace WindowsGlitchHarvester
                 dolphinConn.StopServer();
 
         }
+        private void VisitLink()
+        {
+            System.Diagnostics.Process.Start("https://github.com/NarryG/dolphin/releases");
+        }
+
+        private void lbDownloadNarrysMod_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitLink();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to open link that was clicked.");
+            }
+        }
     }
 }
