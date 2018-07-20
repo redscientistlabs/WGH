@@ -411,7 +411,7 @@ namespace WindowsGlitchHarvester
             Layer = _layer;
         }
 
-        public void Apply()
+        public virtual void Apply()
         {
             WGH_Core.lastBlastLayerBackup = GetBackup();
 
@@ -437,6 +437,21 @@ namespace WindowsGlitchHarvester
             BlastLayer Recovery = new BlastLayer(BackupLayer);
 
             return Recovery;
+        }
+
+    }
+
+    [Serializable()]
+    public class DolphinBlastLayer : BlastLayer
+    {
+        public string SaveState { get; set; }
+        public override void Apply()
+        {
+            WGH_Core.lastBlastLayerBackup = GetBackup();
+
+
+            WGH_Core.ssForm.SendBlastlayer(this);
+
         }
 
     }

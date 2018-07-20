@@ -61,6 +61,7 @@
             this.btnPokeByte = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.lbDownloadNarrysMod = new System.Windows.Forms.LinkLabel();
+            this.btnSendBlastlayer = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -310,7 +311,7 @@
             this.btnLoadState.ForeColor = System.Drawing.Color.Black;
             this.btnLoadState.Location = new System.Drawing.Point(14, 13);
             this.btnLoadState.Name = "btnLoadState";
-            this.btnLoadState.Size = new System.Drawing.Size(137, 32);
+            this.btnLoadState.Size = new System.Drawing.Size(81, 32);
             this.btnLoadState.TabIndex = 24;
             this.btnLoadState.TabStop = false;
             this.btnLoadState.Tag = "color:light";
@@ -328,7 +329,7 @@
             this.btnSaveState.ForeColor = System.Drawing.Color.Black;
             this.btnSaveState.Location = new System.Drawing.Point(14, 52);
             this.btnSaveState.Name = "btnSaveState";
-            this.btnSaveState.Size = new System.Drawing.Size(137, 32);
+            this.btnSaveState.Size = new System.Drawing.Size(81, 32);
             this.btnSaveState.TabIndex = 25;
             this.btnSaveState.TabStop = false;
             this.btnSaveState.Tag = "color:light";
@@ -339,6 +340,7 @@
             // pnNetCoreActions
             // 
             this.pnNetCoreActions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pnNetCoreActions.Controls.Add(this.btnSendBlastlayer);
             this.pnNetCoreActions.Controls.Add(this.btnPokeBytes);
             this.pnNetCoreActions.Controls.Add(this.btnPeekBytes);
             this.pnNetCoreActions.Controls.Add(this.label8);
@@ -363,9 +365,9 @@
             this.btnPokeBytes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPokeBytes.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnPokeBytes.ForeColor = System.Drawing.Color.Black;
-            this.btnPokeBytes.Location = new System.Drawing.Point(319, 13);
+            this.btnPokeBytes.Location = new System.Drawing.Point(196, 14);
             this.btnPokeBytes.Name = "btnPokeBytes";
-            this.btnPokeBytes.Size = new System.Drawing.Size(137, 32);
+            this.btnPokeBytes.Size = new System.Drawing.Size(102, 32);
             this.btnPokeBytes.TabIndex = 35;
             this.btnPokeBytes.TabStop = false;
             this.btnPokeBytes.Tag = "color:light";
@@ -381,9 +383,9 @@
             this.btnPeekBytes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPeekBytes.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnPeekBytes.ForeColor = System.Drawing.Color.Black;
-            this.btnPeekBytes.Location = new System.Drawing.Point(319, 51);
+            this.btnPeekBytes.Location = new System.Drawing.Point(196, 52);
             this.btnPeekBytes.Name = "btnPeekBytes";
-            this.btnPeekBytes.Size = new System.Drawing.Size(137, 32);
+            this.btnPeekBytes.Size = new System.Drawing.Size(102, 32);
             this.btnPeekBytes.TabIndex = 34;
             this.btnPeekBytes.TabStop = false;
             this.btnPeekBytes.Tag = "color:light";
@@ -453,9 +455,9 @@
             this.btnPeekByte.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPeekByte.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnPeekByte.ForeColor = System.Drawing.Color.Black;
-            this.btnPeekByte.Location = new System.Drawing.Point(167, 51);
+            this.btnPeekByte.Location = new System.Drawing.Point(101, 51);
             this.btnPeekByte.Name = "btnPeekByte";
-            this.btnPeekByte.Size = new System.Drawing.Size(137, 32);
+            this.btnPeekByte.Size = new System.Drawing.Size(89, 32);
             this.btnPeekByte.TabIndex = 27;
             this.btnPeekByte.TabStop = false;
             this.btnPeekByte.Tag = "color:light";
@@ -471,9 +473,9 @@
             this.btnPokeByte.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPokeByte.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnPokeByte.ForeColor = System.Drawing.Color.Black;
-            this.btnPokeByte.Location = new System.Drawing.Point(167, 13);
+            this.btnPokeByte.Location = new System.Drawing.Point(101, 13);
             this.btnPokeByte.Name = "btnPokeByte";
-            this.btnPokeByte.Size = new System.Drawing.Size(137, 32);
+            this.btnPokeByte.Size = new System.Drawing.Size(89, 32);
             this.btnPokeByte.TabIndex = 26;
             this.btnPokeByte.TabStop = false;
             this.btnPokeByte.Tag = "color:light";
@@ -500,12 +502,30 @@
             this.lbDownloadNarrysMod.LinkColor = System.Drawing.Color.White;
             this.lbDownloadNarrysMod.Location = new System.Drawing.Point(9, 317);
             this.lbDownloadNarrysMod.Name = "lbDownloadNarrysMod";
-            this.lbDownloadNarrysMod.Size = new System.Drawing.Size(577, 13);
+            this.lbDownloadNarrysMod.Size = new System.Drawing.Size(580, 13);
             this.lbDownloadNarrysMod.TabIndex = 26;
             this.lbDownloadNarrysMod.TabStop = true;
-            this.lbDownloadNarrysMod.Text = "To utilize this feature, you\'ll need a special vesion of Dolphin (Dolphin Narry\'s" +
-    " Mod). Click here to visit the download page.";
+            this.lbDownloadNarrysMod.Text = "To utilize this feature, you\'ll need a special version of Dolphin (Dolphin Narry\'" +
+    "s Mod). Click here to visit the download page.";
             this.lbDownloadNarrysMod.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbDownloadNarrysMod_LinkClicked);
+            // 
+            // btnSendBlastlayer
+            // 
+            this.btnSendBlastlayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSendBlastlayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnSendBlastlayer.FlatAppearance.BorderSize = 0;
+            this.btnSendBlastlayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSendBlastlayer.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnSendBlastlayer.ForeColor = System.Drawing.Color.Black;
+            this.btnSendBlastlayer.Location = new System.Drawing.Point(304, 14);
+            this.btnSendBlastlayer.Name = "btnSendBlastlayer";
+            this.btnSendBlastlayer.Size = new System.Drawing.Size(124, 32);
+            this.btnSendBlastlayer.TabIndex = 36;
+            this.btnSendBlastlayer.TabStop = false;
+            this.btnSendBlastlayer.Tag = "color:light";
+            this.btnSendBlastlayer.Text = "Send Blastlayer";
+            this.btnSendBlastlayer.UseVisualStyleBackColor = false;
+            this.btnSendBlastlayer.Click += new System.EventHandler(this.btnSendBlastlayer_Click);
             // 
             // WGH_SavestateInfoForm
             // 
@@ -578,5 +598,6 @@
         public System.Windows.Forms.Label lbStatus;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.LinkLabel lbDownloadNarrysMod;
+        public System.Windows.Forms.Button btnSendBlastlayer;
     }
 }

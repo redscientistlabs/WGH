@@ -187,7 +187,7 @@ namespace WindowsGlitchHarvester
         {
             if (WGH_Core.currentDolphinSavestate != "")
             {
-                dolphinConn.connector.SendMessage("LOADSTATE", WGH_Core.currentDolphinSavestate);
+                dolphinConn.connector.SendMessage("DOLPHIN|LOADSTATE", WGH_Core.currentDolphinSavestate);
                 ConsoleEx.WriteLine(WGH_Core.currentDolphinSavestate);
             }
             else
@@ -200,7 +200,7 @@ namespace WindowsGlitchHarvester
             //dolphinConn.connector.SendMessage("SAVESTATE");
             //This will send a NetCoreSimpleMessage
             WGH_Core.currentDolphinSavestate = WGH_Core.GetRandomKey();
-            dolphinConn.connector.SendMessage("SAVESTATE", WGH_Core.currentDolphinSavestate);
+            dolphinConn.connector.SendMessage("DOLPHIN|SAVESTATE", WGH_Core.currentDolphinSavestate);
             //If you want to send an advanced message or if you want to specify a filename for example
         }
 
@@ -216,8 +216,8 @@ namespace WindowsGlitchHarvester
 
         public void btnPeekByte_Click(object sender, EventArgs e)
         {
-
-            peekedValue.Text = dolphinConn.connector.SendSyncedMessage("PEEKBYTE", (Object)addressNum.Value)?.ToString() ?? "NULL";
+            object returnValue = dolphinConn.connector.SendSyncedMessage("DOLPHIN|PEEKBYTE", (Object)addressNum.Value);
+            peekedValue.Text = returnValue?.ToString() ?? "NULL";
         }
 
         public void btnPokeBytes_Click(object sender, EventArgs e)
@@ -233,7 +233,7 @@ namespace WindowsGlitchHarvester
         public Byte PeekByte(long address)
         {
             Thread.Sleep(10);
-            return Convert.ToByte(dolphinConn.connector.SendSyncedMessage("PEEKBYTE", ((Object)address) ?? 0));
+            return Convert.ToByte(dolphinConn.connector.SendSyncedMessage("DOLPHIN|PEEKBYTE", ((Object)address) ?? 0));
         }
 
         public void PokeByte(long address, byte value)
@@ -286,10 +286,19 @@ namespace WindowsGlitchHarvester
             dolphinConn.connector.SendMessage("POKEADDRESSES", message);
         }
 
+
+        public void SendBlastlayer(BlastLayer bl)
+        {
+            Object message = new Object();
+            message = bl;
+
+            Thread.Sleep(10);
+            dolphinConn.connector.SendMessage("DOLPHIN|BLASTLAYER", message);
+        }
         public void btnPeekBytes_Click(object sender, EventArgs e)
         {
             Object[] message = new Object[2];
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 4; i++)
             {
                 message[0] = addressNum.Value + i;
                 message[1] = 4;
@@ -329,6 +338,11 @@ namespace WindowsGlitchHarvester
             {
                 MessageBox.Show("Unable to open link that was clicked.");
             }
+        }
+
+        private void btnSendBlastlayer_Click(object sender, EventArgs e)
+        {
+            SendBlastlayer(WGH_Core.currentStashkey.BlastLayer);
         }
     }
 }
