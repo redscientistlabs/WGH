@@ -694,6 +694,14 @@ namespace WindowsGlitchHarvester
         public string Filename;
         public string ShortFilename;
 
+        public override byte[] lastMemoryDump { get; set; } = null;
+
+        //lastMemorySize gets rounded up to a multiplier of 4 to make the vector engine work on multiple files
+        //lastRealMemorySize is used in peek/poke to cancel out non-existing adresses
+        public override long? lastMemorySize { get; set; }
+        public long? lastRealMemorySize { get; set; }
+
+
 
         public FileInterface(string _targetId)
         {
@@ -827,14 +835,28 @@ namespace WindowsGlitchHarvester
             lastMemoryDump = File.ReadAllBytes(getBackupFilename());
             return lastMemoryDump;
         }
-        public override byte[] lastMemoryDump { get; set; } = null;
 
         public override long getMemorySize()
         {
             if (lastMemorySize != null)
                 return (long)lastMemorySize;
 
-            lastMemorySize = new FileInfo(Filename).Length;
+            lastRealMemorySize = new FileInfo(Filename).Length;
+
+            long Alignment32bitReminder = lastRealMemorySize.Value % 4;
+
+            if(Alignment32bitReminder != 0)
+            {
+                lastMemorySize = lastRealMemorySize.Value + (4 - Alignment32bitReminder);
+            }
+            else
+            {
+                lastMemorySize = lastRealMemorySize;
+            }
+
+
+            
+
             return (long)lastMemorySize;
             
         }
@@ -874,10 +896,11 @@ namespace WindowsGlitchHarvester
 
         }
 
-    public override long? lastMemorySize { get; set; }
-
     public override void PokeBytes(long address, byte[] data)
     {
+            if (address + data.Length >= lastRealMemorySize)
+                return;
+
         if (stream == null)
             stream = File.Open(SetWorkingFile(), FileMode.Open);
 
@@ -892,6 +915,9 @@ namespace WindowsGlitchHarvester
 
     public override void PokeByte(long address, byte data)
     {
+            if (address >= lastRealMemorySize)
+                return;
+
         if (stream == null)
             stream = File.Open(SetWorkingFile(), FileMode.Open);
 
@@ -904,6 +930,9 @@ namespace WindowsGlitchHarvester
 
     public override byte? PeekByte(long address)
     {
+        if (address >= lastRealMemorySize)
+            return 0;
+
 
         if (lastMemoryDump != null)
             return lastMemoryDump[address];
@@ -923,6 +952,8 @@ namespace WindowsGlitchHarvester
 
     public override byte[] PeekBytes(long address, int range)
     {
+        if (address + range >= lastRealMemorySize)
+            return new byte[range];
 
         if (lastMemoryDump != null)
             return lastMemoryDump.SubArray(address, range);
