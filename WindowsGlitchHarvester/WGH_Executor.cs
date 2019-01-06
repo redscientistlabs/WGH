@@ -21,7 +21,6 @@ namespace WindowsGlitchHarvester
             if (gh.rbExecuteOtherProgram.Checked || gh.rbExecuteWith.Checked)
             {
                 OpenFileDialog OpenFileDialog1;
-            SelectExecutorAgain:
                 OpenFileDialog1 = new OpenFileDialog();
 
                 OpenFileDialog1.Title = "Open File";

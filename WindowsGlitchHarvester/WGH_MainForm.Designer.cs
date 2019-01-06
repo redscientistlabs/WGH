@@ -163,7 +163,7 @@
             this.btnBrowseTarget.FlatAppearance.BorderSize = 0;
             this.btnBrowseTarget.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBrowseTarget.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.btnBrowseTarget.ForeColor = System.Drawing.Color.Gold;
+            this.btnBrowseTarget.ForeColor = System.Drawing.Color.PaleGoldenrod;
             this.btnBrowseTarget.Location = new System.Drawing.Point(10, 34);
             this.btnBrowseTarget.Name = "btnBrowseTarget";
             this.btnBrowseTarget.Size = new System.Drawing.Size(71, 23);
@@ -176,7 +176,7 @@
             // 
             // lbStashHistory
             // 
-            this.lbStashHistory.BackColor = System.Drawing.Color.Gray;
+            this.lbStashHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.lbStashHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lbStashHistory.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lbStashHistory.ForeColor = System.Drawing.Color.White;
@@ -185,12 +185,11 @@
             this.lbStashHistory.ItemHeight = 17;
             this.lbStashHistory.Location = new System.Drawing.Point(229, 96);
             this.lbStashHistory.Name = "lbStashHistory";
-            this.lbStashHistory.ScrollAlwaysVisible = true;
             this.lbStashHistory.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbStashHistory.Size = new System.Drawing.Size(147, 216);
+            this.lbStashHistory.Size = new System.Drawing.Size(147, 183);
             this.lbStashHistory.TabIndex = 3;
             this.lbStashHistory.TabStop = false;
-            this.lbStashHistory.Tag = "color:normal";
+            this.lbStashHistory.Tag = "color:darker";
             this.lbStashHistory.SelectedIndexChanged += new System.EventHandler(this.lbStashHistory_SelectedIndexChanged);
             this.lbStashHistory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbStashHistory_MouseDown);
             // 
@@ -212,17 +211,17 @@
             // 
             // btnClearStashHistory
             // 
-            this.btnClearStashHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnClearStashHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnClearStashHistory.FlatAppearance.BorderSize = 0;
             this.btnClearStashHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClearStashHistory.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnClearStashHistory.ForeColor = System.Drawing.Color.Black;
-            this.btnClearStashHistory.Location = new System.Drawing.Point(229, 315);
+            this.btnClearStashHistory.ForeColor = System.Drawing.Color.White;
+            this.btnClearStashHistory.Location = new System.Drawing.Point(229, 280);
             this.btnClearStashHistory.Name = "btnClearStashHistory";
             this.btnClearStashHistory.Size = new System.Drawing.Size(147, 32);
             this.btnClearStashHistory.TabIndex = 5;
             this.btnClearStashHistory.TabStop = false;
-            this.btnClearStashHistory.Tag = "color:light";
+            this.btnClearStashHistory.Tag = "color:darker";
             this.btnClearStashHistory.Text = "Clear History";
             this.btnClearStashHistory.UseVisualStyleBackColor = false;
             this.btnClearStashHistory.Click += new System.EventHandler(this.btnClearStashHistory_Click);
@@ -274,17 +273,17 @@
             // btnClearStockpile
             // 
             this.btnClearStockpile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClearStockpile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnClearStockpile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnClearStockpile.FlatAppearance.BorderSize = 0;
             this.btnClearStockpile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClearStockpile.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnClearStockpile.ForeColor = System.Drawing.Color.Black;
+            this.btnClearStockpile.ForeColor = System.Drawing.Color.White;
             this.btnClearStockpile.Location = new System.Drawing.Point(419, 457);
             this.btnClearStockpile.Name = "btnClearStockpile";
             this.btnClearStockpile.Size = new System.Drawing.Size(107, 32);
             this.btnClearStockpile.TabIndex = 10;
             this.btnClearStockpile.TabStop = false;
-            this.btnClearStockpile.Tag = "color:light";
+            this.btnClearStockpile.Tag = "color:darker";
             this.btnClearStockpile.Text = "Clear Stockpile";
             this.btnClearStockpile.UseVisualStyleBackColor = false;
             this.btnClearStockpile.Click += new System.EventHandler(this.btnClearStockpile_Click);
@@ -304,31 +303,32 @@
             // 
             this.lbTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbTarget.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lbTarget.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.lbTarget.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lbTarget.ForeColor = System.Drawing.Color.Gold;
+            this.lbTarget.ForeColor = System.Drawing.Color.PaleGoldenrod;
             this.lbTarget.Location = new System.Drawing.Point(85, 34);
             this.lbTarget.Name = "lbTarget";
             this.lbTarget.Padding = new System.Windows.Forms.Padding(3, 6, 1, 1);
             this.lbTarget.Size = new System.Drawing.Size(655, 23);
             this.lbTarget.TabIndex = 12;
-            this.lbTarget.Tag = "color:dark";
+            this.lbTarget.Tag = "color:darker";
             this.lbTarget.Text = "No target selected";
             this.lbTarget.Click += new System.EventHandler(this.lbTargetName_Click);
             // 
             // btnStockpileMoveDown
             // 
             this.btnStockpileMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStockpileMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnStockpileMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnStockpileMoveDown.FlatAppearance.BorderSize = 0;
             this.btnStockpileMoveDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStockpileMoveDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.btnStockpileMoveDown.ForeColor = System.Drawing.Color.White;
             this.btnStockpileMoveDown.Location = new System.Drawing.Point(815, 457);
             this.btnStockpileMoveDown.Name = "btnStockpileMoveDown";
             this.btnStockpileMoveDown.Size = new System.Drawing.Size(39, 32);
             this.btnStockpileMoveDown.TabIndex = 13;
             this.btnStockpileMoveDown.TabStop = false;
-            this.btnStockpileMoveDown.Tag = "color:light";
+            this.btnStockpileMoveDown.Tag = "color:darker";
             this.btnStockpileMoveDown.Text = "▼▼";
             this.btnStockpileMoveDown.UseVisualStyleBackColor = false;
             this.btnStockpileMoveDown.Click += new System.EventHandler(this.btnStockpileMoveDown_Click);
@@ -336,23 +336,24 @@
             // btnStockpileMoveUp
             // 
             this.btnStockpileMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStockpileMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnStockpileMoveUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnStockpileMoveUp.FlatAppearance.BorderSize = 0;
             this.btnStockpileMoveUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStockpileMoveUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.btnStockpileMoveUp.ForeColor = System.Drawing.Color.White;
             this.btnStockpileMoveUp.Location = new System.Drawing.Point(774, 457);
             this.btnStockpileMoveUp.Name = "btnStockpileMoveUp";
             this.btnStockpileMoveUp.Size = new System.Drawing.Size(39, 32);
             this.btnStockpileMoveUp.TabIndex = 14;
             this.btnStockpileMoveUp.TabStop = false;
-            this.btnStockpileMoveUp.Tag = "color:light";
+            this.btnStockpileMoveUp.Tag = "color:darker";
             this.btnStockpileMoveUp.Text = "▲▲";
             this.btnStockpileMoveUp.UseVisualStyleBackColor = false;
             this.btnStockpileMoveUp.Click += new System.EventHandler(this.btnStockpileMoveUp_Click);
             // 
             // nmIntensity
             // 
-            this.nmIntensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.nmIntensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.nmIntensity.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.nmIntensity.ForeColor = System.Drawing.Color.White;
             this.nmIntensity.Location = new System.Drawing.Point(114, 12);
@@ -365,7 +366,7 @@
             this.nmIntensity.Size = new System.Drawing.Size(86, 25);
             this.nmIntensity.TabIndex = 15;
             this.nmIntensity.TabStop = false;
-            this.nmIntensity.Tag = "color:dark";
+            this.nmIntensity.Tag = "color:darker";
             this.nmIntensity.Value = new decimal(new int[] {
             100,
             0,
@@ -421,7 +422,7 @@
             // 
             // nmStartingAddress
             // 
-            this.nmStartingAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.nmStartingAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.nmStartingAddress.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.nmStartingAddress.ForeColor = System.Drawing.Color.White;
             this.nmStartingAddress.Location = new System.Drawing.Point(114, 78);
@@ -429,7 +430,7 @@
             this.nmStartingAddress.Size = new System.Drawing.Size(86, 25);
             this.nmStartingAddress.TabIndex = 18;
             this.nmStartingAddress.TabStop = false;
-            this.nmStartingAddress.Tag = "color:dark";
+            this.nmStartingAddress.Tag = "color:darker";
             this.nmStartingAddress.ValueChanged += new System.EventHandler(this.nmStartingAddress_ValueChanged);
             // 
             // tbBlastRange
@@ -446,7 +447,7 @@
             // 
             // nmBlastRange
             // 
-            this.nmBlastRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.nmBlastRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.nmBlastRange.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.nmBlastRange.ForeColor = System.Drawing.Color.White;
             this.nmBlastRange.Location = new System.Drawing.Point(114, 144);
@@ -454,7 +455,7 @@
             this.nmBlastRange.Size = new System.Drawing.Size(86, 25);
             this.nmBlastRange.TabIndex = 21;
             this.nmBlastRange.TabStop = false;
-            this.nmBlastRange.Tag = "color:dark";
+            this.nmBlastRange.Tag = "color:darker";
             this.nmBlastRange.Value = new decimal(new int[] {
             100,
             0,
@@ -464,17 +465,17 @@
             // 
             // btnAddStashToStockpile
             // 
-            this.btnAddStashToStockpile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnAddStashToStockpile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnAddStashToStockpile.FlatAppearance.BorderSize = 0;
             this.btnAddStashToStockpile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddStashToStockpile.Font = new System.Drawing.Font("Webdings", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.btnAddStashToStockpile.Location = new System.Drawing.Point(383, 216);
+            this.btnAddStashToStockpile.ForeColor = System.Drawing.Color.White;
+            this.btnAddStashToStockpile.Location = new System.Drawing.Point(387, 154);
             this.btnAddStashToStockpile.Name = "btnAddStashToStockpile";
-            this.btnAddStashToStockpile.Padding = new System.Windows.Forms.Padding(0, 0, 0, 13);
-            this.btnAddStashToStockpile.Size = new System.Drawing.Size(28, 114);
+            this.btnAddStashToStockpile.Size = new System.Drawing.Size(22, 80);
             this.btnAddStashToStockpile.TabIndex = 24;
             this.btnAddStashToStockpile.TabStop = false;
-            this.btnAddStashToStockpile.Tag = "color:light";
+            this.btnAddStashToStockpile.Tag = "color:darker";
             this.btnAddStashToStockpile.Text = "4";
             this.btnAddStashToStockpile.UseVisualStyleBackColor = false;
             this.btnAddStashToStockpile.Click += new System.EventHandler(this.btnAddStashToStockpile_Click);
@@ -511,7 +512,7 @@
             this.btnRestoreFileBackup.FlatAppearance.BorderSize = 0;
             this.btnRestoreFileBackup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRestoreFileBackup.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.btnRestoreFileBackup.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnRestoreFileBackup.ForeColor = System.Drawing.Color.GreenYellow;
             this.btnRestoreFileBackup.Location = new System.Drawing.Point(633, 7);
             this.btnRestoreFileBackup.Name = "btnRestoreFileBackup";
             this.btnRestoreFileBackup.Size = new System.Drawing.Size(107, 23);
@@ -567,7 +568,7 @@
             // 
             // cbCorruptionEngine
             // 
-            this.cbCorruptionEngine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.cbCorruptionEngine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.cbCorruptionEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbCorruptionEngine.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cbCorruptionEngine.Font = new System.Drawing.Font("Segoe UI", 9.75F);
@@ -581,7 +582,7 @@
             this.cbCorruptionEngine.Size = new System.Drawing.Size(345, 25);
             this.cbCorruptionEngine.TabIndex = 29;
             this.cbCorruptionEngine.TabStop = false;
-            this.cbCorruptionEngine.Tag = "color:dark";
+            this.cbCorruptionEngine.Tag = "color:darker";
             this.cbCorruptionEngine.SelectedIndexChanged += new System.EventHandler(this.cbCorruptionEngine_SelectedIndexChanged);
             // 
             // rbTargetFile
@@ -617,17 +618,17 @@
             // btnRemoveSelected
             // 
             this.btnRemoveSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnRemoveSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnRemoveSelected.FlatAppearance.BorderSize = 0;
             this.btnRemoveSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRemoveSelected.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnRemoveSelected.ForeColor = System.Drawing.Color.Black;
+            this.btnRemoveSelected.ForeColor = System.Drawing.Color.White;
             this.btnRemoveSelected.Location = new System.Drawing.Point(540, 457);
             this.btnRemoveSelected.Name = "btnRemoveSelected";
             this.btnRemoveSelected.Size = new System.Drawing.Size(117, 32);
             this.btnRemoveSelected.TabIndex = 33;
             this.btnRemoveSelected.TabStop = false;
-            this.btnRemoveSelected.Tag = "color:light";
+            this.btnRemoveSelected.Tag = "color:darker";
             this.btnRemoveSelected.Text = "Remove Item";
             this.btnRemoveSelected.UseVisualStyleBackColor = false;
             this.btnRemoveSelected.Click += new System.EventHandler(this.btnRemoveSelected_Click);
@@ -651,16 +652,16 @@
             // btnStockpileUp
             // 
             this.btnStockpileUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStockpileUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnStockpileUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnStockpileUp.FlatAppearance.BorderSize = 0;
             this.btnStockpileUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStockpileUp.ForeColor = System.Drawing.Color.Black;
+            this.btnStockpileUp.ForeColor = System.Drawing.Color.White;
             this.btnStockpileUp.Location = new System.Drawing.Point(802, 71);
             this.btnStockpileUp.Name = "btnStockpileUp";
             this.btnStockpileUp.Size = new System.Drawing.Size(25, 23);
             this.btnStockpileUp.TabIndex = 36;
             this.btnStockpileUp.TabStop = false;
-            this.btnStockpileUp.Tag = "color:light";
+            this.btnStockpileUp.Tag = "color:darker";
             this.btnStockpileUp.Text = "▲";
             this.btnStockpileUp.UseVisualStyleBackColor = false;
             this.btnStockpileUp.Click += new System.EventHandler(this.btnStockpileUp_Click);
@@ -668,55 +669,55 @@
             // btnStockpileDown
             // 
             this.btnStockpileDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStockpileDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnStockpileDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnStockpileDown.FlatAppearance.BorderSize = 0;
             this.btnStockpileDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStockpileDown.ForeColor = System.Drawing.Color.Black;
+            this.btnStockpileDown.ForeColor = System.Drawing.Color.White;
             this.btnStockpileDown.Location = new System.Drawing.Point(829, 71);
             this.btnStockpileDown.Name = "btnStockpileDown";
             this.btnStockpileDown.Size = new System.Drawing.Size(25, 23);
             this.btnStockpileDown.TabIndex = 35;
             this.btnStockpileDown.TabStop = false;
-            this.btnStockpileDown.Tag = "color:light";
+            this.btnStockpileDown.Tag = "color:darker";
             this.btnStockpileDown.Text = "▼";
             this.btnStockpileDown.UseVisualStyleBackColor = false;
             this.btnStockpileDown.Click += new System.EventHandler(this.btnStockpileDown_Click);
             // 
             // btnStashHistoryUp
             // 
-            this.btnStashHistoryUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnStashHistoryUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnStashHistoryUp.FlatAppearance.BorderSize = 0;
             this.btnStashHistoryUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStashHistoryUp.ForeColor = System.Drawing.Color.Black;
+            this.btnStashHistoryUp.ForeColor = System.Drawing.Color.White;
             this.btnStashHistoryUp.Location = new System.Drawing.Point(324, 71);
             this.btnStashHistoryUp.Name = "btnStashHistoryUp";
             this.btnStashHistoryUp.Size = new System.Drawing.Size(25, 23);
             this.btnStashHistoryUp.TabIndex = 38;
             this.btnStashHistoryUp.TabStop = false;
-            this.btnStashHistoryUp.Tag = "color:light";
+            this.btnStashHistoryUp.Tag = "color:darker";
             this.btnStashHistoryUp.Text = "▲";
             this.btnStashHistoryUp.UseVisualStyleBackColor = false;
             this.btnStashHistoryUp.Click += new System.EventHandler(this.btnStashHistoryUp_Click);
             // 
             // btnStashHistoryDown
             // 
-            this.btnStashHistoryDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnStashHistoryDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnStashHistoryDown.FlatAppearance.BorderSize = 0;
             this.btnStashHistoryDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStashHistoryDown.ForeColor = System.Drawing.Color.Black;
+            this.btnStashHistoryDown.ForeColor = System.Drawing.Color.White;
             this.btnStashHistoryDown.Location = new System.Drawing.Point(351, 71);
             this.btnStashHistoryDown.Name = "btnStashHistoryDown";
             this.btnStashHistoryDown.Size = new System.Drawing.Size(25, 23);
             this.btnStashHistoryDown.TabIndex = 37;
             this.btnStashHistoryDown.TabStop = false;
-            this.btnStashHistoryDown.Tag = "color:light";
+            this.btnStashHistoryDown.Tag = "color:darker";
             this.btnStashHistoryDown.Text = "▼";
             this.btnStashHistoryDown.UseVisualStyleBackColor = false;
             this.btnStashHistoryDown.Click += new System.EventHandler(this.btnStashHistoryDown_Click);
             // 
             // pnTargetPanel
             // 
-            this.pnTargetPanel.BackColor = System.Drawing.Color.Gray;
+            this.pnTargetPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.pnTargetPanel.Controls.Add(this.rbTargetDolphin);
             this.pnTargetPanel.Controls.Add(this.savestateInfoButton);
             this.pnTargetPanel.Controls.Add(this.rbTargetMultipleFiles);
@@ -732,7 +733,7 @@
             this.pnTargetPanel.Name = "pnTargetPanel";
             this.pnTargetPanel.Size = new System.Drawing.Size(864, 64);
             this.pnTargetPanel.TabIndex = 39;
-            this.pnTargetPanel.Tag = "color:normal";
+            this.pnTargetPanel.Tag = "color:darkest";
             // 
             // rbTargetDolphin
             // 
@@ -755,7 +756,7 @@
             this.savestateInfoButton.FlatAppearance.BorderSize = 0;
             this.savestateInfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.savestateInfoButton.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.savestateInfoButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.savestateInfoButton.ForeColor = System.Drawing.Color.GreenYellow;
             this.savestateInfoButton.Location = new System.Drawing.Point(502, 7);
             this.savestateInfoButton.Name = "savestateInfoButton";
             this.savestateInfoButton.Size = new System.Drawing.Size(125, 23);
@@ -853,7 +854,7 @@
             this.btnDisableAutoUncorrupt.FlatAppearance.BorderSize = 0;
             this.btnDisableAutoUncorrupt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDisableAutoUncorrupt.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.btnDisableAutoUncorrupt.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnDisableAutoUncorrupt.ForeColor = System.Drawing.Color.GreenYellow;
             this.btnDisableAutoUncorrupt.Location = new System.Drawing.Point(84, 11);
             this.btnDisableAutoUncorrupt.Name = "btnDisableAutoUncorrupt";
             this.btnDisableAutoUncorrupt.Size = new System.Drawing.Size(142, 22);
@@ -870,7 +871,7 @@
             this.btnEnableCaching.FlatAppearance.BorderSize = 0;
             this.btnEnableCaching.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEnableCaching.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.btnEnableCaching.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnEnableCaching.ForeColor = System.Drawing.Color.GreenYellow;
             this.btnEnableCaching.Location = new System.Drawing.Point(235, 11);
             this.btnEnableCaching.Name = "btnEnableCaching";
             this.btnEnableCaching.Size = new System.Drawing.Size(189, 21);
@@ -883,7 +884,7 @@
             // 
             // pnBottom
             // 
-            this.pnBottom.BackColor = System.Drawing.Color.Gray;
+            this.pnBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.pnBottom.Controls.Add(this.btnKillProcess);
             this.pnBottom.Controls.Add(this.lbArgs);
             this.pnBottom.Controls.Add(this.tbArgs);
@@ -906,7 +907,7 @@
             this.pnBottom.Name = "pnBottom";
             this.pnBottom.Size = new System.Drawing.Size(864, 80);
             this.pnBottom.TabIndex = 40;
-            this.pnBottom.Tag = "color:normal";
+            this.pnBottom.Tag = "color:darkest";
             // 
             // btnKillProcess
             // 
@@ -942,7 +943,7 @@
             // tbArgs
             // 
             this.tbArgs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbArgs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.tbArgs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.tbArgs.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbArgs.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.tbArgs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -950,6 +951,7 @@
             this.tbArgs.Name = "tbArgs";
             this.tbArgs.Size = new System.Drawing.Size(131, 15);
             this.tbArgs.TabIndex = 53;
+            this.tbArgs.Tag = "color:darker";
             this.tbArgs.Visible = false;
             // 
             // btnBlastUntilEffect
@@ -1097,15 +1099,15 @@
             // 
             this.lbExecution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbExecution.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lbExecution.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.lbExecution.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lbExecution.ForeColor = System.Drawing.Color.Gold;
+            this.lbExecution.ForeColor = System.Drawing.Color.PaleGoldenrod;
             this.lbExecution.Location = new System.Drawing.Point(242, 29);
             this.lbExecution.Name = "lbExecution";
             this.lbExecution.Padding = new System.Windows.Forms.Padding(2, 5, 1, 1);
             this.lbExecution.Size = new System.Drawing.Size(440, 23);
             this.lbExecution.TabIndex = 42;
-            this.lbExecution.Tag = "color:dark";
+            this.lbExecution.Tag = "color:darker";
             this.lbExecution.Text = "No execution set";
             // 
             // cbInjectOnSelect
@@ -1125,17 +1127,17 @@
             // btnRenameSelected
             // 
             this.btnRenameSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRenameSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnRenameSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnRenameSelected.FlatAppearance.BorderSize = 0;
             this.btnRenameSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRenameSelected.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnRenameSelected.ForeColor = System.Drawing.Color.Black;
+            this.btnRenameSelected.ForeColor = System.Drawing.Color.White;
             this.btnRenameSelected.Location = new System.Drawing.Point(659, 457);
             this.btnRenameSelected.Name = "btnRenameSelected";
             this.btnRenameSelected.Size = new System.Drawing.Size(99, 32);
             this.btnRenameSelected.TabIndex = 42;
             this.btnRenameSelected.TabStop = false;
-            this.btnRenameSelected.Tag = "color:light";
+            this.btnRenameSelected.Tag = "color:darker";
             this.btnRenameSelected.Text = "Rename Item";
             this.btnRenameSelected.UseVisualStyleBackColor = false;
             this.btnRenameSelected.Click += new System.EventHandler(this.btnRenameSelected_Click);
@@ -1464,18 +1466,18 @@
             // 
             // pnCorruptionEngine
             // 
-            this.pnCorruptionEngine.BackColor = System.Drawing.Color.Gray;
+            this.pnCorruptionEngine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.pnCorruptionEngine.Controls.Add(this.cbCorruptionEngine);
             this.pnCorruptionEngine.Controls.Add(this.gbDefaultSettings);
             this.pnCorruptionEngine.Location = new System.Drawing.Point(9, 352);
             this.pnCorruptionEngine.Name = "pnCorruptionEngine";
             this.pnCorruptionEngine.Size = new System.Drawing.Size(367, 184);
             this.pnCorruptionEngine.TabIndex = 114;
-            this.pnCorruptionEngine.Tag = "color:normal";
+            this.pnCorruptionEngine.Tag = "color:darker";
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.Gray;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.panel1.Controls.Add(this.nmIntensity);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.nmStartingAddress);
@@ -1489,7 +1491,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(210, 216);
             this.panel1.TabIndex = 114;
-            this.panel1.Tag = "color:normal";
+            this.panel1.Tag = "color:darker";
             // 
             // label6
             // 
@@ -1505,7 +1507,7 @@
             // panel3
             // 
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel3.BackColor = System.Drawing.Color.Gray;
+            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
             this.panel3.Controls.Add(this.label8);
             this.panel3.Controls.Add(this.btnDisableAutoUncorrupt);
             this.panel3.Controls.Add(this.btnEnableCaching);
@@ -1513,7 +1515,7 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(436, 42);
             this.panel3.TabIndex = 115;
-            this.panel3.Tag = "color:normal";
+            this.panel3.Tag = "color:darkest";
             // 
             // label8
             // 
@@ -1551,7 +1553,7 @@
             this.lbStockpile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbStockpile.BackColor = System.Drawing.Color.Gray;
+            this.lbStockpile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.lbStockpile.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lbStockpile.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lbStockpile.ForeColor = System.Drawing.Color.White;
@@ -1565,7 +1567,7 @@
             this.lbStockpile.Size = new System.Drawing.Size(435, 360);
             this.lbStockpile.TabIndex = 2;
             this.lbStockpile.TabStop = false;
-            this.lbStockpile.Tag = "color:normal";
+            this.lbStockpile.Tag = "color:darker";
             this.lbStockpile.SelectedIndexChanged += new System.EventHandler(this.lbStockpile_SelectedIndexChanged);
             this.lbStockpile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbStockpile_MouseDown);
             // 

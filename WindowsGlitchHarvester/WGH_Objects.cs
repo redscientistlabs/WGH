@@ -898,7 +898,7 @@ namespace WindowsGlitchHarvester
 
     public override void PokeBytes(long address, byte[] data)
     {
-            if (address + data.Length >= lastRealMemorySize)
+        if(address + data.Length >= lastRealMemorySize)
                 return;
 
         if (stream == null)

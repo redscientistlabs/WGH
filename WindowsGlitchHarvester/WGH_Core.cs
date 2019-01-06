@@ -12,7 +12,7 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.94b";
+		public static string WghVersion = "0.95";
 
 		public static Random RND = new Random();
 
@@ -48,6 +48,7 @@ namespace WindowsGlitchHarvester
 		public static WGH_AutoCorruptForm acForm = null;
         public static WGH_BlastEditorForm beForm = null;
         public static WGH_SavestateInfoForm ssForm = null;
+        public static WGH_Progress progressForm = null;
 
         //object references
         public static MemoryInterface currentMemoryInterface = null;
@@ -98,7 +99,7 @@ namespace WindowsGlitchHarvester
 				SetWGHColor(Color.FromArgb(Convert.ToByte(bytes[0]), Convert.ToByte(bytes[1]), Convert.ToByte(bytes[2])));
 			}
 			else
-				SetWGHColor(Color.FromArgb(127, 120, 165));
+				SetWGHColor(Color.FromArgb(150, 150, 180));
 
             if (File.Exists(currentDir + "\\LICENSES\\DISCLAIMER.TXT") && !File.Exists(currentDir + "\\PARAMS\\DISCLAIMERREAD"))
             {
@@ -107,6 +108,15 @@ namespace WindowsGlitchHarvester
             }
 
 
+        }
+
+        public static void FormExecute(Control c, Action<object, EventArgs> action, object[] args = null) => FormExecute(ghForm, c, action, args);
+        public static void FormExecute(Form f, Control c, Action<object, EventArgs> a, object[] args = null)
+        {
+            if (c.InvokeRequired)
+                f.Invoke(new MethodInvoker(() => { a.Invoke(null, null); }));
+            else
+                a.Invoke(null, null);
         }
 
         public static long RandomLong(long max)
@@ -169,7 +179,9 @@ namespace WindowsGlitchHarvester
                         BlastRange = MaxAddress - StartingAddress;
                     else if (StartingAddress + BlastRange > MaxAddress)
                         BlastRange = MaxAddress - StartingAddress;
-                    
+
+
+                    int reportCounter = 0;
                     for (int i = 0; i < Intensity; i++)
                     {
                         RandomAdress = StartingAddress + RandomLong(BlastRange -1);
@@ -177,8 +189,17 @@ namespace WindowsGlitchHarvester
                         bu = getBlastUnit(TargetType, RandomAdress);
                         if (bu != null)
                             bl.Layer.Add(bu);
+
+                        reportCounter++;
+                        if (reportCounter > 1000)
+                        {
+                            progressForm?.bw?.ReportProgress(1, "DEFAULT");
+                            reportCounter = 0;
+                        }
                     }
 
+
+                    progressForm?.bw?.ReportProgress(0,"Applying units...");
                     bl.Apply();
 
                     currentMemoryInterface.ApplyWorkingFile();
@@ -442,8 +463,9 @@ namespace WindowsGlitchHarvester
 			var normalColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:normal"));
 			var darkColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:dark"));
 			var darkerColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:darker"));
+            var darkestColorControls = allControls.FindAll(it => (it.Tag as string).Contains("color:darkest"));
 
-			foreach (Control c in lightColorControls)
+            foreach (Control c in lightColorControls)
 				c.BackColor = ChangeColorBrightness(color, 0.30f);
 
 			foreach (Control c in normalColorControls)
@@ -453,12 +475,15 @@ namespace WindowsGlitchHarvester
 			//ghForm.dgvStockpile.BackgroundColor = color;
 
 			foreach (Control c in darkColorControls)
-				c.BackColor = ChangeColorBrightness(color, -0.30f);
+				c.BackColor = ChangeColorBrightness(color, -0.550f);
 
 			foreach (Control c in darkerColorControls)
-				c.BackColor = ChangeColorBrightness(color, -0.75f);
+				c.BackColor = ChangeColorBrightness(color, -0.70f);
 
-		}
+            foreach (Control c in darkestColorControls)
+                c.BackColor = ChangeColorBrightness(color, -0.80f);
+
+        }
 
 		public static void SetAndSaveColorWGH()
 		{

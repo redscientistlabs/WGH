@@ -121,7 +121,6 @@ namespace WindowsGlitchHarvester
         IntPtr bytesout; // If using ReadProcessMemory(), dump the successfully read bytes here. 
 
         public ushort processorArchitecture;
-        ushort reserved;
         public uint pageSize;
         public IntPtr minimumApplicationAddress;
         public IntPtr maximumApplicationAddress;

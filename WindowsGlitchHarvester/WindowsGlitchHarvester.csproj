@@ -143,6 +143,12 @@
   <ItemGroup>
     <Compile Include="FastZipProgram.cs" />
     <Compile Include="WGH_DolphinConnector.cs" />
+    <Compile Include="WGH_Progress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WGH_Progress.Designer.cs">
+      <DependentUpon>WGH_Progress.cs</DependentUpon>
+    </Compile>
     <Compile Include="WGH_SavestateInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -213,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WGH_HookToProcess.resx">
       <DependentUpon>WGH_HookToProcess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WGH_Progress.resx">
+      <DependentUpon>WGH_Progress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WGH_SavestateInfoForm.resx">
       <DependentUpon>WGH_SavestateInfoForm.cs</DependentUpon>

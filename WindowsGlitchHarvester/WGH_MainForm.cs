@@ -16,14 +16,8 @@ namespace WindowsGlitchHarvester
     public partial class WGH_MainForm : Form
     {
 
-        BlastLayer LastBlastLayer = null;
-
         public bool DontLoadSelectedStash = false;
         public bool DontLoadSelectedStockpile = false;
-
-        int oysterClick = 0;
-
-        ProcessHijacker hijack;
 
         public WGH_MainForm()
         {
@@ -58,6 +52,22 @@ namespace WindowsGlitchHarvester
 
             WGH_Core.Start(this);
         }
+
+        public void RunProgressBar(string progressLabel, int maxProgress, Action<object, EventArgs> action)
+        {
+
+            if (WGH_Core.progressForm != null)
+            {
+                WGH_Core.progressForm.Close();
+                this.Controls.Remove(WGH_Core.progressForm);
+                WGH_Core.progressForm = null;
+            }
+
+            WGH_Core.progressForm = new WGH_Progress( progressLabel, maxProgress, action);
+            WGH_Core.progressForm.Run();
+
+        }
+
 
         private void btnBrowseTarget_Click(object sender, EventArgs e)
         {
@@ -146,7 +156,18 @@ namespace WindowsGlitchHarvester
 
         private void btnBlastTarget_Click(object sender, EventArgs e)
         {
-            BlastTarget(1);
+            WrapBlastTarget();
+
+        }
+        public void WrapBlastTarget(int times = 1, bool untilFound = false, bool stashBlastLayer = true)
+        {
+            int intensity = WGH_Core.Intensity;
+
+            Action<object, EventArgs> action = (ob, ea) => {
+                BlastTarget(times, untilFound, stashBlastLayer);
+            };
+
+            RunProgressBar($"Generating {intensity*times} units...", intensity, action);
 
         }
 
@@ -167,7 +188,7 @@ namespace WindowsGlitchHarvester
             if (WGH_Core.currentMemoryInterface == null)
                 return;
 
-
+            WGH_Core.progressForm?.bw?.ReportProgress(0, "Uncorrupting");
             WGH_Core.RestoreTarget();
 
             for (int i = 0; i < times; i++)
@@ -181,10 +202,16 @@ namespace WindowsGlitchHarvester
                     if (stashBlastLayer)
                     {
                         DontLoadSelectedStash = true;
-                        lbStashHistory.Items.Add(WGH_Core.currentStashkey);
-                        lbStashHistory.ClearSelected();
-                        lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
-                        lbStockpile.ClearSelected();
+
+
+                        WGH_Core.FormExecute(lbStashHistory, (o, e) => {
+                            lbStashHistory.Items.Add(WGH_Core.currentStashkey);
+                            lbStashHistory.ClearSelected();
+                            lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
+                            lbStockpile.ClearSelected();
+                        });
+
+
                     }
 
                     if (untilFound)
@@ -891,8 +918,9 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             //RTC_Restore.SaveRestore();
         }
 
-        private void btnRerollInject_Click(object sender, EventArgs e)
+        private void RerollInject()
         {
+
             if (WGH_Core.currentMemoryInterface == null)
             {
                 MessageBox.Show("No target is loaded");
@@ -904,32 +932,46 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             StashKey sk = null;
 
 
-            if (lbStashHistory.SelectedIndex != -1)
-            {
-                sk = (StashKey)lbStashHistory.SelectedItem;
-            }
-            else if (lbStockpile.SelectedIndex != -1)
-            {
-                sk = (StashKey)lbStockpile.SelectedItem;
-            }
+            WGH_Core.FormExecute(lbStashHistory, (o, e) => {
+                if (lbStashHistory.SelectedIndex != -1)
+                {
+                    sk = (StashKey)lbStashHistory.SelectedItem;
+                }
+                else if (lbStockpile.SelectedIndex != -1)
+                {
+                    sk = (StashKey)lbStockpile.SelectedItem;
+                }
+            });
 
             if (sk != null)
             {
-
+                WGH_Core.progressForm?.bw?.ReportProgress(0, "Cloning Stashkey");
                 StashKey newSk = (StashKey)sk.Clone();
                 newSk.Key = WGH_Core.GetRandomKey();
                 newSk.Alias = null;
 
-                WGH_Core.ghForm.DontLoadSelectedStash = true;
-                WGH_Core.ghForm.lbStashHistory.Items.Add(newSk);
-                WGH_Core.ghForm.lbStashHistory.ClearSelected();
-                WGH_Core.ghForm.lbStashHistory.SelectedIndex = WGH_Core.ghForm.lbStashHistory.Items.Count - 1;
-                WGH_Core.ghForm.lbStockpile.ClearSelected();
-
+                WGH_Core.FormExecute(lbStashHistory, (o, e) => {
+                    WGH_Core.ghForm.DontLoadSelectedStash = true;
+                    WGH_Core.ghForm.lbStashHistory.Items.Add(newSk);
+                    WGH_Core.ghForm.lbStashHistory.ClearSelected();
+                    WGH_Core.ghForm.lbStashHistory.SelectedIndex = WGH_Core.ghForm.lbStashHistory.Items.Count - 1;
+                    WGH_Core.ghForm.lbStockpile.ClearSelected();
+                });
 
                 //TODO: Refactor this properly instead of as a hacky mess
+
+                int reportCounter = 0;
                 foreach (BlastUnit bu in newSk.BlastLayer.Layer)
                 {
+                    reportCounter++;
+                    if (reportCounter > 1000)
+                    {
+                        WGH_Core.progressForm?.bw?.ReportProgress(1, "DEFAULT");
+                        reportCounter = 0;
+                    }
+
+
+
                     var bb = (bu as BlastByte);
                     var bv = (bu as BlastVector);
                     //BAD HACK. USE THIS TO DECTECT IF VECTOR. SORRY I DIDN'T KNOW WHERE TO REFACTOR THIS -NARRY
@@ -955,17 +997,52 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                             }
                         }
                     }
-                    if( bv != null )
+                    if (bv != null)
                     {
                         bv.Values = WGH_VectorEngine.getRandomConstant(WGH_VectorEngine.valueList);
                     }
                 }
+
+                WGH_Core.progressForm?.bw?.ReportProgress(1, "Applying Units...");
 
                 WGH_Core.RestoreTarget();
 
                 newSk.Run();
                 WGH_Executor.Execute();
             }
+        }
+
+        private void btnRerollInject_Click(object sender, EventArgs e)
+        {
+            StashKey sk = null;
+
+
+            if (lbStashHistory.SelectedIndex != -1)
+            {
+                sk = (StashKey)lbStashHistory.SelectedItem;
+            }
+            else if (lbStockpile.SelectedIndex != -1)
+            {
+                sk = (StashKey)lbStockpile.SelectedItem;
+            }
+
+            if (sk != null)
+            {
+
+                int intensity = sk.BlastLayer.Layer.Count;
+
+                Action<object, EventArgs> action = (ob, ea) => {
+                    RerollInject();
+                };
+
+                RunProgressBar($"Rerolling {intensity} units...", intensity, action);
+
+            }
+            else
+            {
+                MessageBox.Show("Cannot reroll, no item is currently selected");
+            }
+
         }
 
         private void cbVectorLimiterList_SelectedIndexChanged(object sender, EventArgs e)
@@ -1067,15 +1144,15 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 Point locate = new Point((sender as Control).Location.X + e.Location.X + pnBottom.Location.X, (sender as Control).Location.Y + e.Location.Y + pnBottom.Location.Y);
 
                 ContextMenuStrip columnsMenu = new ContextMenuStrip();
-                columnsMenu.Items.Add("Run 3 times", null, new EventHandler((ob, ev) => { BlastTarget(5); }));
-                columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { BlastTarget(10); }));
-                columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { BlastTarget(20); }));
-                columnsMenu.Items.Add("Run 30 times", null, new EventHandler((ob, ev) => { BlastTarget(30); }));
-                columnsMenu.Items.Add("Run 50 times", null, new EventHandler((ob, ev) => { BlastTarget(50); }));
-                columnsMenu.Items.Add("Run 75 times", null, new EventHandler((ob, ev) => { BlastTarget(75); }));
-                columnsMenu.Items.Add("Run 100 times", null, new EventHandler((ob, ev) => { BlastTarget(100); }));
-                columnsMenu.Items.Add("Run 1000 times", null, new EventHandler((ob, ev) => { BlastTarget(1000); }));
-                columnsMenu.Items.Add("Run 10000 times", null, new EventHandler((ob, ev) => { BlastTarget(10000); }));
+                columnsMenu.Items.Add("Run 3 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(5); }));
+                columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(10); }));
+                columnsMenu.Items.Add("Run 20 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(20); }));
+                columnsMenu.Items.Add("Run 30 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(30); }));
+                columnsMenu.Items.Add("Run 50 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(50); }));
+                columnsMenu.Items.Add("Run 75 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(75); }));
+                columnsMenu.Items.Add("Run 100 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(100); }));
+                columnsMenu.Items.Add("Run 1000 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(1000); }));
+                columnsMenu.Items.Add("Run 10000 times", null, new EventHandler((ob, ev) => { WrapBlastTarget(10000); }));
                 columnsMenu.Show(this, locate);
             }
 
@@ -1083,7 +1160,11 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         private void btnBlastUntilEffect_Click(object sender, EventArgs e)
         {
-            BlastTarget(int.MaxValue, true);
+            Action<object, EventArgs> action = (ob, ea) => {
+                BlastTarget(int.MaxValue, true);
+            };
+
+            RunProgressBar($"Generating an undefined amount of units...\nThis can take a while...", int.MaxValue, action);
         }
 
         private void btnBlastUntilEffect_MouseDown(object sender, MouseEventArgs e)
@@ -1095,7 +1176,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 ContextMenuStrip columnsMenu = new ContextMenuStrip();
                 columnsMenu.Items.Add("Run 3 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(5); }));
                 columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(10); }));
-                columnsMenu.Items.Add("Run 10 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(20); }));
+                columnsMenu.Items.Add("Run 20 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(20); }));
                 columnsMenu.Items.Add("Run 30 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(30); }));
                 columnsMenu.Items.Add("Run 50 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(50); }));
                 columnsMenu.Items.Add("Run 75 times", null, new EventHandler((ob, ev) => { GuaranteedBlastTarget(75); }));
@@ -1106,8 +1187,14 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         private void GuaranteedBlastTarget(int amount)
         {
-            for (int i = 0; i < amount; i++)
-                BlastTarget(int.MaxValue, true);
+
+            Action<object, EventArgs> action = (ob, ea) => {
+                for (int i = 0; i < amount; i++)
+                    BlastTarget(int.MaxValue, true);
+            };
+
+            RunProgressBar($"Generating an undefined amount of units...\nThis can take a while...", int.MaxValue, action);
+
         }
 
         private void cbBigEndian_CheckedChanged(object sender, EventArgs e)
