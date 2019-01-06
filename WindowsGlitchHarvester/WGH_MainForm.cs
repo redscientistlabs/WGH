@@ -405,6 +405,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
             rbExecuteCorruptedFile.Enabled = true;
             rbExecuteWith.Enabled = true;
+            rbExecuteOtherProgram.Enabled = true;
         }
 
         private void rbTargetMultipleFiles_CheckedChanged(object sender, EventArgs e)
@@ -419,8 +420,9 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
             if (rbExecuteWith.Checked)
                 rbNoExecution.Checked = true;
-            rbExecuteWith.Enabled = false;
 
+            rbExecuteWith.Enabled = false;
+            rbExecuteOtherProgram.Enabled = false;
         }
 
         private void rbTargetProcess_CheckedChanged(object sender, EventArgs e)
@@ -479,6 +481,38 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             lbStashHistory.Items.Clear();
         }
 
+        private void WrapInjectSelected()
+        {
+
+            TerminateIfNeeded();
+            StashKey sk = null;
+
+
+            WGH_Core.FormExecute(lbStashHistory, (o, e) =>
+            {
+                if (lbStashHistory.SelectedIndex != -1)
+                {
+                    sk = (StashKey)lbStashHistory.SelectedItem;
+                }
+                else if (lbStockpile.SelectedIndex != -1)
+                {
+                    sk = (StashKey)lbStockpile.SelectedItem;
+                }
+
+            });
+
+            if (sk != null)
+            {
+                WGH_Core.progressForm?.bw?.ReportProgress(1, "Uncorrupting...");
+                WGH_Core.RestoreTarget();
+
+                WGH_Core.progressForm?.bw?.ReportProgress(1, "Applying units...");
+                sk.Run();
+                WGH_Executor.Execute();
+            }
+
+        }
+
         private void btnInjectSelected_Click(object sender, EventArgs e)
         {
             if (WGH_Core.currentMemoryInterface == null)
@@ -487,27 +521,8 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 return;
             }
 
-            TerminateIfNeeded();
-
-            StashKey sk = null;
-
-            if (lbStashHistory.SelectedIndex != -1)
-            {
-                sk = (StashKey)lbStashHistory.SelectedItem;
-            }
-            else if (lbStockpile.SelectedIndex != -1)
-            {
-                sk = (StashKey)lbStockpile.SelectedItem;
-            }
-
-            if (sk != null)
-            {
-
-                WGH_Core.RestoreTarget();
-
-                sk.Run();
-                WGH_Executor.Execute();
-            }
+            void action(object ob, EventArgs ea) => WrapInjectSelected();
+            RunProgressBar($"Injecting units...", int.MaxValue, action);
 
         }
 
@@ -921,12 +936,6 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
         private void RerollInject()
         {
 
-            if (WGH_Core.currentMemoryInterface == null)
-            {
-                MessageBox.Show("No target is loaded");
-                return;
-            }
-
             TerminateIfNeeded();
 
             StashKey sk = null;
@@ -1003,10 +1012,10 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                     }
                 }
 
-                WGH_Core.progressForm?.bw?.ReportProgress(1, "Applying Units...");
-
+                WGH_Core.progressForm?.bw?.ReportProgress(1, "Uncorrupting...");
                 WGH_Core.RestoreTarget();
 
+                WGH_Core.progressForm?.bw?.ReportProgress(1, "Applying units...");
                 newSk.Run();
                 WGH_Executor.Execute();
             }
@@ -1014,17 +1023,20 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         private void btnRerollInject_Click(object sender, EventArgs e)
         {
+
+            if (WGH_Core.currentMemoryInterface == null)
+            {
+                MessageBox.Show("No target is loaded");
+                return;
+            }
+
+
             StashKey sk = null;
 
-
             if (lbStashHistory.SelectedIndex != -1)
-            {
                 sk = (StashKey)lbStashHistory.SelectedItem;
-            }
             else if (lbStockpile.SelectedIndex != -1)
-            {
                 sk = (StashKey)lbStockpile.SelectedItem;
-            }
 
             if (sk != null)
             {

@@ -176,6 +176,8 @@
             // 
             // lbStashHistory
             // 
+            this.lbStashHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.lbStashHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.lbStashHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lbStashHistory.Font = new System.Drawing.Font("Segoe UI", 9.75F);
@@ -211,6 +213,7 @@
             // 
             // btnClearStashHistory
             // 
+            this.btnClearStashHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnClearStashHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnClearStashHistory.FlatAppearance.BorderSize = 0;
             this.btnClearStashHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -496,6 +499,7 @@
             // 
             // label7
             // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.label7.ForeColor = System.Drawing.Color.White;
@@ -1466,6 +1470,7 @@
             // 
             // pnCorruptionEngine
             // 
+            this.pnCorruptionEngine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pnCorruptionEngine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.pnCorruptionEngine.Controls.Add(this.cbCorruptionEngine);
             this.pnCorruptionEngine.Controls.Add(this.gbDefaultSettings);
@@ -1477,6 +1482,8 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.panel1.Controls.Add(this.nmIntensity);
             this.panel1.Controls.Add(this.label4);
