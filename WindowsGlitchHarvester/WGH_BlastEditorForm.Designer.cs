@@ -47,6 +47,7 @@
             this.btnDuplicateSelected = new System.Windows.Forms.Button();
             this.lbBlastLayerSize = new System.Windows.Forms.Label();
             this.btnSanitizeDuplicates = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.gbValueEdit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nmValueEdit)).BeginInit();
             this.gbAddressEdit.SuspendLayout();
@@ -68,7 +69,7 @@
             this.lbBlastLayer.Margin = new System.Windows.Forms.Padding(5);
             this.lbBlastLayer.Name = "lbBlastLayer";
             this.lbBlastLayer.ScrollAlwaysVisible = true;
-            this.lbBlastLayer.Size = new System.Drawing.Size(342, 507);
+            this.lbBlastLayer.Size = new System.Drawing.Size(342, 565);
             this.lbBlastLayer.TabIndex = 11;
             this.lbBlastLayer.Tag = "color:dark";
             this.lbBlastLayer.SelectedIndexChanged += new System.EventHandler(this.lbBlastLayer_SelectedIndexChanged);
@@ -370,12 +371,31 @@
             this.btnSanitizeDuplicates.UseVisualStyleBackColor = false;
             this.btnSanitizeDuplicates.Click += new System.EventHandler(this.btnSanitizeDuplicates_Click);
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
+            this.button1.ForeColor = System.Drawing.Color.OrangeRed;
+            this.button1.Location = new System.Drawing.Point(370, 527);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(157, 28);
+            this.button1.TabIndex = 132;
+            this.button1.TabStop = false;
+            this.button1.Tag = "color:darker";
+            this.button1.Text = "offset";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // WGH_BlastEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(539, 536);
+            this.ClientSize = new System.Drawing.Size(539, 594);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnSanitizeDuplicates);
             this.Controls.Add(this.lbBlastLayerSize);
             this.Controls.Add(this.btnDuplicateSelected);
@@ -426,5 +446,6 @@
         private System.Windows.Forms.Button btnDuplicateSelected;
         private System.Windows.Forms.Label lbBlastLayerSize;
         private System.Windows.Forms.Button btnSanitizeDuplicates;
+        private System.Windows.Forms.Button button1;
     }
 }

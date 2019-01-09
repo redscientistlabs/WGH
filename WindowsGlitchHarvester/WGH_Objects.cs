@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.IO;
+using Ceras;
 
 
 namespace WindowsGlitchHarvester
@@ -71,6 +72,7 @@ namespace WindowsGlitchHarvester
     }
 
     [Serializable()]
+    [Ceras.MemberConfig(TargetMember.All)]
     public class Stockpile
     {
         public List<StashKey> StashKeys = new List<StashKey>();
@@ -85,6 +87,10 @@ namespace WindowsGlitchHarvester
             {
                 StashKeys.Add(sk);
             }
+        }
+        public Stockpile()
+        {
+
         }
 
         public static void Save(Stockpile sks)
@@ -337,6 +343,7 @@ namespace WindowsGlitchHarvester
 
 
     [Serializable()]
+    [Ceras.MemberConfig(TargetMember.All)]
     public class StashKey : ICloneable
     {
 
@@ -377,6 +384,11 @@ namespace WindowsGlitchHarvester
 
         }
 
+        public StashKey()
+        {
+
+        }
+
         public override string ToString()
         {
             return Alias;
@@ -397,6 +409,7 @@ namespace WindowsGlitchHarvester
 
 
     [Serializable()]
+    [Ceras.MemberConfig(TargetMember.All)]
     public class BlastLayer
     {
         public List<BlastUnit> Layer;
@@ -410,6 +423,7 @@ namespace WindowsGlitchHarvester
         {
             Layer = _layer;
         }
+
 
         public virtual void Apply()
         {
@@ -457,6 +471,7 @@ namespace WindowsGlitchHarvester
     }
 
     [Serializable()]
+    [Ceras.MemberConfig(TargetMember.All)]
     public abstract class BlastUnit
     {
         public abstract bool Apply();
@@ -465,6 +480,7 @@ namespace WindowsGlitchHarvester
     }
 
     [Serializable()]
+    [Ceras.MemberConfig(TargetMember.All)]
     public class BlastByte : BlastUnit
     {
         public string Domain;
@@ -480,6 +496,11 @@ namespace WindowsGlitchHarvester
             Type = _type;
             Value = _value;
             IsEnabled = _isEnabled;
+        }
+
+        public BlastByte()
+        {
+
         }
 
         public override bool Apply()
@@ -560,7 +581,8 @@ namespace WindowsGlitchHarvester
     }
 
 	[Serializable()]
-	public class BlastVector : BlastUnit
+	[Ceras.MemberConfig(TargetMember.All)]
+    public class BlastVector : BlastUnit
 	{
 		public string Domain;
 		public long Address;

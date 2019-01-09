@@ -50,6 +50,7 @@
             this.btnLoadState = new System.Windows.Forms.Button();
             this.btnSaveState = new System.Windows.Forms.Button();
             this.pnNetCoreActions = new System.Windows.Forms.Panel();
+            this.btnSendBlastlayer = new System.Windows.Forms.Button();
             this.btnPokeBytes = new System.Windows.Forms.Button();
             this.btnPeekBytes = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -61,7 +62,7 @@
             this.btnPokeByte = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.lbDownloadNarrysMod = new System.Windows.Forms.LinkLabel();
-            this.btnSendBlastlayer = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -340,6 +341,7 @@
             // pnNetCoreActions
             // 
             this.pnNetCoreActions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pnNetCoreActions.Controls.Add(this.button1);
             this.pnNetCoreActions.Controls.Add(this.btnSendBlastlayer);
             this.pnNetCoreActions.Controls.Add(this.btnPokeBytes);
             this.pnNetCoreActions.Controls.Add(this.btnPeekBytes);
@@ -356,6 +358,24 @@
             this.pnNetCoreActions.Name = "pnNetCoreActions";
             this.pnNetCoreActions.Size = new System.Drawing.Size(595, 95);
             this.pnNetCoreActions.TabIndex = 18;
+            // 
+            // btnSendBlastlayer
+            // 
+            this.btnSendBlastlayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSendBlastlayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnSendBlastlayer.FlatAppearance.BorderSize = 0;
+            this.btnSendBlastlayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSendBlastlayer.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnSendBlastlayer.ForeColor = System.Drawing.Color.Black;
+            this.btnSendBlastlayer.Location = new System.Drawing.Point(304, 14);
+            this.btnSendBlastlayer.Name = "btnSendBlastlayer";
+            this.btnSendBlastlayer.Size = new System.Drawing.Size(124, 32);
+            this.btnSendBlastlayer.TabIndex = 36;
+            this.btnSendBlastlayer.TabStop = false;
+            this.btnSendBlastlayer.Tag = "color:light";
+            this.btnSendBlastlayer.Text = "Send Blastlayer";
+            this.btnSendBlastlayer.UseVisualStyleBackColor = false;
+            this.btnSendBlastlayer.Click += new System.EventHandler(this.btnSendBlastlayer_Click);
             // 
             // btnPokeBytes
             // 
@@ -509,23 +529,23 @@
     "s Mod). Click here to visit the download page.";
             this.lbDownloadNarrysMod.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbDownloadNarrysMod_LinkClicked);
             // 
-            // btnSendBlastlayer
+            // button1
             // 
-            this.btnSendBlastlayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSendBlastlayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btnSendBlastlayer.FlatAppearance.BorderSize = 0;
-            this.btnSendBlastlayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSendBlastlayer.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnSendBlastlayer.ForeColor = System.Drawing.Color.Black;
-            this.btnSendBlastlayer.Location = new System.Drawing.Point(304, 14);
-            this.btnSendBlastlayer.Name = "btnSendBlastlayer";
-            this.btnSendBlastlayer.Size = new System.Drawing.Size(124, 32);
-            this.btnSendBlastlayer.TabIndex = 36;
-            this.btnSendBlastlayer.TabStop = false;
-            this.btnSendBlastlayer.Tag = "color:light";
-            this.btnSendBlastlayer.Text = "Send Blastlayer";
-            this.btnSendBlastlayer.UseVisualStyleBackColor = false;
-            this.btnSendBlastlayer.Click += new System.EventHandler(this.btnSendBlastlayer_Click);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(304, 52);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(124, 32);
+            this.button1.TabIndex = 37;
+            this.button1.TabStop = false;
+            this.button1.Tag = "color:light";
+            this.button1.Text = "Start Autocorrupt";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // WGH_SavestateInfoForm
             // 
@@ -599,5 +619,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.LinkLabel lbDownloadNarrysMod;
         public System.Windows.Forms.Button btnSendBlastlayer;
+        public System.Windows.Forms.Button button1;
     }
 }

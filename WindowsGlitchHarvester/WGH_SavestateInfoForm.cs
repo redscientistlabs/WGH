@@ -50,6 +50,9 @@ namespace WindowsGlitchHarvester
             GetSavestateInfo();
         }
 
+        public static int sram_offset = 0;
+        public static int aram_offset = 0;
+        public static int exram_offset = 0;
 
         public void GetSavestateInfo()
         {
@@ -62,10 +65,7 @@ namespace WindowsGlitchHarvester
                 byte[] sram_pattern = { 0x5B, 0x43, 0x6F, 0x72, 0x65, 0x54, 0x69, 0x6D, 0x69, 0x6E, 0x67, 0x5D };
                 byte[] aram_pattern = { 0x5B, 0x50, 0x72, 0x6F, 0x63, 0x65, 0x73, 0x73, 0x6F, 0x72, 0x49, 0x6E, 0x74, 0x65, 0x72, 0x66, 0x61, 0x63, 0x65, 0x40, 0x5D };
                 byte[] exram_pattern = { 0x5B, 0x4D, 0x65, 0x6D, 0x6F, 0x72, 0x79, 0x20, 0x46, 0x61, 0x6B, 0x65, 0x56, 0x4D, 0x45, 0x4D, 0x40, 0x40, 0x40, 0x5D };
-                int sram_offset = 0;
-                int aram_offset = 0;
-                int exram_offset = 0;
-
+             
                 //getMemorySize() returns a long whereas peekbytes uses an int. Dolphin savestates should never be 2GB large so this shouldn't be a problem
                 bytes = mi.PeekBytes(0, Convert.ToInt32(mi.getMemorySize()));
 
@@ -227,7 +227,8 @@ namespace WindowsGlitchHarvester
             message[1] = 4;
             message[2] = BitConverter.GetBytes((Int64)valueNum.Value);
 
-            dolphinConn.connector.SendSyncedMessage("POKEBYTES", message);
+            for(int i = 0; i < (Int64)valueNum.Value; i++)
+                dolphinConn.connector.SendSyncedMessage("POKEBYTES", message);
         }
 
         public Byte PeekByte(long address)
@@ -290,10 +291,25 @@ namespace WindowsGlitchHarvester
         public void SendBlastlayer(BlastLayer bl)
         {
             Object message = new Object();
+
+
             message = bl;
 
             Thread.Sleep(10);
             dolphinConn.connector.SendMessage("DOLPHIN|BLASTLAYER", message);
+        }
+
+
+        public void StartAutoCorrupt()
+        {
+            Object message = new Object();
+            byte[] a = {1,2,3,4};
+            for(int i = 0; i < 500; i++)
+            {
+                PokeBytes(WGH_Core.RandomLong(32000000), a);
+                Thread.Sleep(5);
+            }
+            
         }
         public void btnPeekBytes_Click(object sender, EventArgs e)
         {
@@ -343,6 +359,11 @@ namespace WindowsGlitchHarvester
         private void btnSendBlastlayer_Click(object sender, EventArgs e)
         {
             SendBlastlayer(WGH_Core.currentStashkey.BlastLayer);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            StartAutoCorrupt();
         }
     }
 }
