@@ -6,13 +6,14 @@ using System.Collections;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WindowsGlitchHarvester
 {
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.95";
+		public static string WghVersion = "0.95b";
 
 		public static Random RND = new Random();
 
@@ -147,8 +148,11 @@ namespace WindowsGlitchHarvester
         }
 
         //Generates or queries a blast layer then applies it.
-        public static BlastLayer Blast(BlastLayer _layer)
+        public static BlastLayer Blast(BlastLayer _layer, int requestedIntensity = 0)
         {
+            if (requestedIntensity == 0)
+                requestedIntensity = Intensity;
+
             try
             {
                 if (_layer != null)
@@ -198,15 +202,6 @@ namespace WindowsGlitchHarvester
                         }
                     }
 
-
-                    progressForm?.bw?.ReportProgress(0,"Applying units...");
-                    bl.Apply();
-
-                    currentMemoryInterface.ApplyWorkingFile();
-
-                    if (bl.Layer.Count == 0)
-                        return null;
-                    else
                         return bl;
 
                 }
@@ -221,7 +216,42 @@ namespace WindowsGlitchHarvester
 
         public static BlastLayer Blast()
         {
-            return Blast(null);
+            bool multithread = WGH_Core.currentMemoryInterface.lastMemoryDump != null;
+            var cpus = Environment.ProcessorCount;
+            int splitintensity = Intensity / cpus;
+
+            BlastLayer bl = new BlastLayer();
+
+            if (multithread)
+            {
+
+                Task<BlastLayer>[] tasks = new Task<BlastLayer>[cpus];
+                for (int i = 0; i < cpus; i++)
+                    tasks[i] = Task.Factory.StartNew(() => Blast(null, splitintensity));
+
+                Task.WaitAll(tasks);
+
+                bl = tasks[0].Result;
+
+                if (tasks.Length > 1)
+                    for (int i = 1; i < tasks.Length; i++)
+                        bl.Layer.AddRange(tasks[i].Result.Layer);
+
+            }
+            else
+                bl = Blast(null);
+            
+            progressForm?.bw?.ReportProgress(0, "Applying units...");
+            bl.Apply();
+
+            currentMemoryInterface.ApplyWorkingFile();
+
+            if (bl.Layer.Count == 0)
+                return null;
+            else
+                return bl;
+
+
         }
 
         public static string GetRandomKey()

@@ -13,8 +13,8 @@ namespace WindowsGlitchHarvester
 		public static string lastDomain = null;
 		public static byte[] lastValues = null;
 
-		public static string[] limiterList = null;
-		public static string[] valueList = null;
+		public static uint[] limiterList = null;
+		public static uint[] valueList = null;
 
         public static long vectorOffset = 0;
         public static bool vectorAligned = true;
@@ -26,6 +26,11 @@ namespace WindowsGlitchHarvester
         public static bool customWholeNumbers = true;
 
         #region constant lists
+
+        public static uint[] stringListToIntList(string[] stringList)
+        {
+            return stringList.Select(it => BitConverter.ToUInt32(StringToByteArray(it), 0)).ToArray();
+        }
 
         public static string[] listOfTinyConstants = new string[]
 		{
@@ -353,9 +358,9 @@ namespace WindowsGlitchHarvester
             "000080c7" // = -65536
 		};
 
-        public static string[] customList = new string[]
+        public static uint[] customList = new uint[]
         {
-            "custom"
+            0
 		};
 
         public static bool BigEndian = false;
@@ -410,14 +415,14 @@ namespace WindowsGlitchHarvester
 			}
 		}
 
-		public static bool isConstant(byte[] bytes, string[] list)
+		public static bool isConstant(byte[] bytes, uint[] list)
 		{
             try
             {
             if (list == null)
                 return true;
 
-                if (list[0] == "custom")
+                if (list[0] == 0)
                 {
                     float value;
 
@@ -457,16 +462,12 @@ namespace WindowsGlitchHarvester
 
             if (!WGH_VectorEngine.BigEndian)
 			{
-                return list.Contains(ByteArrayToString(FlipBytes(bytes)));
+                return list.Contains(BitConverter.ToUInt32(FlipBytes(bytes),0));
             }
 
-            return list.Contains(ByteArrayToString(bytes));
+            return list.Contains(BitConverter.ToUInt32(bytes, 0));
 		}
 
-        public static string ByteArrayToString(byte[] bytes)
-        {
-            return ((BitConverter.ToString(bytes).Replace("-", "") ?? null).ToLower());
-        }
 
         public static float ByteArrayToFloat(byte[] bytes)
         {
@@ -478,7 +479,7 @@ namespace WindowsGlitchHarvester
             return mi.PeekBytes(address, 4);
 		}
 
-		public static byte[] getRandomConstant(string[] list)
+		public static byte[] getRandomConstant(uint[] list)
         {
             byte[] bytes;
             if (list == null)
@@ -487,7 +488,7 @@ namespace WindowsGlitchHarvester
                 WGH_Core.RND.NextBytes(buffer);
                 return buffer;
             }
-            if (list[0] == "custom")
+            if (list[0] == 0)
             {
 
                 if (customWholeNumbers)
@@ -508,8 +509,8 @@ namespace WindowsGlitchHarvester
                 }
                 return bytes;
             }
-
-            bytes = StringToByteArray(list[WGH_Core.RND.Next(list.Length)]);
+            var intValue = (list[WGH_Core.RND.Next(list.Length)]);
+            bytes = BitConverter.GetBytes(intValue);
 
             //Assume we have big endian input for some reason. If it's little endian, flip the bytes. 
             if (!WGH_VectorEngine.BigEndian)
@@ -534,7 +535,7 @@ namespace WindowsGlitchHarvester
 
 		public static byte[] StringToByteArray(string hex)
 		{
-			return Enumerable.Range(0, hex.Length)
+			 return Enumerable.Range(0, hex.Length)
 							 .Where(x => x % 2 == 0)
 							 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
 							 .ToArray();

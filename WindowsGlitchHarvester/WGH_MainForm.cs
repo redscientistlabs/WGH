@@ -167,7 +167,10 @@ namespace WindowsGlitchHarvester
                 BlastTarget(times, untilFound, stashBlastLayer);
             };
 
-            RunProgressBar($"Generating {intensity*times} units...", intensity, action);
+            bool multithread = WGH_Core.currentMemoryInterface.lastMemoryDump != null;
+            var cpus = Environment.ProcessorCount;
+
+            RunProgressBar($"Generating {intensity*times} units {(multithread ? $"on {cpus} threads" : $"on 1 thread")} ...", intensity, action);
 
         }
 
@@ -713,13 +716,13 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
         public void btnEnableCaching_Click(object sender, EventArgs e)
         {
             if (WGH_Core.currentMemoryInterface != null)
-                if (btnEnableCaching.Text == "Enable caching on current target")
+                if (btnEnableCaching.Text == "Enable Cache + Multithread")
                 {
                     WGH_Core.currentMemoryInterface.getMemoryDump();
                     if (WGH_Core.currentMemoryInterface is ProcessInterface)
                         (WGH_Core.currentMemoryInterface as ProcessInterface).UseCaching = true;
 
-                    btnEnableCaching.Text = "Disable caching on current target";
+                    btnEnableCaching.Text = "Disable Cache + Multithread";
                 }
                 else
                 {
@@ -1064,34 +1067,34 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             switch (selectedText)
             {
                 case "Extended":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.extendedListOfConstants;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.extendedListOfConstants);
                     break;
                 case "Extended+":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfPositiveConstants;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfPositiveConstants);
                     break;
                 case "Extended-":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfNegativeConstants;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfNegativeConstants);
                     break;
                 case "SuperExtended":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.superExtendedListOfConstants;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.superExtendedListOfConstants);
                     break;
                 case "Whole":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfWholeConstants;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfWholeConstants);
                     break;
                 case "Whole+":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfWholePositiveConstants;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfWholePositiveConstants);
                     break;
                 case "Tiny":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.listOfTinyConstants;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfTinyConstants);
                     break;
                 case "One":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.constantPositiveOne;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.constantPositiveOne);
                     break;
                 case "One*":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.constantOne;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.constantOne);
                     break;
                 case "Two":
-                    WGH_VectorEngine.limiterList = WGH_VectorEngine.constantPositiveTwo;
+                    WGH_VectorEngine.limiterList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.constantPositiveTwo);
                     break;
                 case "Custom":
                     WGH_VectorEngine.limiterList = WGH_VectorEngine.customList;
@@ -1111,34 +1114,34 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             switch (selectedText)
             {
                 case "Extended":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.extendedListOfConstants;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.extendedListOfConstants);
                     break;
                 case "Extended+":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.listOfPositiveConstants;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfPositiveConstants);
                     break;
                 case "Extended-":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.listOfNegativeConstants;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfNegativeConstants);
                     break;
                 case "SuperExtended":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.superExtendedListOfConstants;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.superExtendedListOfConstants);
                     break;
                 case "Whole":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.listOfWholeConstants;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfWholeConstants);
                     break;
                 case "Whole+":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.listOfWholePositiveConstants;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfWholePositiveConstants);
                     break;
                 case "Tiny":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.listOfTinyConstants;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.listOfTinyConstants);
                     break;
                 case "One":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.constantPositiveOne;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.constantPositiveOne);
                     break;
                 case "One*":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.constantOne;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.constantOne);
                     break;
                 case "Two":
-                    WGH_VectorEngine.valueList = WGH_VectorEngine.constantPositiveTwo;
+                    WGH_VectorEngine.valueList = WGH_VectorEngine.stringListToIntList(WGH_VectorEngine.constantPositiveTwo);
                     break;
                 case "Custom":
                     WGH_VectorEngine.valueList = WGH_VectorEngine.customList;

@@ -676,7 +676,7 @@ namespace WindowsGlitchHarvester
 				EnabledString = "[x] ";
 
 			string cleanDomainName = Domain.Replace("(nametables)", ""); //Shortens the domain name if it contains "(nametables)"
-			return (EnabledString + cleanDomainName + "(" + Convert.ToInt32(Address).ToString() + ")." + Type.ToString() + "(" + WGH_VectorEngine.ByteArrayToString(Values) + ")");
+			return (EnabledString + cleanDomainName + "(" + Convert.ToInt32(Address).ToString() + ")." + Type.ToString() + "(" + BitConverter.ToString(Values).Replace("-","").ToLower() + ")");
 		}
 	}
 
@@ -707,7 +707,7 @@ namespace WindowsGlitchHarvester
         public abstract void ResetWorkingFile();
         public abstract void ApplyWorkingFile();
 
-        public System.IO.Stream stream = null;
+        public volatile System.IO.Stream stream = null;
     }
 
     [Serializable()]
@@ -722,7 +722,6 @@ namespace WindowsGlitchHarvester
         //lastRealMemorySize is used in peek/poke to cancel out non-existing adresses
         public override long? lastMemorySize { get; set; }
         public long? lastRealMemorySize { get; set; }
-
 
 
         public FileInterface(string _targetId)
@@ -923,11 +922,11 @@ namespace WindowsGlitchHarvester
         if(address + data.Length >= lastRealMemorySize)
                 return;
 
-        if (stream == null)
-            stream = File.Open(SetWorkingFile(), FileMode.Open);
+                if (stream == null)
+                    stream = File.Open(SetWorkingFile(), FileMode.Open);
 
-        stream.Position = address;
-        stream.Write(data, 0, data.Length);
+                stream.Position = address;
+                stream.Write(data, 0, data.Length);
 
         if (lastMemoryDump != null)
         for (int i = 0; i<data.Length; i++)
@@ -940,11 +939,11 @@ namespace WindowsGlitchHarvester
             if (address >= lastRealMemorySize)
                 return;
 
-        if (stream == null)
-            stream = File.Open(SetWorkingFile(), FileMode.Open);
+                if (stream == null)
+                    stream = File.Open(SetWorkingFile(), FileMode.Open);
 
-        stream.Position = address;
-        stream.WriteByte(data);
+                stream.Position = address;
+                stream.WriteByte(data);
 
         if (lastMemoryDump != null)
             lastMemoryDump[address] = data;
@@ -959,13 +958,15 @@ namespace WindowsGlitchHarvester
         if (lastMemoryDump != null)
             return lastMemoryDump[address];
 
-        if (stream == null)
-            stream = File.Open(SetWorkingFile(), FileMode.Open);
+            byte[] readBytes = new byte[1];
 
-        byte[] readBytes = new byte[1];
-        stream.Position = address;
-        stream.Read(readBytes, 0, 1);
+                if (stream == null)
+                    stream = File.Open(SetWorkingFile(), FileMode.Open);
 
+                
+                stream.Position = address;
+                stream.Read(readBytes, 0, 1);
+            
         //fs.Close();
 
         return readBytes[0];
@@ -980,13 +981,16 @@ namespace WindowsGlitchHarvester
         if (lastMemoryDump != null)
             return lastMemoryDump.SubArray(address, range);
 
-        if (stream == null)
-            stream = File.Open(SetWorkingFile(), FileMode.Open);
-
         byte[] readBytes = new byte[range];
-        stream.Position = address;
-        stream.Read(readBytes, 0, range);
 
+ 
+                if (stream == null)
+                    stream = File.Open(SetWorkingFile(), FileMode.Open);
+
+
+                stream.Position = address;
+                stream.Read(readBytes, 0, range);
+      
         //fs.Close();
 
         return readBytes;

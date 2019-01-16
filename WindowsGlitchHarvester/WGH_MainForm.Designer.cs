@@ -859,7 +859,7 @@
             this.btnDisableAutoUncorrupt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDisableAutoUncorrupt.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.btnDisableAutoUncorrupt.ForeColor = System.Drawing.Color.GreenYellow;
-            this.btnDisableAutoUncorrupt.Location = new System.Drawing.Point(84, 11);
+            this.btnDisableAutoUncorrupt.Location = new System.Drawing.Point(65, 11);
             this.btnDisableAutoUncorrupt.Name = "btnDisableAutoUncorrupt";
             this.btnDisableAutoUncorrupt.Size = new System.Drawing.Size(142, 22);
             this.btnDisableAutoUncorrupt.TabIndex = 36;
@@ -876,13 +876,13 @@
             this.btnEnableCaching.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEnableCaching.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.btnEnableCaching.ForeColor = System.Drawing.Color.GreenYellow;
-            this.btnEnableCaching.Location = new System.Drawing.Point(235, 11);
+            this.btnEnableCaching.Location = new System.Drawing.Point(215, 11);
             this.btnEnableCaching.Name = "btnEnableCaching";
-            this.btnEnableCaching.Size = new System.Drawing.Size(189, 21);
+            this.btnEnableCaching.Size = new System.Drawing.Size(209, 21);
             this.btnEnableCaching.TabIndex = 35;
             this.btnEnableCaching.TabStop = false;
             this.btnEnableCaching.Tag = "color:darker";
-            this.btnEnableCaching.Text = "Enable caching on current target";
+            this.btnEnableCaching.Text = "Enable Cache + Multithread";
             this.btnEnableCaching.UseVisualStyleBackColor = false;
             this.btnEnableCaching.Click += new System.EventHandler(this.btnEnableCaching_Click);
             // 
