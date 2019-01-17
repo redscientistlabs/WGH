@@ -15,7 +15,9 @@ namespace WindowsGlitchHarvester
         public BackgroundWorker bw = new BackgroundWorker();
         string defaultLabel;
 
-        public WGH_Progress(string lbText, int maxprogress, Action<object, EventArgs> registrant)
+        public static Action<object, EventArgs> postAction = null;
+
+        public WGH_Progress(string lbText, int maxprogress, Action<object, EventArgs> actionRegistrant, Action<object, EventArgs> postActionRegistrant = null)
         {
             InitializeComponent();
 
@@ -25,15 +27,17 @@ namespace WindowsGlitchHarvester
             bw.WorkerSupportsCancellation = true;
 
             defaultLabel = lbText;
-            //lbProgress.Text = defaultLabel;
+            lbProgress.Text = defaultLabel;
 
             pbProgress.Minimum = 0;
             pbProgress.Value = 0;
             pbProgress.Maximum = maxprogress;
 
-            bw.DoWork += registrant.Invoke;
+            bw.DoWork += actionRegistrant.Invoke;
             bw.ProgressChanged += Bw_ProgressChanged;
             bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
+
+            postAction = postActionRegistrant;
 
             TopLevel = false;
             Size = WGH_Core.ghForm.Size;
@@ -57,6 +61,14 @@ namespace WindowsGlitchHarvester
             bw.Dispose();
             this.Hide();
             WGH_Core.progressForm = null;
+
+            if (postAction != null)
+            {
+                WGH_Core.FormExecute((o, ea) => {
+                    postAction.Invoke(null, null);
+                });
+            }
+                
         }
 
         private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)

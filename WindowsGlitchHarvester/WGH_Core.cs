@@ -111,10 +111,10 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public static void FormExecute(Control c, Action<object, EventArgs> action, object[] args = null) => FormExecute(ghForm, c, action, args);
-        public static void FormExecute(Form f, Control c, Action<object, EventArgs> a, object[] args = null)
+        public static void FormExecute(Action<object, EventArgs> action, object[] args = null) => FormExecute(ghForm, action, args);
+        public static void FormExecute(Form f, Action<object, EventArgs> a, object[] args = null)
         {
-            if (c.InvokeRequired)
+            if (f.InvokeRequired)
                 f.Invoke(new MethodInvoker(() => { a.Invoke(null, null); }));
             else
                 a.Invoke(null, null);
@@ -186,7 +186,7 @@ namespace WindowsGlitchHarvester
 
 
                     int reportCounter = 0;
-                    for (int i = 0; i < Intensity; i++)
+                    for (int i = 0; i < requestedIntensity; i++)
                     {
                         RandomAdress = StartingAddress + RandomLong(BlastRange -1);
 
@@ -272,7 +272,7 @@ namespace WindowsGlitchHarvester
                 OpenFileDialog1.RestoreDirectory = true;
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    if(OpenFileDialog1.FileName.ToString().Contains('^'))
+                    if (OpenFileDialog1.FileName.ToString().Contains('^'))
                     {
                         MessageBox.Show("You can't use a file that contains the character ^ ");
                         return;
@@ -293,18 +293,37 @@ namespace WindowsGlitchHarvester
                     WGH_Core.RestoreTarget();
                     currentMemoryInterface.stream?.Dispose();
                 }
-                
-                currentTargetType = "File";
-                var fi = new FileInterface(currentTargetId);
-                currentTargetName = fi.ShortFilename;
 
-                currentMemoryInterface = fi;
-                ghForm.lbTarget.Text = currentTargetId + "|MemorySize:" + fi.lastMemorySize.ToString();
+                currentTargetType = "File";
+
+                FileInterface fi = null;
+
+                Action<object, EventArgs> action = (ob, ea) =>
+                {
+                    fi = new FileInterface(currentTargetId);
+                };
+
+                Action<object, EventArgs> postAction = (ob, ea) =>
+                {
+                    if (fi == null)
+                    {
+                        MessageBox.Show("Failed to load target");
+                        return;
+                    }
+
+                    currentTargetName = fi.ShortFilename;
+
+                    currentMemoryInterface = fi;
+                    ghForm.lbTarget.Text = currentTargetId + "|MemorySize:" + fi.lastMemorySize.ToString();
+                };
+
+                WGH_Core.ghForm.RunProgressBar($"Loading target...", 0, action, postAction);
+
             }
             else if (WGH_Core.ghForm.rbTargetMultipleFiles.Checked)
             {
-                if(smForm != null)
-                   smForm.Close();
+                if (smForm != null)
+                    smForm.Close();
 
                 smForm = new WGH_SelectMultipleForm();
 
@@ -337,7 +356,7 @@ namespace WindowsGlitchHarvester
                 currentTargetName = mfi.ProcessName;
                 ghForm.lbTarget.Text = mfi.ProcessName + "|MemorySize:" + mfi.lastMemorySize.ToString();
             }
-            if (WGH_Core.ghForm.rbTargetDolphin.Checked)
+            else if (WGH_Core.ghForm.rbTargetDolphin.Checked)
             {
                 OpenFileDialog OpenFileDialog1;
                 OpenFileDialog1 = new OpenFileDialog();

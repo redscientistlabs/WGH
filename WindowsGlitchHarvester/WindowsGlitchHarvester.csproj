@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="FastZipProgram.cs" />
     <Compile Include="WGH_DolphinConnector.cs" />
+    <Compile Include="WGH_MemoryBanks.cs" />
     <Compile Include="WGH_Progress.cs">
       <SubType>Form</SubType>
     </Compile>

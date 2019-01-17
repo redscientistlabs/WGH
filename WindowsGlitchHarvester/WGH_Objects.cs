@@ -853,6 +853,10 @@ namespace WindowsGlitchHarvester
 
         public override byte[] getMemoryDump()
         {
+            //var getFiles = WGH_MemoryBanks.ReadFile(getBackupFilename());
+
+            new object();
+
             lastMemoryDump = File.ReadAllBytes(getBackupFilename());
             return lastMemoryDump;
         }

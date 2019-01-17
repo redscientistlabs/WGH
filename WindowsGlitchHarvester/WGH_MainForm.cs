@@ -53,7 +53,7 @@ namespace WindowsGlitchHarvester
             WGH_Core.Start(this);
         }
 
-        public void RunProgressBar(string progressLabel, int maxProgress, Action<object, EventArgs> action)
+        public void RunProgressBar(string progressLabel, int maxProgress, Action<object, EventArgs> action, Action<object, EventArgs> postAction = null)
         {
 
             if (WGH_Core.progressForm != null)
@@ -63,7 +63,7 @@ namespace WindowsGlitchHarvester
                 WGH_Core.progressForm = null;
             }
 
-            WGH_Core.progressForm = new WGH_Progress( progressLabel, maxProgress, action);
+            WGH_Core.progressForm = new WGH_Progress( progressLabel, maxProgress, action, postAction);
             WGH_Core.progressForm.Run();
 
         }
@@ -163,14 +163,14 @@ namespace WindowsGlitchHarvester
         {
             int intensity = WGH_Core.Intensity;
 
+            bool multithread = WGH_Core.currentMemoryInterface.lastMemoryDump != null;
+            var cpus = Environment.ProcessorCount;
+
             Action<object, EventArgs> action = (ob, ea) => {
                 BlastTarget(times, untilFound, stashBlastLayer);
             };
 
-            bool multithread = WGH_Core.currentMemoryInterface.lastMemoryDump != null;
-            var cpus = Environment.ProcessorCount;
-
-            RunProgressBar($"Generating {intensity*times} units {(multithread ? $"on {cpus} threads" : $"on 1 thread")} ...", intensity, action);
+            RunProgressBar($"Generating {String.Format("{0:#,##0}", intensity*times)} units {(multithread ? $"on {cpus} threads" : $"on 1 thread")} ...", intensity, action);
 
         }
 
@@ -207,7 +207,7 @@ namespace WindowsGlitchHarvester
                         DontLoadSelectedStash = true;
 
 
-                        WGH_Core.FormExecute(lbStashHistory, (o, e) => {
+                        WGH_Core.FormExecute((o, e) => {
                             lbStashHistory.Items.Add(WGH_Core.currentStashkey);
                             lbStashHistory.ClearSelected();
                             lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
@@ -289,7 +289,8 @@ namespace WindowsGlitchHarvester
             WGH_Core.Intensity = Convert.ToInt32(nmIntensity.Value);
 
             if (tbIntensity.Value != WGH_Core.Intensity)
-                tbIntensity.Value = WGH_Core.Intensity;
+                if(WGH_Core.Intensity <= tbIntensity.Maximum)
+                    tbIntensity.Value = WGH_Core.Intensity;
         }
 
         private void tbIntensity_Scroll(object sender, EventArgs e)
@@ -491,7 +492,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             StashKey sk = null;
 
 
-            WGH_Core.FormExecute(lbStashHistory, (o, e) =>
+            WGH_Core.FormExecute((o, e) =>
             {
                 if (lbStashHistory.SelectedIndex != -1)
                 {
@@ -944,7 +945,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             StashKey sk = null;
 
 
-            WGH_Core.FormExecute(lbStashHistory, (o, e) => {
+            WGH_Core.FormExecute((o, e) => {
                 if (lbStashHistory.SelectedIndex != -1)
                 {
                     sk = (StashKey)lbStashHistory.SelectedItem;
@@ -962,7 +963,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 newSk.Key = WGH_Core.GetRandomKey();
                 newSk.Alias = null;
 
-                WGH_Core.FormExecute(lbStashHistory, (o, e) => {
+                WGH_Core.FormExecute((o, e) => {
                     WGH_Core.ghForm.DontLoadSelectedStash = true;
                     WGH_Core.ghForm.lbStashHistory.Items.Add(newSk);
                     WGH_Core.ghForm.lbStashHistory.ClearSelected();
