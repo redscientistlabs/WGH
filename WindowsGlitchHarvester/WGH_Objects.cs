@@ -742,7 +742,7 @@ namespace WindowsGlitchHarvester
             {
                 MessageBox.Show($"FileInterface failed to load something \n\n" + "Culprit file: " + Filename + "\n\n" + ex.ToString());
 
-                if(WGH_Core.ghForm.rbTargetMultipleFiles.Checked)
+                if (WGH_Core.ghForm.rbTargetMultipleFiles.Checked)
                     throw;
             }
         }
@@ -754,7 +754,7 @@ namespace WindowsGlitchHarvester
 
         public string getCorruptFilename(bool overrideWriteCopyMode = false)
         {
-            if(overrideWriteCopyMode || WGH_Core.writeCopyMode)
+            if (overrideWriteCopyMode || WGH_Core.writeCopyMode)
                 return WGH_Core.currentDir + "\\TEMP\\" + getCompositeFilename("CORRUPT");
             else
                 return Filename;
@@ -766,7 +766,7 @@ namespace WindowsGlitchHarvester
 
         public override void ResetWorkingFile()
         {
-            
+
             try
             {
                 if (File.Exists(getCorruptFilename()))
@@ -776,7 +776,7 @@ namespace WindowsGlitchHarvester
             {
                 MessageBox.Show($"Could not get access to {getCorruptFilename()}\n\nClose the file then try whatever you were doing again", "WARNING");
             }
-            
+
 
             SetWorkingFile();
         }
@@ -791,13 +791,13 @@ namespace WindowsGlitchHarvester
 
         public override void ApplyWorkingFile()
         {
-            if(stream != null)
+            if (stream != null)
             {
                 stream.Close();
                 stream = null;
             }
 
-            if(WGH_Core.writeCopyMode)
+            if (WGH_Core.writeCopyMode)
             {
 
                 try
@@ -855,10 +855,19 @@ namespace WindowsGlitchHarvester
         {
             //var getFiles = WGH_MemoryBanks.ReadFile(getBackupFilename());
 
-            new object();
+            //lastMemoryDump = File.ReadAllBytes(getBackupFilename());
 
-            lastMemoryDump = File.ReadAllBytes(getBackupFilename());
-            return lastMemoryDump;
+            lastMemoryDump = new byte[lastMemorySize.Value];
+
+            using (Stream stream = File.Open(getBackupFilename(), FileMode.Open))
+            {
+
+                //byte[] readBytes = new byte[bankSize];
+                stream.Position = 0;
+                stream.Read(lastMemoryDump, 0, Convert.ToInt32(lastRealMemorySize.Value));
+            }
+
+                return lastMemoryDump;
         }
 
         public override long getMemorySize()
@@ -870,7 +879,7 @@ namespace WindowsGlitchHarvester
 
             long Alignment32bitReminder = lastRealMemorySize.Value % 4;
 
-            if(Alignment32bitReminder != 0)
+            if (Alignment32bitReminder != 0)
             {
                 lastMemorySize = lastRealMemorySize.Value + (4 - Alignment32bitReminder);
             }
@@ -880,10 +889,10 @@ namespace WindowsGlitchHarvester
             }
 
 
-            
+
 
             return (long)lastMemorySize;
-            
+
         }
 
         public override bool dolphinSavestateVersion()
@@ -894,7 +903,7 @@ namespace WindowsGlitchHarvester
              */
 
             string a = "Dolphin Narry's Mod";
-            string b  = Encoding.Default.GetString(PeekBytes(32, 19));
+            string b = Encoding.Default.GetString(PeekBytes(32, 19));
 
             if (a == b)
             {
@@ -921,87 +930,87 @@ namespace WindowsGlitchHarvester
 
         }
 
-    public override void PokeBytes(long address, byte[] data)
-    {
-        if(address + data.Length >= lastRealMemorySize)
+        public override void PokeBytes(long address, byte[] data)
+        {
+            if (address + data.Length >= lastRealMemorySize)
                 return;
 
-                if (stream == null)
-                    stream = File.Open(SetWorkingFile(), FileMode.Open);
+            if (stream == null)
+                stream = File.Open(SetWorkingFile(), FileMode.Open);
 
-                stream.Position = address;
-                stream.Write(data, 0, data.Length);
+            stream.Position = address;
+            stream.Write(data, 0, data.Length);
 
-        if (lastMemoryDump != null)
-        for (int i = 0; i<data.Length; i++)
-            lastMemoryDump[address + i] = data[i];
+            if (lastMemoryDump != null)
+                for (int i = 0; i < data.Length; i++)
+                    lastMemoryDump[address + i] = data[i];
 
-    }
+        }
 
-    public override void PokeByte(long address, byte data)
-    {
+        public override void PokeByte(long address, byte data)
+        {
             if (address >= lastRealMemorySize)
                 return;
 
-                if (stream == null)
-                    stream = File.Open(SetWorkingFile(), FileMode.Open);
+            if (stream == null)
+                stream = File.Open(SetWorkingFile(), FileMode.Open);
 
-                stream.Position = address;
-                stream.WriteByte(data);
+            stream.Position = address;
+            stream.WriteByte(data);
 
-        if (lastMemoryDump != null)
-            lastMemoryDump[address] = data;
-    }
+            if (lastMemoryDump != null)
+                lastMemoryDump[address] = data;
+        }
 
-    public override byte? PeekByte(long address)
-    {
-        if (address >= lastRealMemorySize)
-            return 0;
+        public override byte? PeekByte(long address)
+        {
+            if (address >= lastRealMemorySize)
+                return 0;
 
 
-        if (lastMemoryDump != null)
-            return lastMemoryDump[address];
+            if (lastMemoryDump != null)
+                return lastMemoryDump[address];
 
             byte[] readBytes = new byte[1];
 
-                if (stream == null)
-                    stream = File.Open(SetWorkingFile(), FileMode.Open);
+            if (stream == null)
+                stream = File.Open(SetWorkingFile(), FileMode.Open);
 
-                
-                stream.Position = address;
-                stream.Read(readBytes, 0, 1);
-            
-        //fs.Close();
 
-        return readBytes[0];
+            stream.Position = address;
+            stream.Read(readBytes, 0, 1);
+
+            //fs.Close();
+
+            return readBytes[0];
+
+        }
+
+        public override byte[] PeekBytes(long address, int range)
+        {
+            if (address + range >= lastRealMemorySize)
+                return new byte[range];
+
+            if (lastMemoryDump != null)
+                return lastMemoryDump.SubArray(address, range);
+
+            byte[] readBytes = new byte[range];
+
+
+            if (stream == null)
+                stream = File.Open(SetWorkingFile(), FileMode.Open);
+
+
+            stream.Position = address;
+            stream.Read(readBytes, 0, range);
+
+            //fs.Close();
+
+            return readBytes;
+
+        }
 
     }
-
-    public override byte[] PeekBytes(long address, int range)
-    {
-        if (address + range >= lastRealMemorySize)
-            return new byte[range];
-
-        if (lastMemoryDump != null)
-            return lastMemoryDump.SubArray(address, range);
-
-        byte[] readBytes = new byte[range];
-
- 
-                if (stream == null)
-                    stream = File.Open(SetWorkingFile(), FileMode.Open);
-
-
-                stream.Position = address;
-                stream.Read(readBytes, 0, range);
-      
-        //fs.Close();
-
-        return readBytes;
-
-    }
-
-}
 
 
 [Serializable()]
@@ -1102,13 +1111,37 @@ public class MultipleFileInterface : MemoryInterface
 
     public override byte[] getMemoryDump()
     {
+            long totalDumpSize = 0;
 
-        List<byte> allBytes = new List<byte>();
+            for (int i = 0; i < FileInterfaces.Count; i++)
+                totalDumpSize += FileInterfaces[i].lastMemorySize.Value;
 
-        foreach(var fi in FileInterfaces)
-            allBytes.AddRange(fi.getMemoryDump());
+            lastMemoryDump = new byte[totalDumpSize];
+
+            long targetAddress = 0;
+
+            for (int i = 0; i < FileInterfaces.Count; i++)
+            {
+                FileInterfaces[i].getMemoryDump();
+                long targetLength = FileInterfaces[i].lastMemorySize.Value;
+                Array.Copy(FileInterfaces[i].lastMemoryDump, 0, lastMemoryDump, targetAddress, targetLength);
+                targetAddress += targetLength;
+                FileInterfaces[i].lastMemoryDump = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            /*
+            List<byte> allBytes = new List<byte>();
+
+            foreach (var fi in FileInterfaces)
+            {
+                allBytes.AddRange(fi.getMemoryDump());
+                fi.lastMemoryDump = null;
+            }
 
         lastMemoryDump = allBytes.ToArray();
+        */
+
         return lastMemoryDump;
 
     }
@@ -1216,31 +1249,37 @@ public class MultipleFileInterface : MemoryInterface
 
     public override byte[] PeekBytes(long address, int range)
     {
-
-        if (lastMemoryDump != null)
-            return lastMemoryDump.SubArray(address, range);
-
-
-        long addressPad = 0;
-        FileInterface targetInterface = null;
-
-        foreach (var fi in FileInterfaces)
-        {
-            if (addressPad + fi.getMemorySize() > address)
+            try
             {
-                targetInterface = fi;
-                break;
+                if (lastMemoryDump != null)
+                    return lastMemoryDump.SubArray(address, range);
+
+
+                long addressPad = 0;
+                FileInterface targetInterface = null;
+
+                foreach (var fi in FileInterfaces)
+                {
+                    if (addressPad + fi.getMemorySize() > address)
+                    {
+                        targetInterface = fi;
+                        break;
+                    }
+
+                    addressPad += fi.getMemorySize();
+
+                }
+
+                if (targetInterface != null)
+                    return targetInterface.PeekBytes(address - addressPad, range);
+                else
+                    return null;
             }
-
-            addressPad += fi.getMemorySize();
-
-        }
-
-        if (targetInterface != null)
-            return targetInterface.PeekBytes(address - addressPad,range);
-        else
-            return null;
-
+            catch(Exception ex)
+            {
+                new object();
+                return null;
+            }
     }
 
 }

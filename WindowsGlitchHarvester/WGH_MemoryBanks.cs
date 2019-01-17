@@ -9,11 +9,12 @@ namespace WindowsGlitchHarvester
 {
     static class WGH_MemoryBanks
     {
+        public static int maxBankSize = 1073741820;
+
         public static byte[][] ReadFile (string path)
         {
             try
             {
-                const int maxBankSize = Int32.MaxValue/20;
 
                 long fileLength = new System.IO.FileInfo(path).Length;
                 int tailBankSize = Convert.ToInt32(fileLength % maxBankSize);
@@ -32,7 +33,7 @@ namespace WindowsGlitchHarvester
 
                 using (Stream stream = File.Open(path, FileMode.Open))
                 {
-                    for(int i = 0; i<banksCount; i++)
+                    for(long i = 0; i<banksCount; i++)
                     {
                         int bankSize;
                         long addressStart;
@@ -70,6 +71,71 @@ namespace WindowsGlitchHarvester
                 throw ex;
             }
 
+        }
+
+        public static byte[] SubArray(this byte[][] data, long startAddress, long length)
+        {
+            byte[] result = new byte[length];
+
+            if (data == null)
+                return null;
+
+            long startBank;
+            long relativeStartAdress = (startAddress * maxBankSize);
+
+            if (startAddress < maxBankSize)
+                startBank = 0;
+            else
+                startBank = maxBankSize / (startAddress - (startAddress % maxBankSize));
+
+
+
+            long endBank;
+            long endAddress = startAddress + length;
+
+            if (startAddress+length < maxBankSize)
+                endBank = 0;
+            else
+                endBank = maxBankSize / (endAddress - (endAddress % maxBankSize));
+
+
+
+            if (startBank == endBank)
+                Array.Copy(data[startBank], relativeStartAdress, result, 0, length);
+            else
+            {
+                //only supports 2 banks at the same time.
+                //could easily add support for any number of banks but I need those precious cycles.
+                //anyway a bank is like 1gb so...
+
+                long lengthFromStartBank = maxBankSize - relativeStartAdress;
+                long lengthFromEndBank = length - lengthFromStartBank;
+
+                Array.Copy(data[startBank], relativeStartAdress, result, 0, lengthFromStartBank);
+                Array.Copy(data[endBank], 0, result, lengthFromStartBank, lengthFromEndBank);
+            }
+
+
+            return result;
+        }
+
+        public static byte SubByte(this byte[][] data, long Address)
+        {
+            byte result;
+
+            if (data == null)
+                return 0;
+
+            long bank;
+            long relativeAddress = (Address % maxBankSize);
+
+            if (Address < maxBankSize)
+                bank = 0;
+            else
+                bank = maxBankSize / (Address - (Address % maxBankSize));
+
+
+            return data[bank][relativeAddress];
         }
     }
 }

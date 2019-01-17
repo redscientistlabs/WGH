@@ -734,7 +734,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                     if (WGH_Core.currentMemoryInterface is ProcessInterface)
                         (WGH_Core.currentMemoryInterface as ProcessInterface).UseCaching = false;
 
-                    btnEnableCaching.Text = "Enable caching on current target";
+                    btnEnableCaching.Text = "Enable Cache + Multithread";
                 }
         }
 

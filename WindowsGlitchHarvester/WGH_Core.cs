@@ -13,9 +13,25 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.95b";
+		public static string WghVersion = "0.95d";
 
-		public static Random RND = new Random();
+        private static volatile int _seed = DateTime.Now.Millisecond;
+        public static int seed { get { return ++_seed; } }
+
+        
+        [ThreadStatic]
+        private static Random _RND = null;
+        public static Random RND
+        {
+            get
+            {
+                if (_RND == null)
+                    _RND = new Random(seed);
+
+                return _RND;
+            }
+        }
+        
 
         //Values
         public static bool isLoaded = false;
@@ -256,6 +272,7 @@ namespace WindowsGlitchHarvester
 
         public static string GetRandomKey()
         {
+
             string Key = RND.Next(1, 9999).ToString() + RND.Next(1, 9999).ToString() + RND.Next(1, 9999).ToString() + RND.Next(1, 9999).ToString();
             return Key;
         }
@@ -285,7 +302,7 @@ namespace WindowsGlitchHarvester
                     return;
 
                 //Disable caching of the previously loaded file if it was enabled
-                if (ghForm.btnEnableCaching.Text == "Disable caching on current target")
+                if (ghForm.btnEnableCaching.Text.Contains("Disable"))
                     ghForm.btnEnableCaching.PerformClick();
 
                 if (currentMemoryInterface != null && (currentTargetType == "Dolphin" || currentTargetType == "File" || currentTargetType == "MultipleFiles"))
@@ -378,7 +395,7 @@ namespace WindowsGlitchHarvester
                     return;
 
                 //Disable caching of the previously loaded file if it was enabled
-                if (ghForm.btnEnableCaching.Text == "Disable caching on current target")
+                if (ghForm.btnEnableCaching.Text.Contains("Disable"))
                     ghForm.btnEnableCaching.PerformClick();
 
                 if (currentMemoryInterface != null && (currentTargetType == "Dolphin" || currentTargetType == "File" || currentTargetType == "MultipleFiles"))
@@ -414,7 +431,6 @@ namespace WindowsGlitchHarvester
                 currentTargetName = "Dolphin";
                 ghForm.lbTarget.Text = currentTargetName + "|MemorySize:" + WGH_Core.currentMemoryInterface.lastMemorySize.ToString();
             }*/
-
         }
 
         public static void RestoreTarget()
