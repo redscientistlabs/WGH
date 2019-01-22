@@ -110,7 +110,7 @@ namespace WindowsGlitchHarvester
                     WGH_Core.lastBlastLayerBackup = new BlastLayer();
                 }
 
-
+                /*
                 if (mi is ProcessInterface)
                 {
                     cbTerminateOnReExec.Visible = false;
@@ -128,6 +128,7 @@ namespace WindowsGlitchHarvester
                 }
                 else
                 {
+                */
                     cbTerminateOnReExec.Visible = true;
                     cbWriteCopyMode.Visible = true;
                     rbExecuteWith.Visible = true;
@@ -140,7 +141,7 @@ namespace WindowsGlitchHarvester
                     cbInjectOnSelect.Visible = true;
 
                     WGH_Core.acForm.Visible = false;
-                }
+                //}
             }
 
 
@@ -176,9 +177,10 @@ namespace WindowsGlitchHarvester
 
         public void BlastTarget(int times = 1, bool untilFound = false, bool stashBlastLayer = true)
         {
+            /*
             if (WGH_Core.currentMemoryInterface is ProcessInterface)
                 (WGH_Core.currentMemoryInterface as ProcessInterface).RefreshSize();
-
+            */
 
             if (WGH_Core.currentMemoryInterface == null)
             {
@@ -429,6 +431,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             rbExecuteOtherProgram.Enabled = false;
         }
 
+        /*
         private void rbTargetProcess_CheckedChanged(object sender, EventArgs e)
         {
             btnResetBackup.Enabled = false;
@@ -441,6 +444,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             if (rbExecuteCorruptedFile.Checked || rbExecuteWith.Checked || rbExecuteOtherProgram.Checked)
                 rbNoExecution.Checked = true;
         }
+        */
 
         private void WGH_MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -720,8 +724,11 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 if (btnEnableCaching.Text == "Enable Cache + Multithread")
                 {
                     WGH_Core.currentMemoryInterface.getMemoryDump();
+
+                    /*
                     if (WGH_Core.currentMemoryInterface is ProcessInterface)
                         (WGH_Core.currentMemoryInterface as ProcessInterface).UseCaching = true;
+                    */
 
                     btnEnableCaching.Text = "Disable Cache + Multithread";
                 }
@@ -731,8 +738,10 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                     GC.Collect();
                     GC.WaitForFullGCComplete();
 
+                    /*
                     if (WGH_Core.currentMemoryInterface is ProcessInterface)
                         (WGH_Core.currentMemoryInterface as ProcessInterface).UseCaching = false;
+                    */
 
                     btnEnableCaching.Text = "Enable Cache + Multithread";
                 }

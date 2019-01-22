@@ -59,7 +59,6 @@
             this.cbBlastType = new System.Windows.Forms.ComboBox();
             this.cbCorruptionEngine = new System.Windows.Forms.ComboBox();
             this.rbTargetFile = new System.Windows.Forms.RadioButton();
-            this.rbTargetProcess = new System.Windows.Forms.RadioButton();
             this.btnRemoveSelected = new System.Windows.Forms.Button();
             this.btnImportStockpile = new System.Windows.Forms.Button();
             this.btnStockpileUp = new System.Windows.Forms.Button();
@@ -604,21 +603,6 @@
             this.rbTargetFile.UseVisualStyleBackColor = true;
             this.rbTargetFile.CheckedChanged += new System.EventHandler(this.rbTargetFile_CheckedChanged);
             // 
-            // rbTargetProcess
-            // 
-            this.rbTargetProcess.AutoSize = true;
-            this.rbTargetProcess.BackColor = System.Drawing.Color.Transparent;
-            this.rbTargetProcess.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.rbTargetProcess.ForeColor = System.Drawing.Color.White;
-            this.rbTargetProcess.Location = new System.Drawing.Point(320, 9);
-            this.rbTargetProcess.Name = "rbTargetProcess";
-            this.rbTargetProcess.Size = new System.Drawing.Size(180, 17);
-            this.rbTargetProcess.TabIndex = 31;
-            this.rbTargetProcess.Text = "Target Process (EXPERIMENTAL)";
-            this.rbTargetProcess.UseVisualStyleBackColor = false;
-            this.rbTargetProcess.Visible = false;
-            this.rbTargetProcess.CheckedChanged += new System.EventHandler(this.rbTargetProcess_CheckedChanged);
-            // 
             // btnRemoveSelected
             // 
             this.btnRemoveSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -728,7 +712,6 @@
             this.pnTargetPanel.Controls.Add(this.btnClearAllBackups);
             this.pnTargetPanel.Controls.Add(this.btnResetBackup);
             this.pnTargetPanel.Controls.Add(this.rbTargetFile);
-            this.pnTargetPanel.Controls.Add(this.rbTargetProcess);
             this.pnTargetPanel.Controls.Add(this.btnBrowseTarget);
             this.pnTargetPanel.Controls.Add(this.lbTarget);
             this.pnTargetPanel.Controls.Add(this.btnRestoreFileBackup);
@@ -1684,7 +1667,6 @@
         public System.Windows.Forms.ListBox lbStashHistory;
         public System.Windows.Forms.Button btnSaveStockpile;
         public System.Windows.Forms.RadioButton rbTargetFile;
-        public System.Windows.Forms.RadioButton rbTargetProcess;
         private System.Windows.Forms.Panel pnTargetPanel;
         public System.Windows.Forms.Label lbTarget;
         private System.Windows.Forms.Button btnClearAllBackups;

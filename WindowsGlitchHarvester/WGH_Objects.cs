@@ -26,13 +26,13 @@ namespace WindowsGlitchHarvester
 
     }
 
-	public class RefreshingListBox : ListBox
-	{
-		public void RefreshItemsReal()
-		{
-			base.RefreshItems();
-		}
-	}
+    public class RefreshingListBox : ListBox
+    {
+        public void RefreshItemsReal()
+        {
+            base.RefreshItems();
+        }
+    }
 
     public class MenuButton : Button
     {
@@ -79,7 +79,7 @@ namespace WindowsGlitchHarvester
 
         public string Filename;
         public string ShortFilename;
-		public string WghVersion;
+        public string WghVersion;
 
         public Stockpile(ListBox lbStockpile)
         {
@@ -128,8 +128,8 @@ namespace WindowsGlitchHarvester
                 sks.ShortFilename = WGH_Core.currentStockpile.ShortFilename;
             }
 
-			//Watermarking WGH Version
-			sks.WghVersion = WGH_Core.WghVersion;
+            //Watermarking WGH Version
+            sks.WghVersion = WGH_Core.WghVersion;
 
 
             BinaryFormatter bformatter = new BinaryFormatter();
@@ -203,7 +203,7 @@ namespace WindowsGlitchHarvester
             FastZipProgram.Exec(stringargs);
             */
 
-                        
+
             System.IO.Compression.ZipFile.ExtractToDirectory(Filename, WGH_Core.currentDir + "\\TEMP2\\");
 
             if (!File.Exists(WGH_Core.currentDir + "\\TEMP2\\master.sk"))
@@ -250,15 +250,15 @@ namespace WindowsGlitchHarvester
             WGH_Core.ghForm.btnSaveStockpile.BackColor = Color.Tomato;
             sks.Filename = Filename;
 
-			if (sks.WghVersion != WGH_Core.WghVersion)
-			{
-				if (sks.WghVersion == null)
-					MessageBox.Show("WARNING: You have loaded a pre-0.09 stockpile using WGH " + WGH_Core.WghVersion + "\n Items might not appear identical to how they when they were created.");
-				else
-					MessageBox.Show("WARNING: You have loaded a stockpile created with WGH " + sks.WghVersion + " using WGH " + WGH_Core.WghVersion + "\n Items might not appear identical to how they when they were created.");
-			}
+            if (sks.WghVersion != WGH_Core.WghVersion)
+            {
+                if (sks.WghVersion == null)
+                    MessageBox.Show("WARNING: You have loaded a pre-0.09 stockpile using WGH " + WGH_Core.WghVersion + "\n Items might not appear identical to how they when they were created.");
+                else
+                    MessageBox.Show("WARNING: You have loaded a stockpile created with WGH " + sks.WghVersion + " using WGH " + WGH_Core.WghVersion + "\n Items might not appear identical to how they when they were created.");
+            }
 
-		}
+        }
 
         public static void Import()
         {
@@ -429,10 +429,10 @@ namespace WindowsGlitchHarvester
         {
             WGH_Core.lastBlastLayerBackup = GetBackup();
 
-			foreach (BlastUnit bb in Layer)
-				if (bb == null || !bb.Apply())
-					return;
-                
+            foreach (BlastUnit bb in Layer)
+                if (bb == null || !bb.Apply())
+                    return;
+
         }
 
         public BlastLayer GetBackup()
@@ -441,12 +441,12 @@ namespace WindowsGlitchHarvester
 
             List<BlastUnit> BackupLayer = new List<BlastUnit>(); ;
 
-			foreach (BlastUnit bb in Layer)
-			{
-				var bu = bb.GetBackup();
-				if(bu != null)
-					BackupLayer.Add(bu);
-			}
+            foreach (BlastUnit bb in Layer)
+            {
+                var bu = bb.GetBackup();
+                if (bu != null)
+                    BackupLayer.Add(bu);
+            }
 
             BlastLayer Recovery = new BlastLayer(BackupLayer);
 
@@ -541,7 +541,7 @@ namespace WindowsGlitchHarvester
                 return false;
             }
 
-			return true;
+            return true;
         }
 
         public override BlastUnit GetBackup()
@@ -553,7 +553,7 @@ namespace WindowsGlitchHarvester
             {
                 MemoryInterface mi = WGH_Core.currentMemoryInterface;
 
-                if (mi == null || Type == BlastByteType.NONE || mi is ProcessInterface)
+                if (mi == null || Type == BlastByteType.NONE )//|| mi is ProcessInterface)
                     return null;
 
                 return new BlastByte(Domain, Address, BlastByteType.SET, (int)mi.PeekByte(Address), true);
@@ -580,109 +580,109 @@ namespace WindowsGlitchHarvester
         }
     }
 
-	[Serializable()]
-	[Ceras.MemberConfig(TargetMember.All)]
+    [Serializable()]
+    [Ceras.MemberConfig(TargetMember.All)]
     public class BlastVector : BlastUnit
-	{
-		public string Domain;
-		public long Address;
-		public BlastByteType Type;
+    {
+        public string Domain;
+        public long Address;
+        public BlastByteType Type;
         long vectorOffset = WGH_VectorEngine.vectorOffset;
-		public byte[] Values;
+        public byte[] Values;
 
 
-		public override bool IsEnabled { get; set; }
+        public override bool IsEnabled { get; set; }
 
-		public BlastVector(string _domain, long _address, byte[] _values, bool _isEnabled)
-		{
-			Domain = _domain;
+        public BlastVector(string _domain, long _address, byte[] _values, bool _isEnabled)
+        {
+            Domain = _domain;
             if (WGH_VectorEngine.vectorAligned)
                 Address = ((_address - (_address % 4)) + vectorOffset);
             else
-               Address = (_address + vectorOffset);
+                Address = (_address + vectorOffset);
             Values = _values;
-			IsEnabled = _isEnabled;
-		}
+            IsEnabled = _isEnabled;
+        }
 
-		public BlastVector()
-		{
+        public BlastVector()
+        {
 
-		}
+        }
 
-		public override bool Apply()
-		{
-			if (!IsEnabled)
-				return true;
+        public override bool Apply()
+        {
+            if (!IsEnabled)
+                return true;
 
-			try
-			{
-				MemoryInterface mi = WGH_Core.currentMemoryInterface;
-				//MemoryDomainProxy md = RTC_MemoryDomains.getProxyFromString(Domain);
+            try
+            {
+                MemoryInterface mi = WGH_Core.currentMemoryInterface;
+                //MemoryDomainProxy md = RTC_MemoryDomains.getProxyFromString(Domain);
 
-				if (mi == null)
-					return true;
+                if (mi == null)
+                    return true;
 
-				mi.PokeByte(Address, Values[0]);
-				mi.PokeByte(Address + 1, Values[1]);
-				mi.PokeByte(Address + 2, Values[2]);
-				mi.PokeByte(Address + 3, Values[3]);
+                mi.PokeByte(Address, Values[0]);
+                mi.PokeByte(Address + 1, Values[1]);
+                mi.PokeByte(Address + 2, Values[2]);
+                mi.PokeByte(Address + 3, Values[3]);
 
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("The BlastVector apply() function threw up. \n" +
-				"This is not a BizHawk error so you should probably send a screenshot of this to the devs\n\n" +
-				ex.ToString());
-			}
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("The BlastVector apply() function threw up. \n" +
+                "This is not a BizHawk error so you should probably send a screenshot of this to the devs\n\n" +
+                ex.ToString());
+            }
 
-			return true;
+            return true;
 
-		}
+        }
 
-		public override BlastUnit GetBackup()
-		{
-			if (!IsEnabled)
-				return null;
+        public override BlastUnit GetBackup()
+        {
+            if (!IsEnabled)
+                return null;
 
-			try
-			{
-				//MemoryInterface md = RTC_MemoryDomains.getProxyFromString(Domain);
-				MemoryInterface mi = WGH_Core.currentMemoryInterface;
+            try
+            {
+                //MemoryInterface md = RTC_MemoryDomains.getProxyFromString(Domain);
+                MemoryInterface mi = WGH_Core.currentMemoryInterface;
 
-				if (mi == null)
-					return null;
+                if (mi == null)
+                    return null;
 
-				return new BlastVector(Domain, Address, WGH_VectorEngine.read32bits(mi, Address), true);
+                return new BlastVector(Domain, Address, WGH_VectorEngine.read32bits(mi, Address), true);
 
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("The BlastVector GetBackup() function threw up. \n" +
-				"This is not a BizHawk error so you should probably send a screenshot of this to the devs\n\n" +
-				ex.ToString());
-			}
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("The BlastVector GetBackup() function threw up. \n" +
+                "This is not a BizHawk error so you should probably send a screenshot of this to the devs\n\n" +
+                ex.ToString());
+            }
 
-		}
-		/*
+        }
+        /*
 		public override void Reroll()
 		{
 			Values = WGH_VectorEngine.getRandomConstant(WGH_VectorEngine.valueList);
 		}
 		*/
-		public override string ToString()
-		{
-			string EnabledString = "[ ] ";
-			if (IsEnabled)
-				EnabledString = "[x] ";
+        public override string ToString()
+        {
+            string EnabledString = "[ ] ";
+            if (IsEnabled)
+                EnabledString = "[x] ";
 
-			string cleanDomainName = Domain.Replace("(nametables)", ""); //Shortens the domain name if it contains "(nametables)"
-			return (EnabledString + cleanDomainName + "(" + Convert.ToInt32(Address).ToString() + ")." + Type.ToString() + "(" + BitConverter.ToString(Values).Replace("-","").ToLower() + ")");
-		}
-	}
+            string cleanDomainName = Domain.Replace("(nametables)", ""); //Shortens the domain name if it contains "(nametables)"
+            return (EnabledString + cleanDomainName + "(" + Convert.ToInt32(Address).ToString() + ")." + Type.ToString() + "(" + BitConverter.ToString(Values).Replace("-", "").ToLower() + ")");
+        }
+    }
 
     interface ICachable
     {
-        
+
 
     }
 
@@ -690,11 +690,11 @@ namespace WindowsGlitchHarvester
     [Serializable()]
     public abstract class MemoryInterface
     {
-        public abstract byte[] getMemoryDump();
+        public abstract void getMemoryDump();
         public abstract bool dolphinSavestateVersion();
-        public abstract byte[] lastMemoryDump { get; set; }
+        public abstract byte[][] lastMemoryDump { get; set; }
         public abstract long getMemorySize();
-        public abstract long? lastMemorySize{ get; set; }
+        public abstract long? lastMemorySize { get; set; }
 
         public abstract void PokeByte(long address, byte data);
         public abstract void PokeBytes(long address, byte[] data);
@@ -716,7 +716,7 @@ namespace WindowsGlitchHarvester
         public string Filename;
         public string ShortFilename;
 
-        public override byte[] lastMemoryDump { get; set; } = null;
+        public override byte[][] lastMemoryDump { get; set; } = null;
 
         //lastMemorySize gets rounded up to a multiplier of 4 to make the vector engine work on multiple files
         //lastRealMemorySize is used in peek/poke to cancel out non-existing adresses
@@ -851,10 +851,11 @@ namespace WindowsGlitchHarvester
             }
         }
 
-        public override byte[] getMemoryDump()
+        public override void getMemoryDump()
         {
-            //var getFiles = WGH_MemoryBanks.ReadFile(getBackupFilename());
+            lastMemoryDump = WGH_MemoryBanks.ReadFile(getBackupFilename());
 
+            /*
             //lastMemoryDump = File.ReadAllBytes(getBackupFilename());
 
             lastMemoryDump = new byte[lastMemorySize.Value];
@@ -867,7 +868,8 @@ namespace WindowsGlitchHarvester
                 stream.Read(lastMemoryDump, 0, Convert.ToInt32(lastRealMemorySize.Value));
             }
 
-                return lastMemoryDump;
+            //return lastMemoryDump;
+            */
         }
 
         public override long getMemorySize()
@@ -942,8 +944,13 @@ namespace WindowsGlitchHarvester
             stream.Write(data, 0, data.Length);
 
             if (lastMemoryDump != null)
+                WGH_MemoryBanks.PokeBytes(lastMemoryDump, address, data); 
+
+            /*
+            if (lastMemoryDump != null)
                 for (int i = 0; i < data.Length; i++)
                     lastMemoryDump[address + i] = data[i];
+            */
 
         }
 
@@ -959,7 +966,8 @@ namespace WindowsGlitchHarvester
             stream.WriteByte(data);
 
             if (lastMemoryDump != null)
-                lastMemoryDump[address] = data;
+                WGH_MemoryBanks.PokeByte(lastMemoryDump, address, data);
+                //lastMemoryDump[address] = data;
         }
 
         public override byte? PeekByte(long address)
@@ -969,7 +977,8 @@ namespace WindowsGlitchHarvester
 
 
             if (lastMemoryDump != null)
-                return lastMemoryDump[address];
+                return WGH_MemoryBanks.PeekByte(lastMemoryDump, address);
+                //return lastMemoryDump[address];
 
             byte[] readBytes = new byte[1];
 
@@ -986,15 +995,16 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public override byte[] PeekBytes(long address, int range)
+        public override byte[] PeekBytes(long address, int length)
         {
-            if (address + range >= lastRealMemorySize)
-                return new byte[range];
+            if (address + length >= lastRealMemorySize)
+                return new byte[length];
 
             if (lastMemoryDump != null)
-                return lastMemoryDump.SubArray(address, range);
+                return WGH_MemoryBanks.PeekBytes(lastMemoryDump, address, length);
+                //return lastMemoryDump.SubArray(address, range);
 
-            byte[] readBytes = new byte[range];
+            byte[] readBytes = new byte[length];
 
 
             if (stream == null)
@@ -1002,7 +1012,7 @@ namespace WindowsGlitchHarvester
 
 
             stream.Position = address;
-            stream.Read(readBytes, 0, range);
+            stream.Read(readBytes, 0, length);
 
             //fs.Close();
 
@@ -1013,123 +1023,131 @@ namespace WindowsGlitchHarvester
     }
 
 
-[Serializable()]
-public class MultipleFileInterface : MemoryInterface
-{
-    public string Filename;
-    public string ShortFilename;
-
-    public List<FileInterface> FileInterfaces = new List<FileInterface>();
-
-    public MultipleFileInterface(string _targetId)
+    [Serializable()]
+    public class MultipleFileInterface : MemoryInterface
     {
-        try
+        public string Filename;
+        public string ShortFilename;
+
+        public List<FileInterface> FileInterfaces = new List<FileInterface>();
+
+        public MultipleFileInterface(string _targetId)
         {
-            string[] targetId = _targetId.Split('|');
+            try
+            {
+                string[] targetId = _targetId.Split('|');
 
-            for (int i = 0; i < targetId.Length; i++)
-                FileInterfaces.Add(new FileInterface("File|" + targetId[i]));
+                for (int i = 0; i < targetId.Length; i++)
+                    FileInterfaces.Add(new FileInterface("File|" + targetId[i]));
 
-            Filename = "MultipleFiles";
-            ShortFilename = "MultipleFiles";
+                Filename = "MultipleFiles";
+                ShortFilename = "MultipleFiles";
 
-            //SetBackup();
+                //SetBackup();
 
-            //getMemoryDump();
-            getMemorySize();
+                //getMemoryDump();
+                getMemorySize();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"MultipleFileInterface failed to load something \n\n" + ex.ToString());
+            }
         }
-        catch(Exception ex)
+
+        public string getCompositeFilename(string prefix)
         {
-            MessageBox.Show($"MultipleFileInterface failed to load something \n\n" + ex.ToString());
+            return string.Join("|", FileInterfaces.Select(it => it.getCompositeFilename(prefix)));
+
         }
-    }
 
-    public string getCompositeFilename(string prefix)
-    {
-        return string.Join("|", FileInterfaces.Select(it => it.getCompositeFilename(prefix)));
+        public string getCorruptFilename(bool overrideWriteCopyMode = false)
+        {
+            return string.Join("|", FileInterfaces.Select(it => it.getCorruptFilename(overrideWriteCopyMode)));
 
-    }
+        }
 
-    public string getCorruptFilename(bool overrideWriteCopyMode = false)
-    {
-        return string.Join("|", FileInterfaces.Select(it => it.getCorruptFilename(overrideWriteCopyMode)));
+        public string getBackupFilename()
+        {
+            return string.Join("|", FileInterfaces.Select(it => it.getBackupFilename()));
+        }
 
-    }
+        public override void ResetWorkingFile()
+        {
+            foreach (var fi in FileInterfaces)
+                fi.ResetWorkingFile();
 
-    public string getBackupFilename()
-    {
-        return string.Join("|", FileInterfaces.Select(it => it.getBackupFilename()));
-    }
+        }
 
-    public override void ResetWorkingFile()
-    {
-        foreach (var fi in FileInterfaces)
-            fi.ResetWorkingFile();
+        public string SetWorkingFile()
+        {
+            return string.Join("|", FileInterfaces.Select(it => it.SetWorkingFile()));
 
-    }
+        }
 
-    public string SetWorkingFile()
-    {
-        return string.Join("|", FileInterfaces.Select(it => it.SetWorkingFile()));
+        public override void ApplyWorkingFile()
+        {
+            foreach (var fi in FileInterfaces)
+                fi.ApplyWorkingFile();
 
-    }
+        }
 
-    public override void ApplyWorkingFile()
-    {
-        foreach (var fi in FileInterfaces)
-            fi.ApplyWorkingFile();
+        public override void SetBackup()
+        {
+            foreach (var fi in FileInterfaces)
+                fi.SetBackup();
 
-    }
+        }
 
-    public override void SetBackup()
-    {
-        foreach (var fi in FileInterfaces)
-            fi.SetBackup();
+        public override void ResetBackup(bool askConfirmation = true)
+        {
+            if (askConfirmation && MessageBox.Show("Are you sure you want to reset the backup using the target files?", "WARNING", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
 
-    }
+            foreach (var fi in FileInterfaces)
+                fi.ResetBackup(false);
 
-    public override void ResetBackup(bool askConfirmation = true)
-    {
-        if (askConfirmation && MessageBox.Show("Are you sure you want to reset the backup using the target files?", "WARNING", MessageBoxButtons.YesNo) == DialogResult.No)
-            return;
+        }
 
-        foreach (var fi in FileInterfaces)
-            fi.ResetBackup(false);
+        public override void RestoreBackup(bool announce = true)
+        {
 
-    }
+            foreach (var fi in FileInterfaces)
+                fi.RestoreBackup(false);
 
-    public override void RestoreBackup(bool announce = true)
-    {
+            if (announce)
+                MessageBox.Show("Backups of " + string.Join(",", FileInterfaces.Select(it => (it as FileInterface).ShortFilename)) + " were restored");
 
-        foreach (var fi in FileInterfaces)
-            fi.RestoreBackup(false);
+        }
 
-        if(announce)
-            MessageBox.Show("Backups of " + string.Join(",",FileInterfaces.Select(it => (it as FileInterface).ShortFilename)) + " were restored");
-
-    }
-
-    public override byte[] getMemoryDump()
-    {
+        public override void getMemoryDump()
+        {
             long totalDumpSize = 0;
 
             for (int i = 0; i < FileInterfaces.Count; i++)
-                totalDumpSize += FileInterfaces[i].lastMemorySize.Value;
-
-            lastMemoryDump = new byte[totalDumpSize];
-
-            long targetAddress = 0;
-
-            for (int i = 0; i < FileInterfaces.Count; i++)
             {
+                totalDumpSize += FileInterfaces[i].lastMemorySize.Value;
                 FileInterfaces[i].getMemoryDump();
-                long targetLength = FileInterfaces[i].lastMemorySize.Value;
-                Array.Copy(FileInterfaces[i].lastMemoryDump, 0, lastMemoryDump, targetAddress, targetLength);
-                targetAddress += targetLength;
-                FileInterfaces[i].lastMemoryDump = null;
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
             }
+
+            //lastMemoryDump = new byte[totalDumpSize];
+
+            //long targetAddress = 0;
+
+            //for (int i = 0; i < FileInterfaces.Count; i++)
+            //{
+
+
+            //Removed copying of the memory in a local big file because
+            //it's smarter to actually use the FileInterfaces themselves
+            /*
+            long targetLength = FileInterfaces[i].lastMemorySize.Value;
+            Array.Copy(FileInterfaces[i].lastMemoryDump, 0, lastMemoryDump, targetAddress, targetLength);
+            targetAddress += targetLength;
+            FileInterfaces[i].lastMemoryDump = null;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            */
+            //}
             /*
             List<byte> allBytes = new List<byte>();
 
@@ -1142,122 +1160,123 @@ public class MultipleFileInterface : MemoryInterface
         lastMemoryDump = allBytes.ToArray();
         */
 
-        return lastMemoryDump;
+            //return lastMemoryDump;
 
-    }
-    public override byte[] lastMemoryDump { get; set; } = null;
-
-    public override long getMemorySize()
-    {
-        long size = 0;
-
-        foreach (var fi in FileInterfaces)
-            size += fi.getMemorySize();
-
-        lastMemorySize = size;
-        return (long)lastMemorySize;
-
-    }
-
-    public override bool dolphinSavestateVersion()
-    {
-        //Not supported for multiple files
-        return false;
-    }
-
-    public override long? lastMemorySize { get; set; }
-
-    public override void PokeBytes(long address, byte[] data)
-    {
-        long addressPad = 0;
-        FileInterface targetInterface = null;
-
-        foreach(var fi in FileInterfaces)
+        }
+        public override byte[][] lastMemoryDump
         {
-            if (addressPad + fi.getMemorySize() > address)
-            {
-                targetInterface = fi;
-                break;
-            }
+            get { throw new Exception("FORBIDDEN USE OF LASTMEMORYDUMP ON MULTIPLEFILEINTERFACE"); }
+            set { throw new Exception("FORBIDDEN USE OF LASTMEMORYDUMP ON MULTIPLEFILEINTERFACE"); }
+        }
 
-            addressPad += fi.getMemorySize();
+        public override long getMemorySize()
+        {
+            long size = 0;
+
+            foreach (var fi in FileInterfaces)
+                size += fi.getMemorySize();
+
+            lastMemorySize = size;
+            return (long)lastMemorySize;
 
         }
 
-        if (targetInterface != null)
-            targetInterface.PokeBytes(address - addressPad, data);
-
-        if (lastMemoryDump != null)
-            for (int i = 0; i < data.Length; i++)
-                lastMemoryDump[address + i] = data[i];
-
-    }
-
-    public override void PokeByte(long address, byte data)
-    {
-
-        long addressPad = 0;
-        FileInterface targetInterface = null;
-
-        foreach (var fi in FileInterfaces)
+        public override bool dolphinSavestateVersion()
         {
-            if (addressPad + fi.getMemorySize() > address)
+            //Not supported for multiple files
+            return false;
+        }
+
+        public override long? lastMemorySize { get; set; }
+
+        public override void PokeBytes(long address, byte[] data)
+        {
+            long addressPad = 0;
+            FileInterface targetInterface = null;
+
+            foreach (var fi in FileInterfaces)
             {
-                targetInterface = fi;
-                break;
+                if (addressPad + fi.getMemorySize() > address)
+                {
+                    targetInterface = fi;
+                    break;
+                }
+
+                addressPad += fi.getMemorySize();
+
             }
 
-            addressPad += fi.getMemorySize();
+            if (targetInterface != null)
+                targetInterface.PokeBytes(address - addressPad, data);
+
+            /*
+            if (lastMemoryDump != null)
+                for (int i = 0; i < data.Length; i++)
+                    lastMemoryDump[address + i] = data[i];
+            */
 
         }
 
-        if (targetInterface != null)
-            targetInterface.PokeByte(address - addressPad, data);
-
-        if (lastMemoryDump != null)
-            lastMemoryDump[address] = data;
-    }
-
-    public override byte? PeekByte(long address)
-    {
-
-        if (lastMemoryDump != null)
-            return lastMemoryDump[address];
-
-        long addressPad = 0;
-        FileInterface targetInterface = null;
-
-        foreach (var fi in FileInterfaces)
+        public override void PokeByte(long address, byte data)
         {
-            if (addressPad + fi.getMemorySize() > address)
+
+            long addressPad = 0;
+            FileInterface targetInterface = null;
+
+            //find which fileInterface contains the file we want
+            foreach (var fi in FileInterfaces)
             {
-                targetInterface = fi;
-                break;
+                if (addressPad + fi.getMemorySize() > address)
+                {
+                    targetInterface = fi;
+                    break;
+                }
+
+                addressPad += fi.getMemorySize();
+
             }
 
-            addressPad += fi.getMemorySize();
+            if (targetInterface != null)
+                targetInterface.PokeByte(address - addressPad, data);
 
         }
 
-        if (targetInterface != null)
-            return targetInterface.PeekByte(address - addressPad);
-        else
-            return null;
+        public override byte? PeekByte(long address)
+        {
+
+            long addressPad = 0;
+            FileInterface targetInterface = null;
+
+            //find which fileInterface contains the file we want
+            foreach (var fi in FileInterfaces)
+            {
+                if (addressPad + fi.getMemorySize() > address)
+                {
+                    targetInterface = fi;
+                    break;
+                }
+                addressPad += fi.getMemorySize();
+
+            }
 
 
-    }
+            if (targetInterface != null)
+                return targetInterface.PeekByte(address - addressPad);
+            else
+                return null;
 
-    public override byte[] PeekBytes(long address, int range)
-    {
+
+        }
+
+        public override byte[] PeekBytes(long address, int range)
+        {
             try
             {
-                if (lastMemoryDump != null)
-                    return lastMemoryDump.SubArray(address, range);
-
 
                 long addressPad = 0;
                 FileInterface targetInterface = null;
 
+                //find which fileInterface contains the file we want
                 foreach (var fi in FileInterfaces)
                 {
                     if (addressPad + fi.getMemorySize() > address)
@@ -1275,73 +1294,74 @@ public class MultipleFileInterface : MemoryInterface
                 else
                     return null;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 new object();
                 return null;
             }
-    }
-
-}
-
-
-[Serializable()]
-public class ProcessInterface : MemoryInterface
-{
-    public string ProcessName;
-    ProcessHijacker Hijack = null;
-
-    public bool Hooked;
-    public bool UseCaching = false;
-
-    public ProcessInterface(string _processName)
-    {
-        Hijack = new ProcessHijacker(_processName);
-        Hooked = Hijack.Hooked;
-        ProcessName = _processName;
-
-        //getMemoryDump();
-        getMemorySize();
-    }
-
-    public override byte[] getMemoryDump()
-    {
-        lastMemoryDump = Hijack.ReadAllData();
-        return lastMemoryDump;
-    }
-    public override byte[] lastMemoryDump { get; set; } = null;
-
-    public override long getMemorySize()
-    {
-        if (Hijack == null)
-            return 0;
-
-        Hijack.refreshProcessSize();
-        lastMemorySize = Hijack.processSize;
-
-        return (long)lastMemorySize;
-
-    }
-
-    public override bool dolphinSavestateVersion()
-    {  
-        //Not applicable for processs corruption
-        return false;
-    }
-
-    public override long? lastMemorySize { get; set; }
-
-    public override void PokeBytes(long address, byte[] data)
-    {
-
-        //HOOK CHEATENGINE API HERE
-        /*
-        using (Stream stream = File.Open(filename, FileMode.Open))
-        {
-            stream.Position = address;
-            stream.Write(data, 0, data.Length);
         }
-        */
+
+    }
+
+    //RIP ProcessInterface
+    /*
+    [Serializable()]
+    public class ProcessInterface : MemoryInterface
+    {
+        public string ProcessName;
+        ProcessHijacker Hijack = null;
+
+        public bool Hooked;
+        public bool UseCaching = false;
+
+        public ProcessInterface(string _processName)
+        {
+            Hijack = new ProcessHijacker(_processName);
+            Hooked = Hijack.Hooked;
+            ProcessName = _processName;
+
+            //getMemoryDump();
+            getMemorySize();
+        }
+
+        public override void getMemoryDump()
+        {
+            lastMemoryDump = Hijack.ReadAllData();
+            //return lastMemoryDump;
+        }
+        public override byte[] lastMemoryDump { get; set; } = null;
+
+        public override long getMemorySize()
+        {
+            if (Hijack == null)
+                return 0;
+
+            Hijack.refreshProcessSize();
+            lastMemorySize = Hijack.processSize;
+
+            return (long)lastMemorySize;
+
+        }
+
+        public override bool dolphinSavestateVersion()
+        {
+            //Not applicable for processs corruption
+            return false;
+        }
+
+        public override long? lastMemorySize { get; set; }
+
+        public override void PokeBytes(long address, byte[] data)
+        {
+
+            //HOOK CHEATENGINE API HERE
+            
+            //using (Stream stream = File.Open(filename, FileMode.Open))
+            //{
+            //  stream.Position = address;
+            //  stream.Write(data, 0, data.Length);
+            //}
+            
 
             // if (lastMemoryDump == null)
             //     getMemoryDump();
@@ -1349,11 +1369,11 @@ public class ProcessInterface : MemoryInterface
             if (Hijack == null)
                 return;
 
-			Hijack.WriteBytes(data, address);
+            Hijack.WriteBytes(data, address);
 
             //for (int i = 0; i < data.Length; i++)
-           // {
-              //  lastMemoryDump[address + i] = data[i];
+            // {
+            //  lastMemoryDump[address + i] = data[i];
             //}
 
 
@@ -1363,21 +1383,21 @@ public class ProcessInterface : MemoryInterface
         {
 
             //HOOK CHEATENGINE API HERE
-            /*
-            using (Stream stream = File.Open(filename, FileMode.Open))
-            {
-                stream.Position = address;
-                stream.WriteByte(data);
-            }
-            */
+            
+            //using (Stream stream = File.Open(filename, FileMode.Open))
+            //{
+            //    stream.Position = address;
+            //    stream.WriteByte(data);
+            //}
+            
 
             //if (hijack == null)
-                //getMemoryDump();
+            //getMemoryDump();
 
             if (Hijack == null)
                 return;
 
-			Hijack.WriteByte(data, address);
+            Hijack.WriteByte(data, address);
         }
 
         public override byte? PeekByte(long address)
@@ -1385,38 +1405,38 @@ public class ProcessInterface : MemoryInterface
             if (Hijack == null)
                 return null;
 
-			if (UseCaching)
-			{
-				if (lastMemoryDump == null)
-					getMemoryDump();
+            if (UseCaching)
+            {
+                if (lastMemoryDump == null)
+                    getMemoryDump();
 
-				if (lastMemoryDump == null)
-					return null;
+                if (lastMemoryDump == null)
+                    return null;
 
-				return lastMemoryDump[address];
-			}
-			else
-				return Hijack.ReadByte(address);
-		}
+                return lastMemoryDump[address];
+            }
+            else
+                return Hijack.ReadByte(address);
+        }
 
         public override byte[] PeekBytes(long address, int range)
         {
-			if (Hijack == null)
-				return null;
+            if (Hijack == null)
+                return null;
 
-			if(UseCaching)
-			{
-				if (lastMemoryDump == null)
-					getMemoryDump();
+            if (UseCaching)
+            {
+                if (lastMemoryDump == null)
+                    getMemoryDump();
 
-				if (lastMemoryDump == null)
-					return null;
+                if (lastMemoryDump == null)
+                    return null;
 
-				return lastMemoryDump.SubArray(address, range);
-			}
-			else
-				return Hijack.ReadBytes(address, range);
-		}
+                return lastMemoryDump.SubArray(address, range);
+            }
+            else
+                return Hijack.ReadBytes(address, range);
+        }
 
         public override void SetBackup()
         {
@@ -1443,13 +1463,13 @@ public class ProcessInterface : MemoryInterface
             //CAN'T DO THAT WITH PROCESSES
         }
 
-		public void RefreshSize()
-		{
-			getMemorySize();
-		}
+        public void RefreshSize()
+        {
+            getMemorySize();
+        }
     }
+    */
 
-    
     //Since we don't need to corrupt in place for dolphin, we can corrupt a copied file
     //This also means that copy mode doesn't need to work
     //Because of this, we're using the code intended for copy mode to provide the working file which'll be corrupted
@@ -1461,7 +1481,7 @@ public class ProcessInterface : MemoryInterface
         public string ShortFilename;
         public string OriginalFilename;
         public string OriginalShortFilename;
-        
+
         public DolphinInterface(string _targetId)
         {
             try
@@ -1560,12 +1580,13 @@ public class ProcessInterface : MemoryInterface
             }
         }
 
-        public override byte[] getMemoryDump()
+        public override void getMemoryDump()
         {
-            lastMemoryDump = File.ReadAllBytes(getBackupFilename());
-            return lastMemoryDump;
+            //lastMemoryDump = File.ReadAllBytes(getBackupFilename());
+            lastMemoryDump = WGH_MemoryBanks.ReadFile(getBackupFilename());
+            //return lastMemoryDump;
         }
-        public override byte[] lastMemoryDump { get; set; } = null;
+        public override byte[][] lastMemoryDump { get; set; } = null;
 
         public override long getMemorySize()
         {
@@ -1586,7 +1607,7 @@ public class ProcessInterface : MemoryInterface
              */
 
             string a = "Dolphin Narry's Mod";
-            string b  = Encoding.Default.GetString(PeekBytes(32, 19));
+            string b = Encoding.Default.GetString(PeekBytes(32, 19));
 
             if (a == b)
             {
@@ -1624,9 +1645,15 @@ public class ProcessInterface : MemoryInterface
             stream.Position = address;
             stream.Write(data, 0, data.Length);
 
+
+            if (lastMemoryDump != null)
+                WGH_MemoryBanks.PokeBytes(lastMemoryDump, address, data);
+
+            /*
             if (lastMemoryDump != null)
                 for (int i = 0; i < data.Length; i++)
                     lastMemoryDump[address + i] = data[i];
+            */
         }
 
         public override void PokeByte(long address, byte data)
@@ -1638,14 +1665,16 @@ public class ProcessInterface : MemoryInterface
             stream.WriteByte(data);
 
             if (lastMemoryDump != null)
-                lastMemoryDump[address] = data;
+                WGH_MemoryBanks.PokeByte(lastMemoryDump, address, data);
+                //lastMemoryDump[address] = data;
         }
 
         public override byte? PeekByte(long address)
         {
 
             if (lastMemoryDump != null)
-                return lastMemoryDump[address];
+                return WGH_MemoryBanks.PeekByte(lastMemoryDump, address);
+                //return lastMemoryDump[address];
 
             if (stream == null)
                 stream = File.Open(SetWorkingFile(), FileMode.Open);
@@ -1660,18 +1689,19 @@ public class ProcessInterface : MemoryInterface
 
         }
 
-        public override byte[] PeekBytes(long address, int range)
+        public override byte[] PeekBytes(long address, int length)
         {
 
             if (lastMemoryDump != null)
-                return lastMemoryDump.SubArray(address, range);
+                return WGH_MemoryBanks.PeekBytes(lastMemoryDump, address, length);
+                //return lastMemoryDump.SubArray(address, range);
 
             if (stream == null)
                 stream = File.Open(SetWorkingFile(), FileMode.Open);
 
-            byte[] readBytes = new byte[range];
+            byte[] readBytes = new byte[length];
             stream.Position = address;
-            stream.Read(readBytes, 0, range);
+            stream.Read(readBytes, 0, length);
 
             //fs.Close();
 

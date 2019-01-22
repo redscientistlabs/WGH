@@ -9,7 +9,8 @@ namespace WindowsGlitchHarvester
 {
     static class WGH_MemoryBanks
     {
-        public static int maxBankSize = 1073741820;
+        public static int maxBankSize = 1073741824;
+        public static long totalFileSize = 0;
 
         public static byte[][] ReadFile (string path)
         {
@@ -17,6 +18,7 @@ namespace WindowsGlitchHarvester
             {
 
                 long fileLength = new System.IO.FileInfo(path).Length;
+                totalFileSize = fileLength;
                 int tailBankSize = Convert.ToInt32(fileLength % maxBankSize);
                 bool multipleBanks = fileLength > maxBankSize;
                 int banksCount = 1;
@@ -73,7 +75,27 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public static byte[] SubArray(this byte[][] data, long startAddress, long length)
+
+        public static byte PeekByte(this byte[][] data, long Address)
+        {
+            
+
+            if (data == null)
+                return 0;
+
+            long bank;
+            long relativeAddress = (Address % maxBankSize);
+
+            if (Address < maxBankSize)
+                bank = 0;
+            else
+                bank = maxBankSize / (Address - (Address % maxBankSize));
+
+            byte result = data[bank][relativeAddress];
+            return result;
+        }
+
+        public static byte[] PeekBytes(this byte[][] data, long startAddress, long length)
         {
             byte[] result = new byte[length];
 
@@ -119,12 +141,12 @@ namespace WindowsGlitchHarvester
             return result;
         }
 
-        public static byte SubByte(this byte[][] data, long Address)
+        public static void PokeByte(this byte[][] data, long Address, byte value)
         {
-            byte result;
+
 
             if (data == null)
-                return 0;
+                return;
 
             long bank;
             long relativeAddress = (Address % maxBankSize);
@@ -134,8 +156,52 @@ namespace WindowsGlitchHarvester
             else
                 bank = maxBankSize / (Address - (Address % maxBankSize));
 
-
-            return data[bank][relativeAddress];
+            data[bank][relativeAddress] = value;
         }
+
+        public static void PokeBytes(this byte[][] data, long startAddress, byte[] values)
+        {
+            int length = values.Length;
+
+            if (data == null)
+                return;
+
+            long startBank;
+            long relativeStartAdress = (startAddress * maxBankSize);
+
+            if (startAddress < maxBankSize)
+                startBank = 0;
+            else
+                startBank = maxBankSize / (startAddress - (startAddress % maxBankSize));
+
+
+
+            long endBank;
+            long endAddress = startAddress + length;
+
+            if (startAddress + length < maxBankSize)
+                endBank = 0;
+            else
+                endBank = maxBankSize / (endAddress - (endAddress % maxBankSize));
+
+
+
+            if (startBank == endBank)
+                Array.Copy(values, 0, data[startBank], relativeStartAdress, length);
+            else
+            {
+                //only supports 2 banks at the same time.
+                //could easily add support for any number of banks but I need those precious cycles.
+                //anyway a bank is like 1gb so...
+
+                long lengthFromStartBank = maxBankSize - relativeStartAdress;
+                long lengthFromEndBank = length - lengthFromStartBank;
+
+                Array.Copy(values, 0, data[startBank], relativeStartAdress, lengthFromStartBank);
+                Array.Copy(values, lengthFromStartBank, data[endBank], 0, lengthFromEndBank);
+            }
+
+        }
+
     }
 }

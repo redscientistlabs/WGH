@@ -355,6 +355,7 @@ namespace WindowsGlitchHarvester
                 currentTargetName = mfi.ShortFilename;
                 ghForm.lbTarget.Text = mfi.ShortFilename + "|MemorySize:" + mfi.lastMemorySize.ToString();
             }
+            /*
             else if (WGH_Core.ghForm.rbTargetProcess.Checked)
             {
                 if (hpForm != null)
@@ -373,6 +374,7 @@ namespace WindowsGlitchHarvester
                 currentTargetName = mfi.ProcessName;
                 ghForm.lbTarget.Text = mfi.ProcessName + "|MemorySize:" + mfi.lastMemorySize.ToString();
             }
+            */
             else if (WGH_Core.ghForm.rbTargetDolphin.Checked)
             {
                 OpenFileDialog OpenFileDialog1;
