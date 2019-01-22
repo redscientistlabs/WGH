@@ -1,5 +1,7 @@
-﻿namespace WindowsGlitchHarvester
+﻿/*
+namespace WindowsGlitchHarvester
 {
+    
     partial class WGH_HookProcessForm
 	{
         /// <summary>
@@ -126,3 +128,4 @@
 		private System.Windows.Forms.Label label1;
 	}
 }
+*/

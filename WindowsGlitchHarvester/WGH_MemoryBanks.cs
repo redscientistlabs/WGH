@@ -103,22 +103,23 @@ namespace WindowsGlitchHarvester
                 return null;
 
             long startBank;
-            long relativeStartAdress = (startAddress * maxBankSize);
+            long relativeStartAdress = (startAddress % maxBankSize);
 
             if (startAddress < maxBankSize)
                 startBank = 0;
             else
-                startBank = maxBankSize / (startAddress - (startAddress % maxBankSize));
+                startBank = maxBankSize / (startAddress - relativeStartAdress);
 
 
 
             long endBank;
             long endAddress = startAddress + length;
+            long relativeEndAdress = (endAddress % maxBankSize);
 
             if (startAddress+length < maxBankSize)
                 endBank = 0;
             else
-                endBank = maxBankSize / (endAddress - (endAddress % maxBankSize));
+                endBank = maxBankSize / (endAddress - relativeEndAdress);
 
 
 

@@ -164,7 +164,7 @@ namespace WindowsGlitchHarvester
         {
             int intensity = WGH_Core.Intensity;
 
-            bool multithread = WGH_Core.currentMemoryInterface.lastMemoryDump != null;
+            bool multithread = WGH_Core.currentMemoryInterface.cacheEnabled;
             var cpus = Environment.ProcessorCount;
 
             Action<object, EventArgs> action = (ob, ea) => {
@@ -734,9 +734,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 }
                 else
                 {
-                    WGH_Core.currentMemoryInterface.lastMemoryDump = null;
-                    GC.Collect();
-                    GC.WaitForFullGCComplete();
+                    WGH_Core.currentMemoryInterface.wipeMemoryDump();
 
                     /*
                     if (WGH_Core.currentMemoryInterface is ProcessInterface)

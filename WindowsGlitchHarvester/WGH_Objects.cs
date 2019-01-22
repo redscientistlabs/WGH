@@ -576,7 +576,7 @@ namespace WindowsGlitchHarvester
                 EnabledString = "[x] ";
 
             string cleanDomainName = Domain.Replace("(nametables)", ""); //Shortens the domain name if it contains "(nametables)"
-            return (EnabledString + cleanDomainName + "(" + Convert.ToInt32(Address).ToString() + ")." + Type.ToString() + "(" + Value.ToString() + ")");
+            return (EnabledString + cleanDomainName + "(" + Convert.ToInt64(Address).ToString() + ")." + Type.ToString() + "(" + Value.ToString() + ")");
         }
     }
 
@@ -676,7 +676,7 @@ namespace WindowsGlitchHarvester
                 EnabledString = "[x] ";
 
             string cleanDomainName = Domain.Replace("(nametables)", ""); //Shortens the domain name if it contains "(nametables)"
-            return (EnabledString + cleanDomainName + "(" + Convert.ToInt32(Address).ToString() + ")." + Type.ToString() + "(" + BitConverter.ToString(Values).Replace("-", "").ToLower() + ")");
+            return (EnabledString + cleanDomainName + "(" + Convert.ToInt64(Address).ToString() + ")." + Type.ToString() + "(" + BitConverter.ToString(Values).Replace("-", "").ToLower() + ")");
         }
     }
 
@@ -691,15 +691,18 @@ namespace WindowsGlitchHarvester
     public abstract class MemoryInterface
     {
         public abstract void getMemoryDump();
+        public abstract void wipeMemoryDump();
         public abstract bool dolphinSavestateVersion();
         public abstract byte[][] lastMemoryDump { get; set; }
+        public abstract bool cacheEnabled { get; }
+
         public abstract long getMemorySize();
         public abstract long? lastMemorySize { get; set; }
 
         public abstract void PokeByte(long address, byte data);
         public abstract void PokeBytes(long address, byte[] data);
         public abstract byte? PeekByte(long address);
-        public abstract byte[] PeekBytes(long address, int range);
+        public abstract byte[] PeekBytes(long address, int length);
 
         public abstract void SetBackup();
         public abstract void ResetBackup(bool askConfirmation = true);
@@ -717,6 +720,7 @@ namespace WindowsGlitchHarvester
         public string ShortFilename;
 
         public override byte[][] lastMemoryDump { get; set; } = null;
+        public override bool cacheEnabled { get { return lastMemoryDump != null; } }
 
         //lastMemorySize gets rounded up to a multiplier of 4 to make the vector engine work on multiple files
         //lastRealMemorySize is used in peek/poke to cancel out non-existing adresses
@@ -851,6 +855,13 @@ namespace WindowsGlitchHarvester
             }
         }
 
+        public override void wipeMemoryDump()
+        {
+            lastMemoryDump = null;
+            //GC.Collect();
+            //GC.WaitForFullGCComplete();
+        }
+
         public override void getMemoryDump()
         {
             lastMemoryDump = WGH_MemoryBanks.ReadFile(getBackupFilename());
@@ -943,7 +954,7 @@ namespace WindowsGlitchHarvester
             stream.Position = address;
             stream.Write(data, 0, data.Length);
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 WGH_MemoryBanks.PokeBytes(lastMemoryDump, address, data); 
 
             /*
@@ -965,7 +976,7 @@ namespace WindowsGlitchHarvester
             stream.Position = address;
             stream.WriteByte(data);
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 WGH_MemoryBanks.PokeByte(lastMemoryDump, address, data);
                 //lastMemoryDump[address] = data;
         }
@@ -976,7 +987,7 @@ namespace WindowsGlitchHarvester
                 return 0;
 
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 return WGH_MemoryBanks.PeekByte(lastMemoryDump, address);
                 //return lastMemoryDump[address];
 
@@ -1000,7 +1011,7 @@ namespace WindowsGlitchHarvester
             if (address + length >= lastRealMemorySize)
                 return new byte[length];
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 return WGH_MemoryBanks.PeekBytes(lastMemoryDump, address, length);
                 //return lastMemoryDump.SubArray(address, range);
 
@@ -1119,6 +1130,16 @@ namespace WindowsGlitchHarvester
 
         }
 
+        public override void wipeMemoryDump()
+        {
+            for (int i = 0; i < FileInterfaces.Count; i++)
+            {
+                FileInterfaces[i].wipeMemoryDump();
+                //GC.Collect();
+                //GC.WaitForFullGCComplete();
+            }
+        }
+
         public override void getMemoryDump()
         {
             long totalDumpSize = 0;
@@ -1167,6 +1188,11 @@ namespace WindowsGlitchHarvester
         {
             get { throw new Exception("FORBIDDEN USE OF LASTMEMORYDUMP ON MULTIPLEFILEINTERFACE"); }
             set { throw new Exception("FORBIDDEN USE OF LASTMEMORYDUMP ON MULTIPLEFILEINTERFACE"); }
+        }
+
+        public override bool cacheEnabled
+        {
+            get { return FileInterfaces.Count > 0 && FileInterfaces[0].lastMemoryDump != null; }
         }
 
         public override long getMemorySize()
@@ -1580,13 +1606,25 @@ namespace WindowsGlitchHarvester
             }
         }
 
+
+        public override void wipeMemoryDump()
+        {
+            lastMemoryDump = null;
+            //GC.Collect();
+            //GC.WaitForFullGCComplete();
+        }
+
         public override void getMemoryDump()
         {
             //lastMemoryDump = File.ReadAllBytes(getBackupFilename());
             lastMemoryDump = WGH_MemoryBanks.ReadFile(getBackupFilename());
             //return lastMemoryDump;
         }
+
+
         public override byte[][] lastMemoryDump { get; set; } = null;
+
+        public override bool cacheEnabled { get { return lastMemoryDump != null; } }
 
         public override long getMemorySize()
         {
@@ -1646,7 +1684,7 @@ namespace WindowsGlitchHarvester
             stream.Write(data, 0, data.Length);
 
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 WGH_MemoryBanks.PokeBytes(lastMemoryDump, address, data);
 
             /*
@@ -1664,7 +1702,7 @@ namespace WindowsGlitchHarvester
             stream.Position = address;
             stream.WriteByte(data);
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 WGH_MemoryBanks.PokeByte(lastMemoryDump, address, data);
                 //lastMemoryDump[address] = data;
         }
@@ -1672,7 +1710,7 @@ namespace WindowsGlitchHarvester
         public override byte? PeekByte(long address)
         {
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 return WGH_MemoryBanks.PeekByte(lastMemoryDump, address);
                 //return lastMemoryDump[address];
 
@@ -1692,7 +1730,7 @@ namespace WindowsGlitchHarvester
         public override byte[] PeekBytes(long address, int length)
         {
 
-            if (lastMemoryDump != null)
+            if (cacheEnabled)
                 return WGH_MemoryBanks.PeekBytes(lastMemoryDump, address, length);
                 //return lastMemoryDump.SubArray(address, range);
 

@@ -61,7 +61,7 @@ namespace WindowsGlitchHarvester
         //Forms
         public static WGH_MainForm ghForm;
         public static WGH_SelectMultipleForm smForm = null;
-		public static WGH_HookProcessForm hpForm = null;
+		//public static WGH_HookProcessForm hpForm = null;
 		public static WGH_AutoCorruptForm acForm = null;
         public static WGH_BlastEditorForm beForm = null;
         public static WGH_SavestateInfoForm ssForm = null;
@@ -232,7 +232,7 @@ namespace WindowsGlitchHarvester
 
         public static BlastLayer Blast()
         {
-            bool multithread = WGH_Core.currentMemoryInterface.lastMemoryDump != null;
+            bool multithread = WGH_Core.currentMemoryInterface.cacheEnabled;
             var cpus = Environment.ProcessorCount;
             int splitintensity = Intensity / cpus;
 

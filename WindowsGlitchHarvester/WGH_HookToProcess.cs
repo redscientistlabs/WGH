@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 
+/*
+
 namespace WindowsGlitchHarvester
 {
     public partial class WGH_HookProcessForm : Form
@@ -192,3 +194,5 @@ namespace WindowsGlitchHarvester
 
     }
 }
+
+*/
