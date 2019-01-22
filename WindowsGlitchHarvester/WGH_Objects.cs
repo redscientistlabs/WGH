@@ -727,6 +727,9 @@ namespace WindowsGlitchHarvester
         public override long? lastMemorySize { get; set; }
         public long? lastRealMemorySize { get; set; }
 
+        public long MultiFilePosition = 0;
+        public long MultiFilePositionCeiling = 0;
+
 
         public FileInterface(string _targetId)
         {
@@ -1058,6 +1061,10 @@ namespace WindowsGlitchHarvester
 
                 //getMemoryDump();
                 getMemorySize();
+
+                setFilePositions();
+                
+
             }
             catch (Exception ex)
             {
@@ -1127,6 +1134,22 @@ namespace WindowsGlitchHarvester
 
             if (announce)
                 MessageBox.Show("Backups of " + string.Join(",", FileInterfaces.Select(it => (it as FileInterface).ShortFilename)) + " were restored");
+
+        }
+
+        public void setFilePositions()
+        {
+
+            long addressPad = 0;
+
+            //find which fileInterface contains the file we want
+            foreach (var fi in FileInterfaces)
+            {
+                fi.MultiFilePosition = addressPad;
+                addressPad += fi.getMemorySize();
+                fi.MultiFilePositionCeiling = addressPad;
+                
+            }
 
         }
 
@@ -1217,114 +1240,71 @@ namespace WindowsGlitchHarvester
 
         public override void PokeBytes(long address, byte[] data)
         {
-            long addressPad = 0;
-            FileInterface targetInterface = null;
 
-            foreach (var fi in FileInterfaces)
+            //find which fileInterface contains the file we want
+            for (int i = 0; i < FileInterfaces.Count; i++)
             {
-                if (addressPad + fi.getMemorySize() > address)
+                var fi = FileInterfaces[i];
+
+                if (fi.MultiFilePositionCeiling > address)
                 {
-                    targetInterface = fi;
-                    break;
+                    fi.PokeBytes(address - fi.MultiFilePosition, data);
+                    return;
                 }
-
-                addressPad += fi.getMemorySize();
-
             }
-
-            if (targetInterface != null)
-                targetInterface.PokeBytes(address - addressPad, data);
-
-            /*
-            if (lastMemoryDump != null)
-                for (int i = 0; i < data.Length; i++)
-                    lastMemoryDump[address + i] = data[i];
-            */
 
         }
 
         public override void PokeByte(long address, byte data)
         {
 
-            long addressPad = 0;
-            FileInterface targetInterface = null;
-
             //find which fileInterface contains the file we want
-            foreach (var fi in FileInterfaces)
+            for (int i = 0; i < FileInterfaces.Count; i++)
             {
-                if (addressPad + fi.getMemorySize() > address)
+                var fi = FileInterfaces[i];
+
+                if (fi.MultiFilePositionCeiling > address)
                 {
-                    targetInterface = fi;
-                    break;
+                    fi.PokeByte(address - fi.MultiFilePosition, data);
+                    return;
                 }
-
-                addressPad += fi.getMemorySize();
-
             }
-
-            if (targetInterface != null)
-                targetInterface.PokeByte(address - addressPad, data);
 
         }
 
         public override byte? PeekByte(long address)
         {
 
-            long addressPad = 0;
-            FileInterface targetInterface = null;
-
             //find which fileInterface contains the file we want
-            foreach (var fi in FileInterfaces)
+            for(int i = 0;i< FileInterfaces.Count;i++)
             {
-                if (addressPad + fi.getMemorySize() > address)
-                {
-                    targetInterface = fi;
-                    break;
-                }
-                addressPad += fi.getMemorySize();
+                var fi = FileInterfaces[i];
 
+                if (fi.MultiFilePositionCeiling > address)
+                    return fi.PeekByte(address - fi.MultiFilePosition);
             }
 
-
-            if (targetInterface != null)
-                return targetInterface.PeekByte(address - addressPad);
-            else
-                return null;
+            //if wasn't found
+            return null;
 
 
         }
 
         public override byte[] PeekBytes(long address, int range)
         {
-            try
+
+            //find which fileInterface contains the file we want
+            for (int i = 0; i < FileInterfaces.Count; i++)
             {
+                var fi = FileInterfaces[i];
 
-                long addressPad = 0;
-                FileInterface targetInterface = null;
-
-                //find which fileInterface contains the file we want
-                foreach (var fi in FileInterfaces)
-                {
-                    if (addressPad + fi.getMemorySize() > address)
-                    {
-                        targetInterface = fi;
-                        break;
-                    }
-
-                    addressPad += fi.getMemorySize();
-
-                }
-
-                if (targetInterface != null)
-                    return targetInterface.PeekBytes(address - addressPad, range);
-                else
-                    return null;
+                if (fi.MultiFilePositionCeiling > address)
+                    return fi.PeekBytes(address - fi.MultiFilePosition, range);
             }
-            catch (Exception ex)
-            {
-                new object();
-                return null;
-            }
+
+            //if wasn't found
+            return null;
+
         }
 
     }
