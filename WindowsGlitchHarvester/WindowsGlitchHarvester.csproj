@@ -144,7 +144,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\MultiTrackBar_Comp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Components\MultiTrackBar_Comp.Designer.cs">
+      <DependentUpon>MultiTrackBar_Comp.cs</DependentUpon>
+    </Compile>
     <Compile Include="FastZipProgram.cs" />
+    <Compile Include="WGH_TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WGH_TestForm.Designer.cs">
+      <DependentUpon>WGH_TestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="WGH_DolphinConnector.cs" />
     <Compile Include="WGH_MemoryBanks.cs" />
     <Compile Include="WGH_Progress.cs">
@@ -206,6 +218,9 @@
       <DependentUpon>WGH_SelectMultiple.cs</DependentUpon>
     </Compile>
     <Compile Include="WGH_VectorEngine.cs" />
+    <EmbeddedResource Include="Components\MultiTrackBar_Comp.resx">
+      <DependentUpon>MultiTrackBar_Comp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WGH_AutoCorruptForm.resx">
       <DependentUpon>WGH_AutoCorruptForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -232,6 +247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WGH_SelectMultiple.resx">
       <DependentUpon>WGH_SelectMultiple.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WGH_TestForm.resx">
+      <DependentUpon>WGH_TestForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config">
       <SubType>Designer</SubType>

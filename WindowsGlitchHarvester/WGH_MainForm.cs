@@ -266,6 +266,8 @@ namespace WindowsGlitchHarvester
 
         private void WGH_MainForm_Load(object sender, EventArgs e)
         {
+            //new WGH_TestForm().ShowDialog();
+
             cbCorruptionEngine.SelectedIndex = 0;
             cbBlastType.SelectedIndex = 0;
 
