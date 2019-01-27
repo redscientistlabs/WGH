@@ -50,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -205,9 +206,7 @@
     <Compile Include="WGH_Objects.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WGH_HookToProcess.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="WGH_HookToProcess.cs" />
     <Compile Include="WGH_HookToProcess.Designer.cs">
       <DependentUpon>WGH_HookToProcess.cs</DependentUpon>
     </Compile>
