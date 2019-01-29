@@ -106,7 +106,6 @@
     <Compile Include="Components\MultiTrackBar_Comp.Designer.cs">
       <DependentUpon>MultiTrackBar_Comp.cs</DependentUpon>
     </Compile>
-    <Compile Include="FastZipProgram.cs" />
     <Compile Include="WGH_TestForm.cs">
       <SubType>Form</SubType>
     </Compile>

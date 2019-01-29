@@ -63,10 +63,11 @@
             this.nmControlValue.TabIndex = 2;
             this.nmControlValue.Tag = "color:darker";
             this.nmControlValue.ValueChanged += new System.EventHandler(this.nmControlValue_ValueChanged);
-            this.nmControlValue.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nmControlValue_KeyUp);
             // 
             // tbControlValue
             // 
+            this.tbControlValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbControlValue.Location = new System.Drawing.Point(0, 35);
             this.tbControlValue.Maximum = 65536;
             this.tbControlValue.Name = "tbControlValue";
@@ -75,7 +76,6 @@
             this.tbControlValue.TabStop = false;
             this.tbControlValue.TickFrequency = 6553;
             this.tbControlValue.ValueChanged += new System.EventHandler(this.tbControlValue_ValueChanged);
-            this.tbControlValue.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tbControlValue_MouseUp);
             // 
             // MultiTrackBar_Comp
             // 

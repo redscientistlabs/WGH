@@ -12,17 +12,107 @@ namespace WindowsGlitchHarvester.Components
 {
     public partial class MultiTrackBar_Comp : UserControl
     {
-        bool GeneralUpdateFlag = false; //makes other events ignore firing
+        public event EventHandler<ValueUpdateEventArgs> ValueChanged;
+        public virtual void OnValueChanged(ValueUpdateEventArgs e) => ValueChanged?.Invoke(this, e);
 
-        public List<MultiTrackBar_Comp> slaveComps = new List<MultiTrackBar_Comp>();
-        public MultiTrackBar_Comp parentComp = null;
+        private bool GeneralUpdateFlag = false; //makes other events ignore firing
+
+        [Description("Net value of the control (displayed in numeric box)"), Category("Data")]
+        public long Value { get; set; } = 0;
+
+        private bool FirstLoadDone = false;
+        private long _Maximum = 500000;
+        [Description("Maximum value of the control"), Category("Data")]
+        public long Maximum
+        {
+            get
+            {
+                return _Maximum;
+            }
+            set
+            {
+                _Maximum = value;
+                if (FirstLoadDone)
+                    tbControlValue_ValueChanged(null, null);
+            }
+        }
+
+        [Description("Displayed label of the control"), Category("Data")]
+        public override string Text { get { return lbControlName.Text; } set { lbControlName.Text = value; } }
+
+        [Description("Let the NumericBox override the maximum value"), Category("Data")]
+        public bool UncapNumericBox { get; set; } = false;
+
+        private Timer updater;
+        private int updateThreshold = 250;
+
+        private List<MultiTrackBar_Comp> slaveComps = new List<MultiTrackBar_Comp>();
+        private MultiTrackBar_Comp parentComp = null;
+
+        private decimal A; //A value for quadratic function Y = AX² used to scale components
 
         public MultiTrackBar_Comp()
         {
             InitializeComponent();
+
+            updater = new Timer();
+            updater.Interval = updateThreshold;
+            updater.Tick += Updater_Tick;
+
+            //Calculate A for quadratic function
+            decimal max_X = Convert.ToDecimal(65536);
+            decimal max_X_Squared = max_X * max_X;
+            A = Maximum / max_X_Squared;
         }
 
-        internal void registerSlave(MultiTrackBar_Comp comp)
+
+        /*
+        Y = AX²
+        5000000 = A * 4294967296
+
+        A = 4294967296
+        A = (65536*65536)/Maximum
+        */
+
+        private long tbValueToNmValueQuadScale(long tbValue)
+        {
+            decimal max_X = Convert.ToDecimal(tbControlValue.Maximum);
+            decimal max_X_Squared = max_X * max_X;
+            decimal A = Maximum / max_X_Squared;
+
+            decimal X = Convert.ToDecimal(tbValue);
+            decimal Y = A * (X * X);
+
+            decimal Floored_Y = Math.Floor(Y);
+            return Convert.ToInt64(Floored_Y);
+        }
+
+        private int nmValueToTbValueQuadScale(decimal Y)
+        {
+            decimal max_X = Convert.ToDecimal(tbControlValue.Maximum);
+            decimal max_X_Squared = max_X * max_X;
+            decimal A = Maximum / max_X_Squared;
+
+            decimal X = DecSqrt(Y / A);
+
+            decimal Floored_X = Math.Floor(X);
+            return Convert.ToInt32(Floored_X);
+        }
+
+
+        public static decimal DecSqrt(decimal x)
+        {
+            return (decimal)Math.Sqrt((double)x);
+        }
+
+        private void Updater_Tick(object sender, EventArgs e)
+        {
+            updater.Stop();
+            OnValueChanged(new ValueUpdateEventArgs(Value));
+            
+        }
+
+        public void registerSlave(MultiTrackBar_Comp comp)
         {
             slaveComps.Add(comp);
             comp.parentComp = this;
@@ -31,9 +121,10 @@ namespace WindowsGlitchHarvester.Components
 
         private void MultiTrackBar_Comp_Load(object sender, EventArgs e)
         {
+            FirstLoadDone = true;
         }
 
-        public void UpdateAllControls(long value, Control setter)
+        private void UpdateAllControls(long nmValue, long tbValue, Control setter)
         {
             GeneralUpdateFlag = true;
 
@@ -42,49 +133,36 @@ namespace WindowsGlitchHarvester.Components
 
                 if (setter != tbControlValue)
                 {
-                    if (value > 65536)
-                        tbControlValue.Value = 65536;
+                    if (tbValue > 65536)
+                        tbControlValue.Value = Convert.ToInt32(65536);
                     else
-                        tbControlValue.Value = Convert.ToInt32(value);
+                        tbControlValue.Value = Convert.ToInt32(tbValue);
                 }
 
                 if (setter != nmControlValue)
-                    nmControlValue.Value = value;
-
-
+                    if (nmValue > Maximum && !UncapNumericBox)
+                        nmControlValue.Value = Convert.ToInt32(Maximum);
+                    else
+                        nmControlValue.Value = nmValue;
 
                 foreach (var slave in slaveComps)
-                    slave.UpdateAllControls(value, this);
+                    slave.UpdateAllControls(nmValue, tbValue, this);
 
                 if (parentComp != null)
-                    parentComp.UpdateAllControls(value, setter);
+                    parentComp.UpdateAllControls(nmValue, tbValue, setter);
 
             }
 
             GeneralUpdateFlag = false;
         }
 
-        public void PropagateValue(long value, Control setter)
+        private void PropagateValue(long nmValue, long tbValue, Control setter)
         {
-            UpdateAllControls(value, setter);
+            UpdateAllControls(nmValue, tbValue, setter);
 
-            //call event whatever
-        }
-
-        private void nmControlValue_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (GeneralUpdateFlag)
-                return;
-
-            PropagateValue(Convert.ToInt64(nmControlValue.Value), nmControlValue);
-        }
-
-        private void tbControlValue_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (GeneralUpdateFlag)
-                return;
-
-            PropagateValue(tbControlValue.Value, tbControlValue);
+            Value = nmValue;
+            updater.Stop();
+            updater.Start();
         }
 
         private void tbControlValue_ValueChanged(object sender, EventArgs e)
@@ -92,7 +170,10 @@ namespace WindowsGlitchHarvester.Components
             if (GeneralUpdateFlag)
                 return;
 
-            UpdateAllControls(tbControlValue.Value, tbControlValue);
+            int tbValue = tbControlValue.Value;
+            long nmValue = tbValueToNmValueQuadScale(tbValue);
+
+            PropagateValue(nmValue, tbValue, tbControlValue);
         }
 
         private void nmControlValue_ValueChanged(object sender, EventArgs e)
@@ -100,7 +181,10 @@ namespace WindowsGlitchHarvester.Components
             if (GeneralUpdateFlag)
                 return;
 
-            UpdateAllControls(Convert.ToInt64(nmControlValue.Value), nmControlValue);
+            long nmValue = Convert.ToInt64(nmControlValue.Value);
+            int tbValue = nmValueToTbValueQuadScale(nmControlValue.Value);
+
+            PropagateValue(nmValue, tbValue, nmControlValue);
         }
     }
 
@@ -118,6 +202,16 @@ namespace WindowsGlitchHarvester.Components
         {
             base.OnGotFocus(e);
             SendMessage(this.Handle, 0x0128, MakeParam(1, 0x1), 0);
+        }
+    }
+
+    public class ValueUpdateEventArgs : EventArgs
+    {
+        public long value;
+
+        public ValueUpdateEventArgs(long _value)
+        {
+            value = _value;
         }
     }
 }

@@ -20,6 +20,12 @@ namespace WindowsGlitchHarvester
         private void WGH_TestForm_Load(object sender, EventArgs e)
         {
             multiTrackBar_Comp1.registerSlave(multiTrackBar_Comp2);
+            multiTrackBar_Comp1.registerSlave(multiTrackBar_Comp3);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            multiTrackBar_Comp1.Maximum = Convert.ToInt64(textBox1.Text);
         }
     }
 }
