@@ -1647,11 +1647,11 @@
         private System.Windows.Forms.NumericUpDown nmIntensity;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TrackBar tbIntensity;
-        private System.Windows.Forms.TrackBar tbStartingAddress;
+        public System.Windows.Forms.TrackBar tbStartingAddress;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown nmStartingAddress;
-        private System.Windows.Forms.TrackBar tbBlastRange;
-        private System.Windows.Forms.NumericUpDown nmBlastRange;
+        public System.Windows.Forms.NumericUpDown nmStartingAddress;
+        public System.Windows.Forms.TrackBar tbBlastRange;
+        public System.Windows.Forms.NumericUpDown nmBlastRange;
         private System.Windows.Forms.Button btnAddStashToStockpile;
         private System.Windows.Forms.CheckBox cbBlastRange;
         private System.Windows.Forms.Label label7;

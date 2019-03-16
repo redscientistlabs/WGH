@@ -73,42 +73,6 @@ namespace WindowsGlitchHarvester
         {
             WGH_Core.LoadTarget();
 
-            if (WGH_Core.currentMemoryInterface != null)
-            {
-                var mi = WGH_Core.currentMemoryInterface;
-
-                if (mi.lastMemorySize != null)
-                {
-                    if (mi.lastMemorySize >= int.MaxValue)
-                    {
-                        tbStartingAddress.Visible = false;
-                        tbBlastRange.Visible = false;
-                    }
-                    else
-                    {
-                        tbStartingAddress.Visible = true;
-                        tbBlastRange.Visible = true;
-                    }
-
-
-                    if (tbStartingAddress.Visible && tbStartingAddress.Value > mi.lastMemorySize && tbStartingAddress.Maximum > mi.lastMemorySize)
-                        tbStartingAddress.Value = (int)mi.lastMemorySize;
-
-                    nmStartingAddress.Maximum = (long)mi.lastMemorySize;
-
-                    if (tbBlastRange.Visible && tbBlastRange.Value > mi.lastMemorySize && tbBlastRange.Maximum > mi.lastMemorySize)
-                        tbBlastRange.Value = (int)mi.lastMemorySize;
-
-                    nmBlastRange.Maximum = (long)mi.lastMemorySize;
-
-                    if (tbStartingAddress.Visible)
-                    {
-                        tbStartingAddress.Maximum = (int)mi.lastMemorySize;
-                        tbBlastRange.Maximum = (int)mi.lastMemorySize;
-                    }
-
-                    WGH_Core.lastBlastLayerBackup = new BlastLayer();
-                }
 
                 /*
                 if (mi is ProcessInterface)
@@ -142,9 +106,6 @@ namespace WindowsGlitchHarvester
 
                     WGH_Core.acForm.Visible = false;
                 //}
-            }
-
-
             lbStashHistory.Items.Clear();
             lbStockpile.Items.Clear();
 
@@ -162,6 +123,8 @@ namespace WindowsGlitchHarvester
         }
         public void WrapBlastTarget(int times = 1, bool untilFound = false, bool stashBlastLayer = true)
         {
+            if (WGH_Core.currentMemoryInterface == null)
+                return;
             int intensity = WGH_Core.Intensity;
 
             bool multithread = WGH_Core.currentMemoryInterface.cacheEnabled;
@@ -175,12 +138,23 @@ namespace WindowsGlitchHarvester
 
         }
 
+        private volatile bool timeout = false;
         public void BlastTarget(int times = 1, bool untilFound = false, bool stashBlastLayer = true)
         {
             /*
             if (WGH_Core.currentMemoryInterface is ProcessInterface)
                 (WGH_Core.currentMemoryInterface as ProcessInterface).RefreshSize();
             */
+            
+
+            System.Timers.Timer timeoutTimer = new System.Timers.Timer();
+            timeoutTimer.Interval = 15000;
+            timeoutTimer.Elapsed += delegate {
+                timeout = true;
+            };
+
+            if (untilFound)
+                timeoutTimer.Start();
 
             if (WGH_Core.currentMemoryInterface == null)
             {
@@ -198,6 +172,13 @@ namespace WindowsGlitchHarvester
 
             for (int i = 0; i < times; i++)
             {
+                if (untilFound && timeout)
+                {
+                    timeoutTimer.Stop();
+                    MessageBox.Show(@"No effect found after 15 seconds, cancelling.");
+                    break;
+                }
+
                 var bl = WGH_Core.Blast();
 
                 if (bl != null)

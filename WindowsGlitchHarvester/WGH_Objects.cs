@@ -739,6 +739,33 @@ namespace WindowsGlitchHarvester
                 Filename = targetId[1];
                 ShortFilename = Filename.Substring(Filename.LastIndexOf("\\") + 1, Filename.Length - (Filename.LastIndexOf("\\") + 1));
 
+                FileInfo info = new System.IO.FileInfo(Filename);
+
+                if (info.IsReadOnly)
+                {
+                    throw new Exception("The file " + Filename + " is read - only! Cancelling load");
+                }
+                try
+                {
+                    using (Stream stream = new FileStream(Filename, FileMode.Open))
+                    {
+                        //Dummy code
+                        Console.Write(stream.Length);
+                    }
+                }
+                catch(IOException ex)
+                {
+                    if (ex is FileLoadException)
+                    {
+                        throw new Exception($"FileInterface failed to load something because the file is (probably) in use \n" + "Culprit file: " + Filename + "\n" + ex.Message);
+                    }
+                    if (ex is PathTooLongException)
+                    {
+                        throw new Exception($"FileInterface failed to load something because the path is too long. Try moving it closer to root \n" + "Culprit file: " + Filename + "\n" + ex.Message);
+                    }
+                }
+
+
                 SetBackup();
 
                 //getMemoryDump();

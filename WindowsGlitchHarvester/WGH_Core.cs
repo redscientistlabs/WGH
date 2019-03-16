@@ -13,7 +13,7 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.96";
+		public static string WghVersion = "0.96a";
 
         private static volatile int _seed = DateTime.Now.Millisecond;
         public static int seed { get { return ++_seed; } }
@@ -322,7 +322,7 @@ namespace WindowsGlitchHarvester
 
                 Action<object, EventArgs> postAction = (ob, ea) =>
                 {
-                    if (fi == null)
+                    if (fi == null || fi.lastMemorySize == null)
                     {
                         MessageBox.Show("Failed to load target");
                         return;
@@ -332,10 +332,13 @@ namespace WindowsGlitchHarvester
 
                     currentMemoryInterface = fi;
                     ghForm.lbTarget.Text = currentTargetId + "|MemorySize:" + fi.lastMemorySize.ToString();
+
+                    //Refresh the UI
+                    RefreshUIPostLoad();
                 };
 
                 WGH_Core.ghForm.RunProgressBar($"Loading target...", 0, action, postAction);
-
+                return;
             }
             else if (WGH_Core.ghForm.rbTargetMultipleFiles.Checked)
             {
@@ -433,6 +436,51 @@ namespace WindowsGlitchHarvester
                 currentTargetName = "Dolphin";
                 ghForm.lbTarget.Text = currentTargetName + "|MemorySize:" + WGH_Core.currentMemoryInterface.lastMemorySize.ToString();
             }*/
+
+            //Refresh the UI
+            RefreshUIPostLoad();
+        }
+
+        public static void RefreshUIPostLoad()
+        {
+
+            if (WGH_Core.currentMemoryInterface != null)
+            {
+                var mi = WGH_Core.currentMemoryInterface;
+
+                if (mi.lastMemorySize != null)
+                {
+                    if (mi.lastMemorySize >= int.MaxValue)
+                    {
+                        WGH_Core.ghForm.tbStartingAddress.Visible = false;
+                        WGH_Core.ghForm.tbBlastRange.Visible = false;
+                    }
+                    else
+                    {
+                        WGH_Core.ghForm.tbStartingAddress.Visible = true;
+                        WGH_Core.ghForm.tbBlastRange.Visible = true;
+                    }
+
+
+                    if (WGH_Core.ghForm.tbStartingAddress.Visible && WGH_Core.ghForm.tbStartingAddress.Value > mi.lastMemorySize && WGH_Core.ghForm.tbStartingAddress.Maximum > mi.lastMemorySize)
+                        WGH_Core.ghForm.tbStartingAddress.Value = (int)mi.lastMemorySize;
+
+                    WGH_Core.ghForm.nmStartingAddress.Maximum = (long)mi.lastMemorySize;
+
+                    if (WGH_Core.ghForm.tbBlastRange.Visible && WGH_Core.ghForm.tbBlastRange.Value > mi.lastMemorySize && WGH_Core.ghForm.tbBlastRange.Maximum > mi.lastMemorySize)
+                        WGH_Core.ghForm.tbBlastRange.Value = (int)mi.lastMemorySize;
+
+                    WGH_Core.ghForm.nmBlastRange.Maximum = (long)mi.lastMemorySize;
+
+                    if (WGH_Core.ghForm.tbStartingAddress.Visible)
+                    {
+                        WGH_Core.ghForm.tbStartingAddress.Maximum = (int)mi.lastMemorySize;
+                        WGH_Core.ghForm.tbBlastRange.Maximum = (int)mi.lastMemorySize;
+                    }
+
+                    WGH_Core.lastBlastLayerBackup = new BlastLayer();
+                }
+            }
         }
 
         public static void RestoreTarget()
