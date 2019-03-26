@@ -783,7 +783,16 @@ namespace WindowsGlitchHarvester
 
         public string getCompositeFilename(string prefix)
         {
-            return $"{prefix.Trim().ToUpper()}^{Filename.ToBase64()}^{ShortFilename}";
+            if (WGH_Core.CompositeFilenameDico.ContainsKey(Filename))
+            {
+                return WGH_Core.CompositeFilenameDico[Filename];
+            }
+            //Add it to the dico
+            string name = (WGH_Core.CompositeFilenameDico.Keys.Count + 1).ToString();
+            WGH_Core.CompositeFilenameDico[Filename] = name;
+            //Flush to disk
+            WGH_Core.SaveCompositeFilenameDico();
+            return name;
         }
 
         public string getCorruptFilename(bool overrideWriteCopyMode = false)
@@ -1102,7 +1111,6 @@ namespace WindowsGlitchHarvester
         public string getCompositeFilename(string prefix)
         {
             return string.Join("|", FileInterfaces.Select(it => it.getCompositeFilename(prefix)));
-
         }
 
         public string getCorruptFilename(bool overrideWriteCopyMode = false)
@@ -1543,7 +1551,16 @@ namespace WindowsGlitchHarvester
 
         public string getCompositeFilename(string prefix)
         {
-            return $"{prefix.Trim().ToUpper()}^{Filename.ToBase64()}^{ShortFilename}";
+            if (WGH_Core.CompositeFilenameDico.ContainsKey(Filename))
+            {
+                return WGH_Core.CompositeFilenameDico[Filename];
+            }
+            //Add it to the dico
+            string name = (WGH_Core.CompositeFilenameDico.Keys.Count + 1).ToString();
+            WGH_Core.CompositeFilenameDico[Filename] = name;
+            //Flush to disk
+            WGH_Core.SaveCompositeFilenameDico();
+            return name;
         }
 
         public string getCorruptFilename(bool overrideWriteCopyMode = false)

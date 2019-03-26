@@ -2,3 +2,4 @@
 WindowsGlitchHarvester/bin/*
 WindowsGlitchHarvester/obj/*
 .vs/*
+packages/*

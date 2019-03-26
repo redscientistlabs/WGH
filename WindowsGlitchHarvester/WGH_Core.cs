@@ -7,6 +7,9 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using WindowsGlitchHarvester;
+using Newtonsoft.Json;
 
 namespace WindowsGlitchHarvester
 {
@@ -73,7 +76,10 @@ namespace WindowsGlitchHarvester
         public static StashKey currentStashkey = null;
         public static BlastLayer lastBlastLayerBackup = null;
 
-		public static int ErrorDelay = 100;
+        //File management
+        public static Dictionary<String, String> CompositeFilenameDico = null;
+
+        public static int ErrorDelay = 100;
 
 		public static void Start(WGH_MainForm _ghForm)
         {
@@ -124,6 +130,9 @@ namespace WindowsGlitchHarvester
                 File.Create(currentDir + "\\PARAMS\\DISCLAIMERREAD");
             }
 
+            //If we can't load the dictionary, quit the wgh to prevent the loss of backups
+            if (!LoadCompositeFilenameDico())
+                Application.Exit();
 
         }
 
@@ -134,6 +143,53 @@ namespace WindowsGlitchHarvester
                 f.Invoke(new MethodInvoker(() => { a.Invoke(null, null); }));
             else
                 a.Invoke(null, null);
+        }
+
+
+        public static bool LoadCompositeFilenameDico()
+        {
+            JsonSerializer serializer = new JsonSerializer();
+            var path = WGH_Core.currentDir + "\\TEMP\\" + "filemap.json";
+            if (!File.Exists(path))
+            {
+                CompositeFilenameDico = new Dictionary<string, string>();
+                return true;
+            }
+            try
+            {
+
+                using (StreamReader sw = new StreamReader(WGH_Core.currentDir + "\\TEMP\\" + "filemap.json"))
+                using (JsonTextReader reader = new JsonTextReader(sw))
+                {
+                    CompositeFilenameDico = serializer.Deserialize<Dictionary<string, string>>(reader);
+                }
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show("Unable to access the filemap! Figure out what's locking it and then restart the WGH.\n" + e.ToString());
+                return false;
+            }
+              return true;
+        }
+
+        public static bool SaveCompositeFilenameDico()
+        {
+            JsonSerializer serializer = new JsonSerializer();
+            var path = WGH_Core.currentDir + "\\TEMP\\" + "filemap.json";
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(path))
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    serializer.Serialize(writer, CompositeFilenameDico);
+                }
+            }
+            catch(IOException e)
+            {
+                MessageBox.Show("Unable to access the filemap!\n" + e.ToString());
+                return false;
+            }
+            return true;
         }
 
         public static long RandomLong(long max)
