@@ -204,7 +204,7 @@ namespace WindowsGlitchHarvester
                         break;
                 }
             }
-            WGH_Executor.Execute();
+            WGH_Core.FormExecute((o, e) => { WGH_Executor.Execute(); });
         }
 
         private void TerminateIfNeeded()
