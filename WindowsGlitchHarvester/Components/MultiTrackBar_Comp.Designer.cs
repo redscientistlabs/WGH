@@ -31,6 +31,7 @@
             this.lbControlName = new System.Windows.Forms.Label();
             this.nmControlValue = new System.Windows.Forms.NumericUpDown();
             this.tbControlValue = new WindowsGlitchHarvester.Components.NoFocusTrackBar();
+            this.cbControlName = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nmControlValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbControlValue)).BeginInit();
             this.SuspendLayout();
@@ -63,6 +64,7 @@
             this.nmControlValue.TabIndex = 2;
             this.nmControlValue.Tag = "color:darker";
             this.nmControlValue.ValueChanged += new System.EventHandler(this.nmControlValue_ValueChanged);
+            this.nmControlValue.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nmControlValue_KeyUp);
             // 
             // tbControlValue
             // 
@@ -77,11 +79,26 @@
             this.tbControlValue.TickFrequency = 6553;
             this.tbControlValue.ValueChanged += new System.EventHandler(this.tbControlValue_ValueChanged);
             // 
+            // cbControlName
+            // 
+            this.cbControlName.AutoSize = true;
+            this.cbControlName.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.cbControlName.ForeColor = System.Drawing.Color.White;
+            this.cbControlName.Location = new System.Drawing.Point(79, 9);
+            this.cbControlName.Name = "cbControlName";
+            this.cbControlName.Size = new System.Drawing.Size(62, 21);
+            this.cbControlName.TabIndex = 4;
+            this.cbControlName.Text = "Name";
+            this.cbControlName.UseVisualStyleBackColor = true;
+            this.cbControlName.Visible = false;
+            this.cbControlName.CheckedChanged += new System.EventHandler(this.cbControlName_CheckedChanged);
+            // 
             // MultiTrackBar_Comp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.Controls.Add(this.cbControlName);
             this.Controls.Add(this.tbControlValue);
             this.Controls.Add(this.nmControlValue);
             this.Controls.Add(this.lbControlName);
@@ -101,5 +118,6 @@
         private System.Windows.Forms.Label lbControlName;
         private System.Windows.Forms.NumericUpDown nmControlValue;
         private NoFocusTrackBar tbControlValue;
+        private System.Windows.Forms.CheckBox cbControlName;
     }
 }

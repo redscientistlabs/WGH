@@ -15,10 +15,33 @@ namespace WindowsGlitchHarvester.Components
         public event EventHandler<ValueUpdateEventArgs> ValueChanged;
         public virtual void OnValueChanged(ValueUpdateEventArgs e) => ValueChanged?.Invoke(this, e);
 
+        public event EventHandler<EventArgs> CheckChanged;
+        public virtual void OnCheckChanged(object sender, EventArgs e) => CheckChanged?.Invoke(sender, e);
+
         private bool GeneralUpdateFlag = false; //makes other events ignore firing
 
         [Description("Net value of the control (displayed in numeric box)"), Category("Data")]
         public long Value { get; set; } = 0;
+
+        private bool _DisplayCheckbox = false;
+        [Description("Display a checkbox before the label"), Category("Data")]
+        public bool DisplayCheckbox {
+            get {
+                return _DisplayCheckbox; }
+            set {
+                _DisplayCheckbox = value;
+                if(value)
+                {
+                    lbControlName.Visible = false;
+                    cbControlName.Visible = true;
+                }
+                else
+                {
+                    lbControlName.Visible = true;
+                    cbControlName.Visible = false;
+                }
+            }
+        }
 
         private bool FirstLoadDone = false;
         private long _Maximum = 500000;
@@ -54,6 +77,8 @@ namespace WindowsGlitchHarvester.Components
         public MultiTrackBar_Comp()
         {
             InitializeComponent();
+
+            cbControlName.Location = lbControlName.Location;
 
             updater = new Timer();
             updater.Interval = updateThreshold;
@@ -177,6 +202,22 @@ namespace WindowsGlitchHarvester.Components
         }
 
         private void nmControlValue_ValueChanged(object sender, EventArgs e)
+        {
+            if (GeneralUpdateFlag)
+                return;
+
+            long nmValue = Convert.ToInt64(nmControlValue.Value);
+            int tbValue = nmValueToTbValueQuadScale(nmControlValue.Value);
+
+            PropagateValue(nmValue, tbValue, nmControlValue);
+        }
+
+        private void cbControlName_CheckedChanged(object sender, EventArgs e)
+        {
+            OnCheckChanged(sender, e);
+        }
+
+        private void nmControlValue_KeyUp(object sender, KeyEventArgs e)
         {
             if (GeneralUpdateFlag)
                 return;
