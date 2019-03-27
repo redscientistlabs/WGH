@@ -20,8 +20,26 @@ namespace WindowsGlitchHarvester.Components
 
         private bool GeneralUpdateFlag = false; //makes other events ignore firing
 
+        private long _value;
+
         [Description("Net value of the control (displayed in numeric box)"), Category("Data")]
-        public long Value { get; set; } = 0;
+        public long Value
+        {
+            get { return _value; }
+            set
+            {
+                if (!initialized)
+                {
+                    var tbValue = nmValueToTbValueQuadScale(value);
+                    UpdateAllControls(value, tbValue, null);
+                    initialized = true;
+                }
+                else
+                {
+                    _value = value;
+                }
+            }
+        }
 
         private bool _DisplayCheckbox = false;
         [Description("Display a checkbox before the label"), Category("Data")]
@@ -60,8 +78,18 @@ namespace WindowsGlitchHarvester.Components
             }
         }
 
+        private string name  = "Name"; 
+
         [Description("Displayed label of the control"), Category("Data")]
-        public override string Text { get { return lbControlName.Text; } set { lbControlName.Text = value; } }
+        public string Label {
+            get { return name; }
+            set
+            {
+                name = value;
+                lbControlName.Text = value;
+                cbControlName.Text = value;
+            }
+        }
 
         [Description("Let the NumericBox override the maximum value"), Category("Data")]
         public bool UncapNumericBox { get; set; } = false;
@@ -73,6 +101,7 @@ namespace WindowsGlitchHarvester.Components
         private MultiTrackBar_Comp parentComp = null;
 
         private decimal A; //A value for quadratic function Y = AX² used to scale components
+        private bool initialized = false;
 
         public MultiTrackBar_Comp()
         {

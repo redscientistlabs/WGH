@@ -16,7 +16,7 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.96a";
+		public static string WghVersion = "0.97a";
 
         private static volatile int _seed = DateTime.Now.Millisecond;
         public static int seed { get { return ++_seed; } }
@@ -508,30 +508,30 @@ namespace WindowsGlitchHarvester
                 {
                     if (mi.lastMemorySize >= int.MaxValue)
                     {
-                        WGH_Core.ghForm.tbStartingAddress.Visible = false;
-                        WGH_Core.ghForm.tbBlastRange.Visible = false;
+                        WGH_Core.ghForm.mtb_StartingAddress.Visible = false;
+                        WGH_Core.ghForm.mtb_BlastRange.Visible = false;
                     }
                     else
                     {
-                        WGH_Core.ghForm.tbStartingAddress.Visible = true;
-                        WGH_Core.ghForm.tbBlastRange.Visible = true;
+                        WGH_Core.ghForm.mtb_StartingAddress.Visible = true;
+                        WGH_Core.ghForm.mtb_BlastRange.Visible = true;
                     }
 
 
-                    if (WGH_Core.ghForm.tbStartingAddress.Visible && WGH_Core.ghForm.tbStartingAddress.Value > mi.lastMemorySize && WGH_Core.ghForm.tbStartingAddress.Maximum > mi.lastMemorySize)
-                        WGH_Core.ghForm.tbStartingAddress.Value = (int)mi.lastMemorySize;
+                    if (WGH_Core.ghForm.mtb_StartingAddress.Visible && WGH_Core.ghForm.mtb_StartingAddress.Value > mi.lastMemorySize && WGH_Core.ghForm.mtb_StartingAddress.Maximum > mi.lastMemorySize)
+                        WGH_Core.ghForm.mtb_StartingAddress.Value = (int)mi.lastMemorySize;
 
-                    WGH_Core.ghForm.nmStartingAddress.Maximum = (long)mi.lastMemorySize;
+                    WGH_Core.ghForm.mtb_StartingAddress.Maximum = (long)mi.lastMemorySize;
 
-                    if (WGH_Core.ghForm.tbBlastRange.Visible && WGH_Core.ghForm.tbBlastRange.Value > mi.lastMemorySize && WGH_Core.ghForm.tbBlastRange.Maximum > mi.lastMemorySize)
-                        WGH_Core.ghForm.tbBlastRange.Value = (int)mi.lastMemorySize;
+                    if (WGH_Core.ghForm.mtb_BlastRange.Visible && WGH_Core.ghForm.mtb_BlastRange.Value > mi.lastMemorySize && WGH_Core.ghForm.mtb_BlastRange.Maximum > mi.lastMemorySize)
+                        WGH_Core.ghForm.mtb_BlastRange.Value = (int)mi.lastMemorySize;
 
-                    WGH_Core.ghForm.nmBlastRange.Maximum = (long)mi.lastMemorySize;
+                    WGH_Core.ghForm.mtb_BlastRange.Maximum = (long)mi.lastMemorySize;
 
-                    if (WGH_Core.ghForm.tbStartingAddress.Visible)
+                    if (WGH_Core.ghForm.mtb_StartingAddress.Visible)
                     {
-                        WGH_Core.ghForm.tbStartingAddress.Maximum = (int)mi.lastMemorySize;
-                        WGH_Core.ghForm.tbBlastRange.Maximum = (int)mi.lastMemorySize;
+                        WGH_Core.ghForm.mtb_StartingAddress.Maximum = (int)mi.lastMemorySize;
+                        WGH_Core.ghForm.mtb_BlastRange.Maximum = (int)mi.lastMemorySize;
                     }
 
                     WGH_Core.lastBlastLayerBackup = new BlastLayer();

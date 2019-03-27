@@ -266,61 +266,32 @@ namespace WindowsGlitchHarvester
 
             this.Text = "Windows Glitch Harvester " + WGH_Core.WghVersion;
 
+            mtb_Intensity.ValueChanged += Mtb_Intensity_ValueChanged;
+            mtb_StartingAddress.ValueChanged += Mtb_StartingAddress_ValueChanged;
+
+            mtb_BlastRange.ValueChanged += Mtb_BlastRange_ValueChanged;
+            mtb_BlastRange.CheckChanged += Mtb_BlastRange_CheckChanged;
 
         }
 
-        private void nmIntensity_ValueChanged(object sender, EventArgs e)
-        {
-            WGH_Core.Intensity = Convert.ToInt32(nmIntensity.Value);
 
-            if (tbIntensity.Value != WGH_Core.Intensity)
-                if(WGH_Core.Intensity <= tbIntensity.Maximum)
-                    tbIntensity.Value = WGH_Core.Intensity;
+        private void Mtb_BlastRange_CheckChanged(object sender, EventArgs e)
+        {
+            WGH_Core.useBlastRange = ((CheckBox)sender).Checked;
         }
 
-        private void tbIntensity_Scroll(object sender, EventArgs e)
+        private void Mtb_BlastRange_ValueChanged(object sender, Components.ValueUpdateEventArgs e)
         {
-            WGH_Core.Intensity = tbIntensity.Value;
-
-            if (nmIntensity.Value != WGH_Core.Intensity)
-                nmIntensity.Value = WGH_Core.Intensity;
+            WGH_Core.BlastRange = Convert.ToInt32(mtb_BlastRange.Value);
+        }
+        private void Mtb_StartingAddress_ValueChanged(object sender, Components.ValueUpdateEventArgs e)
+        {
+            WGH_Core.StartingAddress = Convert.ToInt32(e.value);
         }
 
-        private void nmStartingAddress_ValueChanged(object sender, EventArgs e)
+        private void Mtb_Intensity_ValueChanged(object sender, Components.ValueUpdateEventArgs e)
         {
-            WGH_Core.StartingAddress = Convert.ToInt32(nmStartingAddress.Value);
-
-            if (tbStartingAddress.Visible && tbStartingAddress.Value != WGH_Core.StartingAddress)
-                tbStartingAddress.Value = WGH_Core.StartingAddress;
-        }
-
-        private void tbStartingAddress_Scroll(object sender, EventArgs e)
-        {
-            WGH_Core.StartingAddress = tbStartingAddress.Value;
-
-            if (nmStartingAddress.Value != WGH_Core.StartingAddress)
-                nmStartingAddress.Value = WGH_Core.StartingAddress;
-        }
-
-        private void cbBlastRange_CheckedChanged(object sender, EventArgs e)
-        {
-            WGH_Core.useBlastRange = cbBlastRange.Checked;
-        }
-
-        private void nmBlastRange_ValueChanged(object sender, EventArgs e)
-        {
-            WGH_Core.BlastRange = Convert.ToInt32(nmBlastRange.Value);
-
-            if (tbBlastRange.Visible && tbBlastRange.Value != WGH_Core.BlastRange)
-                tbBlastRange.Value = WGH_Core.BlastRange;
-        }
-
-        private void tbBlastRange_Scroll(object sender, EventArgs e)
-        {
-            WGH_Core.BlastRange = tbBlastRange.Value;
-
-            if (nmBlastRange.Value != WGH_Core.BlastRange)
-                nmBlastRange.Value = WGH_Core.BlastRange;
+            WGH_Core.Intensity = Convert.ToInt32(e.value);
         }
 
         private void cbCorruptionEngine_SelectedIndexChanged(object sender, EventArgs e)

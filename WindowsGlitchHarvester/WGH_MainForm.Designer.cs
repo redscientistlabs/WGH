@@ -42,16 +42,7 @@
             this.lbTarget = new System.Windows.Forms.Label();
             this.btnStockpileMoveDown = new System.Windows.Forms.Button();
             this.btnStockpileMoveUp = new System.Windows.Forms.Button();
-            this.nmIntensity = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.tbIntensity = new System.Windows.Forms.TrackBar();
-            this.tbStartingAddress = new System.Windows.Forms.TrackBar();
-            this.label5 = new System.Windows.Forms.Label();
-            this.nmStartingAddress = new System.Windows.Forms.NumericUpDown();
-            this.tbBlastRange = new System.Windows.Forms.TrackBar();
-            this.nmBlastRange = new System.Windows.Forms.NumericUpDown();
             this.btnAddStashToStockpile = new System.Windows.Forms.Button();
-            this.cbBlastRange = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.btnRestoreFileBackup = new System.Windows.Forms.Button();
             this.gbNightmareEngineSettings = new System.Windows.Forms.GroupBox();
@@ -118,12 +109,9 @@
             this.label9 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.lbStockpile = new System.Windows.Forms.ListBox();
-            ((System.ComponentModel.ISupportInitialize)(this.nmIntensity)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbIntensity)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbStartingAddress)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nmStartingAddress)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbBlastRange)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nmBlastRange)).BeginInit();
+            this.mtb_BlastRange = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
+            this.mtb_StartingAddress = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
+            this.mtb_Intensity = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
             this.gbNightmareEngineSettings.SuspendLayout();
             this.pnTargetPanel.SuspendLayout();
             this.pnBottom.SuspendLayout();
@@ -353,118 +341,6 @@
             this.btnStockpileMoveUp.UseVisualStyleBackColor = false;
             this.btnStockpileMoveUp.Click += new System.EventHandler(this.btnStockpileMoveUp_Click);
             // 
-            // nmIntensity
-            // 
-            this.nmIntensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.nmIntensity.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.nmIntensity.ForeColor = System.Drawing.Color.White;
-            this.nmIntensity.Location = new System.Drawing.Point(114, 12);
-            this.nmIntensity.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.nmIntensity.Name = "nmIntensity";
-            this.nmIntensity.Size = new System.Drawing.Size(86, 25);
-            this.nmIntensity.TabIndex = 15;
-            this.nmIntensity.TabStop = false;
-            this.nmIntensity.Tag = "color:darker";
-            this.nmIntensity.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nmIntensity.ValueChanged += new System.EventHandler(this.nmIntensity_ValueChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(8, 17);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(62, 17);
-            this.label4.TabIndex = 16;
-            this.label4.Text = "Intensity :";
-            // 
-            // tbIntensity
-            // 
-            this.tbIntensity.Location = new System.Drawing.Point(9, 41);
-            this.tbIntensity.Maximum = 5000000;
-            this.tbIntensity.Name = "tbIntensity";
-            this.tbIntensity.Size = new System.Drawing.Size(191, 45);
-            this.tbIntensity.TabIndex = 17;
-            this.tbIntensity.TabStop = false;
-            this.tbIntensity.TickFrequency = 0;
-            this.tbIntensity.Value = 100;
-            this.tbIntensity.Scroll += new System.EventHandler(this.tbIntensity_Scroll);
-            // 
-            // tbStartingAddress
-            // 
-            this.tbStartingAddress.Location = new System.Drawing.Point(9, 106);
-            this.tbStartingAddress.Maximum = 100;
-            this.tbStartingAddress.Name = "tbStartingAddress";
-            this.tbStartingAddress.Size = new System.Drawing.Size(191, 45);
-            this.tbStartingAddress.TabIndex = 20;
-            this.tbStartingAddress.TabStop = false;
-            this.tbStartingAddress.TickFrequency = 0;
-            this.tbStartingAddress.Value = 100;
-            this.tbStartingAddress.Scroll += new System.EventHandler(this.tbStartingAddress_Scroll);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(6, 79);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(107, 17);
-            this.label5.TabIndex = 19;
-            this.label5.Text = "Starting address:";
-            // 
-            // nmStartingAddress
-            // 
-            this.nmStartingAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.nmStartingAddress.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.nmStartingAddress.ForeColor = System.Drawing.Color.White;
-            this.nmStartingAddress.Location = new System.Drawing.Point(114, 78);
-            this.nmStartingAddress.Name = "nmStartingAddress";
-            this.nmStartingAddress.Size = new System.Drawing.Size(86, 25);
-            this.nmStartingAddress.TabIndex = 18;
-            this.nmStartingAddress.TabStop = false;
-            this.nmStartingAddress.Tag = "color:darker";
-            this.nmStartingAddress.ValueChanged += new System.EventHandler(this.nmStartingAddress_ValueChanged);
-            // 
-            // tbBlastRange
-            // 
-            this.tbBlastRange.Location = new System.Drawing.Point(9, 175);
-            this.tbBlastRange.Maximum = 100;
-            this.tbBlastRange.Name = "tbBlastRange";
-            this.tbBlastRange.Size = new System.Drawing.Size(191, 45);
-            this.tbBlastRange.TabIndex = 23;
-            this.tbBlastRange.TabStop = false;
-            this.tbBlastRange.TickFrequency = 0;
-            this.tbBlastRange.Value = 100;
-            this.tbBlastRange.Scroll += new System.EventHandler(this.tbBlastRange_Scroll);
-            // 
-            // nmBlastRange
-            // 
-            this.nmBlastRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.nmBlastRange.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.nmBlastRange.ForeColor = System.Drawing.Color.White;
-            this.nmBlastRange.Location = new System.Drawing.Point(114, 144);
-            this.nmBlastRange.Name = "nmBlastRange";
-            this.nmBlastRange.Size = new System.Drawing.Size(86, 25);
-            this.nmBlastRange.TabIndex = 21;
-            this.nmBlastRange.TabStop = false;
-            this.nmBlastRange.Tag = "color:darker";
-            this.nmBlastRange.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nmBlastRange.ValueChanged += new System.EventHandler(this.nmBlastRange_ValueChanged);
-            // 
             // btnAddStashToStockpile
             // 
             this.btnAddStashToStockpile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
@@ -481,20 +357,6 @@
             this.btnAddStashToStockpile.Text = "4";
             this.btnAddStashToStockpile.UseVisualStyleBackColor = false;
             this.btnAddStashToStockpile.Click += new System.EventHandler(this.btnAddStashToStockpile_Click);
-            // 
-            // cbBlastRange
-            // 
-            this.cbBlastRange.AutoSize = true;
-            this.cbBlastRange.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.cbBlastRange.ForeColor = System.Drawing.Color.White;
-            this.cbBlastRange.Location = new System.Drawing.Point(9, 145);
-            this.cbBlastRange.Name = "cbBlastRange";
-            this.cbBlastRange.Size = new System.Drawing.Size(95, 21);
-            this.cbBlastRange.TabIndex = 25;
-            this.cbBlastRange.TabStop = false;
-            this.cbBlastRange.Text = "Blast range:";
-            this.cbBlastRange.UseVisualStyleBackColor = true;
-            this.cbBlastRange.CheckedChanged += new System.EventHandler(this.cbBlastRange_CheckedChanged);
             // 
             // label7
             // 
@@ -1468,15 +1330,9 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.panel1.Controls.Add(this.nmIntensity);
-            this.panel1.Controls.Add(this.label4);
-            this.panel1.Controls.Add(this.nmStartingAddress);
-            this.panel1.Controls.Add(this.label5);
-            this.panel1.Controls.Add(this.nmBlastRange);
-            this.panel1.Controls.Add(this.tbBlastRange);
-            this.panel1.Controls.Add(this.cbBlastRange);
-            this.panel1.Controls.Add(this.tbIntensity);
-            this.panel1.Controls.Add(this.tbStartingAddress);
+            this.panel1.Controls.Add(this.mtb_BlastRange);
+            this.panel1.Controls.Add(this.mtb_StartingAddress);
+            this.panel1.Controls.Add(this.mtb_Intensity);
             this.panel1.Location = new System.Drawing.Point(9, 96);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(210, 216);
@@ -1561,6 +1417,49 @@
             this.lbStockpile.SelectedIndexChanged += new System.EventHandler(this.lbStockpile_SelectedIndexChanged);
             this.lbStockpile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbStockpile_MouseDown);
             // 
+            // mtb_BlastRange
+            // 
+            this.mtb_BlastRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.mtb_BlastRange.DisplayCheckbox = true;
+            this.mtb_BlastRange.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.mtb_BlastRange.Label = "Blast Range";
+            this.mtb_BlastRange.Location = new System.Drawing.Point(10, 141);
+            this.mtb_BlastRange.Maximum = ((long)(100));
+            this.mtb_BlastRange.Name = "mtb_BlastRange";
+            this.mtb_BlastRange.Size = new System.Drawing.Size(190, 63);
+            this.mtb_BlastRange.TabIndex = 28;
+            this.mtb_BlastRange.Tag = "color:darker";
+            this.mtb_BlastRange.UncapNumericBox = false;
+            this.mtb_BlastRange.Value = ((long)(100));
+            // 
+            // mtb_StartingAddress
+            // 
+            this.mtb_StartingAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.mtb_StartingAddress.DisplayCheckbox = false;
+            this.mtb_StartingAddress.Label = "Start Address";
+            this.mtb_StartingAddress.Location = new System.Drawing.Point(10, 72);
+            this.mtb_StartingAddress.Maximum = ((long)(100));
+            this.mtb_StartingAddress.Name = "mtb_StartingAddress";
+            this.mtb_StartingAddress.Size = new System.Drawing.Size(190, 63);
+            this.mtb_StartingAddress.TabIndex = 27;
+            this.mtb_StartingAddress.Tag = "color:darker";
+            this.mtb_StartingAddress.UncapNumericBox = false;
+            this.mtb_StartingAddress.Value = ((long)(0));
+            // 
+            // mtb_Intensity
+            // 
+            this.mtb_Intensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.mtb_Intensity.DisplayCheckbox = false;
+            this.mtb_Intensity.Label = "Intensity";
+            this.mtb_Intensity.Location = new System.Drawing.Point(10, 3);
+            this.mtb_Intensity.Maximum = ((long)(500000));
+            this.mtb_Intensity.Name = "mtb_Intensity";
+            this.mtb_Intensity.Size = new System.Drawing.Size(190, 63);
+            this.mtb_Intensity.TabIndex = 26;
+            this.mtb_Intensity.Tag = "color:darker";
+            this.mtb_Intensity.UncapNumericBox = false;
+            this.mtb_Intensity.Value = ((long)(0));
+            // 
             // WGH_MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1602,12 +1501,6 @@
             this.Text = "Windows Glitch Harvester";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WGH_MainForm_FormClosing);
             this.Load += new System.EventHandler(this.WGH_MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.nmIntensity)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbIntensity)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbStartingAddress)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nmStartingAddress)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tbBlastRange)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nmBlastRange)).EndInit();
             this.gbNightmareEngineSettings.ResumeLayout(false);
             this.gbNightmareEngineSettings.PerformLayout();
             this.pnTargetPanel.ResumeLayout(false);
@@ -1623,7 +1516,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.vectorOffset)).EndInit();
             this.pnCorruptionEngine.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.ResumeLayout(false);
@@ -1644,16 +1536,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnStockpileMoveDown;
         private System.Windows.Forms.Button btnStockpileMoveUp;
-        private System.Windows.Forms.NumericUpDown nmIntensity;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TrackBar tbIntensity;
-        public System.Windows.Forms.TrackBar tbStartingAddress;
-        private System.Windows.Forms.Label label5;
-        public System.Windows.Forms.NumericUpDown nmStartingAddress;
-        public System.Windows.Forms.TrackBar tbBlastRange;
-        public System.Windows.Forms.NumericUpDown nmBlastRange;
         private System.Windows.Forms.Button btnAddStashToStockpile;
-        private System.Windows.Forms.CheckBox cbBlastRange;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnRestoreFileBackup;
         private System.Windows.Forms.GroupBox gbNightmareEngineSettings;
@@ -1722,6 +1605,9 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
         public System.Windows.Forms.RadioButton rbTargetDolphin;
+        public Components.MultiTrackBar_Comp mtb_Intensity;
+        public Components.MultiTrackBar_Comp mtb_StartingAddress;
+        public Components.MultiTrackBar_Comp mtb_BlastRange;
     }
 }
 

@@ -53,14 +53,14 @@
             this.nmControlValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.nmControlValue.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.nmControlValue.ForeColor = System.Drawing.Color.White;
-            this.nmControlValue.Location = new System.Drawing.Point(202, 6);
+            this.nmControlValue.Location = new System.Drawing.Point(251, 6);
             this.nmControlValue.Maximum = new decimal(new int[] {
             -1,
             2147483647,
             0,
             0});
             this.nmControlValue.Name = "nmControlValue";
-            this.nmControlValue.Size = new System.Drawing.Size(120, 25);
+            this.nmControlValue.Size = new System.Drawing.Size(75, 25);
             this.nmControlValue.TabIndex = 2;
             this.nmControlValue.Tag = "color:darker";
             this.nmControlValue.ValueChanged += new System.EventHandler(this.nmControlValue_ValueChanged);
