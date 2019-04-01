@@ -351,10 +351,10 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 }
             }
 
+            WGH_Core.CompositeFilenameDico = new Dictionary<string, string>();
             if (WGH_Core.currentMemoryInterface != null && (WGH_Core.currentTargetType == "File" || WGH_Core.currentTargetType == "MultipleFiles"))
                 WGH_Core.currentMemoryInterface.ResetBackup(false);
-
-            WGH_Core.CompositeFilenameDico = new Dictionary<string, string>();
+            WGH_Core.SaveCompositeFilenameDico();
             MessageBox.Show("All the backups were cleared.");
         }
 
