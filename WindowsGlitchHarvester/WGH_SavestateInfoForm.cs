@@ -341,7 +341,6 @@ namespace WindowsGlitchHarvester
         }
         private void VisitLink()
         {
-            System.Diagnostics.Process.Start("https://github.com/NarryG/dolphin/releases");
         }
 
         private void lbDownloadNarrysMod_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

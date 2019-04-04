@@ -50,6 +50,7 @@
             this.btnLoadState = new System.Windows.Forms.Button();
             this.btnSaveState = new System.Windows.Forms.Button();
             this.pnNetCoreActions = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnSendBlastlayer = new System.Windows.Forms.Button();
             this.btnPokeBytes = new System.Windows.Forms.Button();
             this.btnPeekBytes = new System.Windows.Forms.Button();
@@ -62,7 +63,6 @@
             this.btnPokeByte = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.lbDownloadNarrysMod = new System.Windows.Forms.LinkLabel();
-            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -359,6 +359,25 @@
             this.pnNetCoreActions.Size = new System.Drawing.Size(595, 95);
             this.pnNetCoreActions.TabIndex = 18;
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(304, 52);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(124, 32);
+            this.button1.TabIndex = 37;
+            this.button1.TabStop = false;
+            this.button1.Tag = "color:light";
+            this.button1.Text = "Start Autocorrupt";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // btnSendBlastlayer
             // 
             this.btnSendBlastlayer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -522,30 +541,12 @@
             this.lbDownloadNarrysMod.LinkColor = System.Drawing.Color.White;
             this.lbDownloadNarrysMod.Location = new System.Drawing.Point(9, 317);
             this.lbDownloadNarrysMod.Name = "lbDownloadNarrysMod";
-            this.lbDownloadNarrysMod.Size = new System.Drawing.Size(580, 13);
+            this.lbDownloadNarrysMod.Size = new System.Drawing.Size(633, 13);
             this.lbDownloadNarrysMod.TabIndex = 26;
             this.lbDownloadNarrysMod.TabStop = true;
             this.lbDownloadNarrysMod.Text = "To utilize this feature, you\'ll need a special version of Dolphin (Dolphin Narry\'" +
-    "s Mod). Click here to visit the download page.";
+    "s Mod). You can download it through the RTC Launcher.";
             this.lbDownloadNarrysMod.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lbDownloadNarrysMod_LinkClicked);
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(304, 52);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 32);
-            this.button1.TabIndex = 37;
-            this.button1.TabStop = false;
-            this.button1.Tag = "color:light";
-            this.button1.Text = "Start Autocorrupt";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // WGH_SavestateInfoForm
             // 
