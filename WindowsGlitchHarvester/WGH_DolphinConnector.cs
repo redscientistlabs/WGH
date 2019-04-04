@@ -29,6 +29,7 @@ namespace WindowsGlitchHarvester
 
             spec.Side = NetworkSide.SERVER;
             spec.MessageReceived += OnMessageReceived;
+            spec.Port = 42169;
 
             spec.ServerConnected += updateFormStatusLabel;
             spec.ServerConnectionLost += updateFormStatusLabel;
