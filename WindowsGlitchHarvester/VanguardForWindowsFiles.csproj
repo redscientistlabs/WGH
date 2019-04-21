@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WindowsGlitchHarvester</RootNamespace>
     <AssemblyName>WindowsGlitchHarvester</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -88,14 +88,11 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UI">
+      <HintPath>..\..\RTCV\Build\UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\MultiTrackBar_Comp.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Components\MultiTrackBar_Comp.Designer.cs">
-      <DependentUpon>MultiTrackBar_Comp.cs</DependentUpon>
-    </Compile>
     <Compile Include="WGH_TestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,9 +151,6 @@
       <DependentUpon>WGH_SelectMultiple.cs</DependentUpon>
     </Compile>
     <Compile Include="WGH_VectorEngine.cs" />
-    <EmbeddedResource Include="Components\MultiTrackBar_Comp.resx">
-      <DependentUpon>MultiTrackBar_Comp.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="WGH_AutoCorruptForm.resx">
       <DependentUpon>WGH_AutoCorruptForm.cs</DependentUpon>
       <SubType>Designer</SubType>

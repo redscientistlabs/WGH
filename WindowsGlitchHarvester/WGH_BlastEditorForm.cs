@@ -361,13 +361,7 @@ namespace WindowsGlitchHarvester
 
         private void button1_Click(object sender, EventArgs e)
         {
-            foreach (BlastUnit bu in sk.BlastLayer.Layer)
-            {
-                if (bu is BlastByte bb)
-                    bb.Address -= WGH_SavestateInfoForm.sram_offset;
-                if (bu is BlastVector bv)
-                    bv.Address -= WGH_SavestateInfoForm.sram_offset;
-            }
+
         }
     }
 }

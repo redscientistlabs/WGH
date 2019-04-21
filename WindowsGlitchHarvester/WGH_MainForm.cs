@@ -1290,8 +1290,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         private void savestateInfoButton_Click(object sender, EventArgs e)
         {
-            WGH_Core.ssForm?.Close();
-            WGH_Core.ssForm = new WGH_SavestateInfoForm();
+
         }
         private void customWholeNumbers_CheckedChanged(object sender, EventArgs e)
         {

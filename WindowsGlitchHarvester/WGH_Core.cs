@@ -67,7 +67,6 @@ namespace WindowsGlitchHarvester
 		//public static WGH_HookProcessForm hpForm = null;
 		public static WGH_AutoCorruptForm acForm = null;
         public static WGH_BlastEditorForm beForm = null;
-        public static WGH_SavestateInfoForm ssForm = null;
         public static WGH_Progress progressForm = null;
 
         //object references
@@ -478,8 +477,6 @@ namespace WindowsGlitchHarvester
                 ghForm.btnEnableCaching.PerformClick();
 
                 //Update the savestate info. 
-                if (WGH_Core.ssForm != null)
-                    WGH_Core.ssForm.GetSavestateInfo();
 
             }
             /*

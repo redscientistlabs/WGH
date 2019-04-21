@@ -464,8 +464,6 @@ namespace WindowsGlitchHarvester
             WGH_Core.lastBlastLayerBackup = GetBackup();
 
 
-            WGH_Core.ssForm.SendBlastlayer(this);
-
         }
 
     }
