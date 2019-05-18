@@ -27,7 +27,13 @@ namespace WindowsGlitchHarvester
 
         public static uint[] stringListToIntList(string[] stringList)
         {
-            return stringList.Select(it => BitConverter.ToUInt32(StringToByteArray(it), 0)).ToArray();
+            List<uint> select = new List<uint>();
+
+            foreach (var it in stringList)
+                select.Add(BitConverter.ToUInt32(StringToByteArray(it), 0));
+
+
+            return select.ToArray();
         }
 
         public static string[] listOfTinyConstants = new string[]
@@ -460,11 +466,23 @@ namespace WindowsGlitchHarvester
 
             if (!WGH_VectorEngine.BigEndian)
 			{
-                return list.Contains(BitConverter.ToUInt32(FlipBytes(bytes),0));
+                foreach (var item in list)
+                    if (item == BitConverter.ToUInt32(FlipBytes(bytes), 0))
+                        return true;
+
+                return false;
+
+                //return list.Contains();
             }
 
-            return list.Contains(BitConverter.ToUInt32(bytes, 0));
-		}
+            foreach (var item in list)
+                if (item == BitConverter.ToUInt32(bytes, 0))
+                    return true;
+
+            return false;
+
+            //return list.Contains(BitConverter.ToUInt32(bytes, 0));
+        }
 
 
         public static float ByteArrayToFloat(byte[] bytes)
@@ -533,10 +551,19 @@ namespace WindowsGlitchHarvester
 
 		public static byte[] StringToByteArray(string hex)
 		{
-			 return Enumerable.Range(0, hex.Length)
+            byte[] arr = new byte[hex.Length / 2];
+
+            for (int i = 0; i < hex.Length; i++)
+                if (i % 2 == 0)
+                    arr[i / 2] = Convert.ToByte(hex.Substring(i, 2));
+
+            return arr;
+            /*
+            return Enumerable.Range(0, hex.Length)
 							 .Where(x => x % 2 == 0)
 							 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
 							 .ToArray();
+                             */
 		}
 	}
 }

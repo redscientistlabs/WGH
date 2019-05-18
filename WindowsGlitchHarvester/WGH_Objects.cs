@@ -1100,18 +1100,35 @@ namespace WindowsGlitchHarvester
 
         public string getCompositeFilename(string prefix)
         {
-            return string.Join("|", FileInterfaces.Select(it => it.getCompositeFilename(prefix)));
+            List<string> select = new List<string>();
+
+            foreach (var it in FileInterfaces)
+                select.Add(it.getCompositeFilename(prefix));
+
+            return string.Join("|", select.ToArray());
         }
 
         public string getCorruptFilename(bool overrideWriteCopyMode = false)
         {
-            return string.Join("|", FileInterfaces.Select(it => it.getCorruptFilename(overrideWriteCopyMode)));
+            List<string> select = new List<string>();
+
+            foreach (var it in FileInterfaces)
+                select.Add(it.getCorruptFilename(overrideWriteCopyMode));
+
+
+            return string.Join("|", select.ToArray());
 
         }
 
         public string getBackupFilename()
         {
-            return string.Join("|", FileInterfaces.Select(it => it.getBackupFilename()));
+            List<string> select = new List<string>();
+
+            foreach (var it in FileInterfaces)
+                select.Add(it.getBackupFilename());
+
+
+            return string.Join("|", select.ToArray());
         }
 
         public override void ResetWorkingFile()
@@ -1123,7 +1140,12 @@ namespace WindowsGlitchHarvester
 
         public string SetWorkingFile()
         {
-            return string.Join("|", FileInterfaces.Select(it => it.SetWorkingFile()));
+            List<string> select = new List<string>();
+
+            foreach (var it in FileInterfaces)
+                select.Add(it.SetWorkingFile());
+
+            return string.Join("|", select.ToArray());
 
         }
 
@@ -1158,8 +1180,17 @@ namespace WindowsGlitchHarvester
                 fi.RestoreBackup(false);
 
             if (announce)
-                MessageBox.Show("Backups of " + string.Join(",", FileInterfaces.Select(it => (it as FileInterface).ShortFilename)) + " were restored");
+            {
+                List<string> select = new List<string>();
 
+                foreach (var it in FileInterfaces)
+                    select.Add((it as FileInterface).ShortFilename);
+
+
+
+
+                MessageBox.Show("Backups of " + string.Join(",", select.ToArray()) + " were restored");
+            }
         }
 
         public void setFilePositions()
