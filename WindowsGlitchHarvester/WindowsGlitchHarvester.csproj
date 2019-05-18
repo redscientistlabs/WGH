@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,31 +27,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>logo.ico</ApplicationIcon>
@@ -79,6 +55,29 @@
   <PropertyGroup>
     <ManifestKeyFile>WindowsGlitchHarvester_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>WindowsGlitchHarvester.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -94,12 +93,6 @@
       <DependentUpon>MultiTrackBar_Comp.cs</DependentUpon>
     </Compile>
     <Compile Include="FastZipProgram.cs" />
-    <Compile Include="WGH_TestForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WGH_TestForm.Designer.cs">
-      <DependentUpon>WGH_TestForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="WGH_MemoryBanks.cs" />
     <Compile Include="WGH_Progress.cs">
       <SubType>Form</SubType>
@@ -112,12 +105,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="WGH_AutoCorruptForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WGH_AutoCorruptForm.Designer.cs">
-      <DependentUpon>WGH_AutoCorruptForm.cs</DependentUpon>
     </Compile>
     <Compile Include="WGH_BlastEditorForm.cs">
       <SubType>Form</SubType>
@@ -155,10 +142,6 @@
     <EmbeddedResource Include="Components\MultiTrackBar_Comp.resx">
       <DependentUpon>MultiTrackBar_Comp.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WGH_AutoCorruptForm.resx">
-      <DependentUpon>WGH_AutoCorruptForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="WGH_BlastEditorForm.resx">
       <DependentUpon>WGH_BlastEditorForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -178,9 +161,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WGH_SelectMultiple.resx">
       <DependentUpon>WGH_SelectMultiple.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WGH_TestForm.resx">
-      <DependentUpon>WGH_TestForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">

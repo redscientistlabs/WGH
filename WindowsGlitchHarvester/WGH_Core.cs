@@ -15,7 +15,7 @@ namespace WindowsGlitchHarvester
 
     public static class WGH_Core
     {
-		public static string WghVersion = "0.97b";
+		public static string WghVersion = "Legacy edition";
 
         private static volatile int _seed = DateTime.Now.Millisecond;
         public static int seed { get { return ++_seed; } }
@@ -64,7 +64,6 @@ namespace WindowsGlitchHarvester
         public static WGH_MainForm ghForm;
         public static WGH_SelectMultipleForm smForm = null;
 		//public static WGH_HookProcessForm hpForm = null;
-		public static WGH_AutoCorruptForm acForm = null;
         public static WGH_BlastEditorForm beForm = null;
         public static WGH_Progress progressForm = null;
 
@@ -93,16 +92,6 @@ namespace WindowsGlitchHarvester
             }
 
             ghForm = _ghForm;
-			acForm = new WGH_AutoCorruptForm();
-			acForm.TopLevel = false;
-			ghForm.pnBottom.Controls.Add(acForm);
-			acForm.Anchor = AnchorStyles.Left;
-			acForm.Location = new Point(240, 0);
-
-			acForm.Show();
-			
-			acForm.BringToFront();
-			acForm.Visible = false;
 
             if (!Directory.Exists(WGH_Core.currentDir + "\\TEMP\\"))
                 Directory.CreateDirectory(WGH_Core.currentDir + "\\TEMP\\");
@@ -598,13 +587,6 @@ namespace WindowsGlitchHarvester
 				{
 					allControls.AddRange(FindTag(ghForm.Controls));
 					allControls.Add(ghForm);
-				}
-
-				
-				if (acForm != null)
-				{
-					allControls.AddRange(FindTag(acForm.Controls));
-					allControls.Add(acForm);
 				}
 				
 

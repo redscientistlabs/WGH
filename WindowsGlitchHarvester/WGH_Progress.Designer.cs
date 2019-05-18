@@ -44,11 +44,11 @@
             // lbProgress
             // 
             this.lbProgress.AutoSize = true;
-            this.lbProgress.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
+            this.lbProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.lbProgress.ForeColor = System.Drawing.Color.White;
             this.lbProgress.Location = new System.Drawing.Point(48, 60);
             this.lbProgress.Name = "lbProgress";
-            this.lbProgress.Size = new System.Drawing.Size(22, 21);
+            this.lbProgress.Size = new System.Drawing.Size(16, 13);
             this.lbProgress.TabIndex = 1;
             this.lbProgress.Text = "...";
             // 

@@ -102,7 +102,6 @@ namespace WindowsGlitchHarvester
                     lbExecution.Visible = true;
                     cbInjectOnSelect.Visible = true;
 
-                    WGH_Core.acForm.Visible = false;
                 //}
             lbStashHistory.Items.Clear();
             lbStockpile.Items.Clear();
@@ -262,7 +261,7 @@ namespace WindowsGlitchHarvester
             gbNightmareEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
             gbVectorEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
 
-            this.Text = "Windows Glitch Harvester " + WGH_Core.WghVersion;
+            this.Text = "WGH : " + WGH_Core.WghVersion;
 
             mtb_Intensity.ValueChanged += Mtb_Intensity_ValueChanged;
             mtb_StartingAddress.ValueChanged += Mtb_StartingAddress_ValueChanged;
@@ -1396,5 +1395,6 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
 
         }
+
     }
 }

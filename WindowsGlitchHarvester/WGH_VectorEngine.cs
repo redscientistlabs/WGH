@@ -555,7 +555,12 @@ namespace WindowsGlitchHarvester
 
             for (int i = 0; i < hex.Length; i++)
                 if (i % 2 == 0)
-                    arr[i / 2] = Convert.ToByte(hex.Substring(i, 2));
+                {
+                    string sub = hex.Substring(i, 2).ToUpper();
+                    //arr[i / 2] = HexToByte(sub);
+                    int intnb = Convert.ToInt32(sub, 16);
+                    arr[i / 2] = Convert.ToByte(intnb);
+                }
 
             return arr;
             /*
@@ -565,5 +570,39 @@ namespace WindowsGlitchHarvester
 							 .ToArray();
                              */
 		}
-	}
+
+        public static byte HexToByte(string hex)
+        {
+            byte value = 0;
+
+            string upperHex = hex.Trim().ToUpper();
+            for(int i = upperHex.Length-1; i>= 0; i--)
+            {
+                value += Convert.ToByte(HexLetterToNumber(upperHex[i]) * (10 * (i - (upperHex.Length - 1))));
+            }
+
+            return value;
+        }
+
+        public static byte HexLetterToNumber(char letter)
+        {
+            switch (letter)
+            {
+                case 'A':
+                    return 10;
+                case 'B':
+                    return 11;
+                case 'C':
+                    return 12;
+                case 'D':
+                    return 13;
+                case 'E':
+                    return 14;
+                case 'F':
+                    return 15;
+                default:
+                    return Convert.ToByte(letter);
+            }
+        }
+    }
 }

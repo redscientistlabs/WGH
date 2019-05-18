@@ -39,11 +39,11 @@
             // lbControlName
             // 
             this.lbControlName.AutoSize = true;
-            this.lbControlName.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lbControlName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.lbControlName.ForeColor = System.Drawing.Color.White;
             this.lbControlName.Location = new System.Drawing.Point(7, 8);
             this.lbControlName.Name = "lbControlName";
-            this.lbControlName.Size = new System.Drawing.Size(43, 17);
+            this.lbControlName.Size = new System.Drawing.Size(35, 13);
             this.lbControlName.TabIndex = 0;
             this.lbControlName.Text = "Name";
             // 
@@ -51,7 +51,7 @@
             // 
             this.nmControlValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nmControlValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.nmControlValue.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.nmControlValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.nmControlValue.ForeColor = System.Drawing.Color.White;
             this.nmControlValue.Location = new System.Drawing.Point(251, 6);
             this.nmControlValue.Maximum = new decimal(new int[] {
@@ -60,7 +60,7 @@
             0,
             0});
             this.nmControlValue.Name = "nmControlValue";
-            this.nmControlValue.Size = new System.Drawing.Size(75, 25);
+            this.nmControlValue.Size = new System.Drawing.Size(75, 20);
             this.nmControlValue.TabIndex = 2;
             this.nmControlValue.Tag = "color:darker";
             this.nmControlValue.ValueChanged += new System.EventHandler(this.nmControlValue_ValueChanged);
@@ -82,11 +82,11 @@
             // cbControlName
             // 
             this.cbControlName.AutoSize = true;
-            this.cbControlName.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.cbControlName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.cbControlName.ForeColor = System.Drawing.Color.White;
             this.cbControlName.Location = new System.Drawing.Point(79, 9);
             this.cbControlName.Name = "cbControlName";
-            this.cbControlName.Size = new System.Drawing.Size(62, 21);
+            this.cbControlName.Size = new System.Drawing.Size(54, 17);
             this.cbControlName.TabIndex = 4;
             this.cbControlName.Text = "Name";
             this.cbControlName.UseVisualStyleBackColor = true;

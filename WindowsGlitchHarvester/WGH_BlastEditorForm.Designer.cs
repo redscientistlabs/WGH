@@ -80,7 +80,7 @@
             this.btnLoadCorrupt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnLoadCorrupt.FlatAppearance.BorderSize = 0;
             this.btnLoadCorrupt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLoadCorrupt.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
+            this.btnLoadCorrupt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnLoadCorrupt.ForeColor = System.Drawing.Color.OrangeRed;
             this.btnLoadCorrupt.Location = new System.Drawing.Point(370, 460);
             this.btnLoadCorrupt.Name = "btnLoadCorrupt";
@@ -98,7 +98,7 @@
             this.btnSendToStash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.btnSendToStash.FlatAppearance.BorderSize = 0;
             this.btnSendToStash.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSendToStash.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
+            this.btnSendToStash.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnSendToStash.ForeColor = System.Drawing.Color.OrangeRed;
             this.btnSendToStash.Location = new System.Drawing.Point(370, 493);
             this.btnSendToStash.Name = "btnSendToStash";
@@ -116,7 +116,7 @@
             this.btnDisable50.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnDisable50.FlatAppearance.BorderSize = 0;
             this.btnDisable50.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDisable50.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnDisable50.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnDisable50.ForeColor = System.Drawing.Color.Black;
             this.btnDisable50.Location = new System.Drawing.Point(370, 25);
             this.btnDisable50.Name = "btnDisable50";
@@ -134,7 +134,7 @@
             this.btnRemoveDisabled.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnRemoveDisabled.FlatAppearance.BorderSize = 0;
             this.btnRemoveDisabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRemoveDisabled.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnRemoveDisabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnRemoveDisabled.ForeColor = System.Drawing.Color.Black;
             this.btnRemoveDisabled.Location = new System.Drawing.Point(370, 81);
             this.btnRemoveDisabled.Name = "btnRemoveDisabled";
@@ -152,7 +152,7 @@
             this.btnInvertDisabled.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnInvertDisabled.FlatAppearance.BorderSize = 0;
             this.btnInvertDisabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInvertDisabled.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnInvertDisabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnInvertDisabled.ForeColor = System.Drawing.Color.Black;
             this.btnInvertDisabled.Location = new System.Drawing.Point(370, 53);
             this.btnInvertDisabled.Name = "btnInvertDisabled";
@@ -182,18 +182,18 @@
             // lbValueEdit
             // 
             this.lbValueEdit.AutoSize = true;
-            this.lbValueEdit.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lbValueEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.lbValueEdit.ForeColor = System.Drawing.Color.White;
             this.lbValueEdit.Location = new System.Drawing.Point(14, 16);
             this.lbValueEdit.Name = "lbValueEdit";
-            this.lbValueEdit.Size = new System.Drawing.Size(74, 19);
+            this.lbValueEdit.Size = new System.Drawing.Size(58, 13);
             this.lbValueEdit.TabIndex = 126;
             this.lbValueEdit.Text = "Value Edit:";
             // 
             // nmValueEdit
             // 
             this.nmValueEdit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.nmValueEdit.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.nmValueEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.nmValueEdit.ForeColor = System.Drawing.Color.White;
             this.nmValueEdit.Location = new System.Drawing.Point(18, 39);
             this.nmValueEdit.Maximum = new decimal(new int[] {
@@ -202,7 +202,7 @@
             0,
             0});
             this.nmValueEdit.Name = "nmValueEdit";
-            this.nmValueEdit.Size = new System.Drawing.Size(118, 25);
+            this.nmValueEdit.Size = new System.Drawing.Size(118, 20);
             this.nmValueEdit.TabIndex = 119;
             this.nmValueEdit.TabStop = false;
             this.nmValueEdit.Tag = "color:dark";
@@ -213,7 +213,7 @@
             this.btnValueUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnValueUpdate.FlatAppearance.BorderSize = 0;
             this.btnValueUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnValueUpdate.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnValueUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnValueUpdate.ForeColor = System.Drawing.Color.Black;
             this.btnValueUpdate.Location = new System.Drawing.Point(18, 70);
             this.btnValueUpdate.Name = "btnValueUpdate";
@@ -243,18 +243,18 @@
             // lbAddressEdit
             // 
             this.lbAddressEdit.AutoSize = true;
-            this.lbAddressEdit.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lbAddressEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.lbAddressEdit.ForeColor = System.Drawing.Color.White;
             this.lbAddressEdit.Location = new System.Drawing.Point(14, 16);
             this.lbAddressEdit.Name = "lbAddressEdit";
-            this.lbAddressEdit.Size = new System.Drawing.Size(89, 19);
+            this.lbAddressEdit.Size = new System.Drawing.Size(69, 13);
             this.lbAddressEdit.TabIndex = 126;
             this.lbAddressEdit.Text = "Address Edit:";
             // 
             // nmAddressEdit
             // 
             this.nmAddressEdit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.nmAddressEdit.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.nmAddressEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.nmAddressEdit.ForeColor = System.Drawing.Color.White;
             this.nmAddressEdit.Location = new System.Drawing.Point(18, 39);
             this.nmAddressEdit.Maximum = new decimal(new int[] {
@@ -263,7 +263,7 @@
             0,
             0});
             this.nmAddressEdit.Name = "nmAddressEdit";
-            this.nmAddressEdit.Size = new System.Drawing.Size(118, 25);
+            this.nmAddressEdit.Size = new System.Drawing.Size(118, 20);
             this.nmAddressEdit.TabIndex = 119;
             this.nmAddressEdit.TabStop = false;
             this.nmAddressEdit.Tag = "color:dark";
@@ -274,7 +274,7 @@
             this.btnAdressUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnAdressUpdate.FlatAppearance.BorderSize = 0;
             this.btnAdressUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdressUpdate.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnAdressUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnAdressUpdate.ForeColor = System.Drawing.Color.Black;
             this.btnAdressUpdate.Location = new System.Drawing.Point(18, 70);
             this.btnAdressUpdate.Name = "btnAdressUpdate";
@@ -292,7 +292,7 @@
             this.btnDisableEverything.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnDisableEverything.FlatAppearance.BorderSize = 0;
             this.btnDisableEverything.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDisableEverything.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnDisableEverything.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnDisableEverything.ForeColor = System.Drawing.Color.Black;
             this.btnDisableEverything.Location = new System.Drawing.Point(370, 116);
             this.btnDisableEverything.Name = "btnDisableEverything";
@@ -310,7 +310,7 @@
             this.btnEnableEverything.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnEnableEverything.FlatAppearance.BorderSize = 0;
             this.btnEnableEverything.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEnableEverything.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnEnableEverything.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnEnableEverything.ForeColor = System.Drawing.Color.Black;
             this.btnEnableEverything.Location = new System.Drawing.Point(370, 144);
             this.btnEnableEverything.Name = "btnEnableEverything";
@@ -328,7 +328,7 @@
             this.btnDuplicateSelected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnDuplicateSelected.FlatAppearance.BorderSize = 0;
             this.btnDuplicateSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDuplicateSelected.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnDuplicateSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnDuplicateSelected.ForeColor = System.Drawing.Color.Black;
             this.btnDuplicateSelected.Location = new System.Drawing.Point(370, 175);
             this.btnDuplicateSelected.Name = "btnDuplicateSelected";
@@ -344,11 +344,11 @@
             // 
             this.lbBlastLayerSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbBlastLayerSize.AutoSize = true;
-            this.lbBlastLayerSize.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold);
+            this.lbBlastLayerSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.lbBlastLayerSize.ForeColor = System.Drawing.Color.White;
             this.lbBlastLayerSize.Location = new System.Drawing.Point(367, 9);
             this.lbBlastLayerSize.Name = "lbBlastLayerSize";
-            this.lbBlastLayerSize.Size = new System.Drawing.Size(106, 13);
+            this.lbBlastLayerSize.Size = new System.Drawing.Size(101, 13);
             this.lbBlastLayerSize.TabIndex = 127;
             this.lbBlastLayerSize.Text = "BlastLayer Size: null";
             // 
@@ -358,7 +358,7 @@
             this.btnSanitizeDuplicates.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.btnSanitizeDuplicates.FlatAppearance.BorderSize = 0;
             this.btnSanitizeDuplicates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSanitizeDuplicates.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnSanitizeDuplicates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.btnSanitizeDuplicates.ForeColor = System.Drawing.Color.Black;
             this.btnSanitizeDuplicates.Location = new System.Drawing.Point(370, 203);
             this.btnSanitizeDuplicates.Name = "btnSanitizeDuplicates";
