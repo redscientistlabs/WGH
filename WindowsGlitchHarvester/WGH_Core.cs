@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml.Serialization;
 using WindowsGlitchHarvester;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace WindowsGlitchHarvester
 {
@@ -291,20 +292,52 @@ namespace WindowsGlitchHarvester
 
             BlastLayer bl = new BlastLayer();
 
+            List<BlastLayer> returns = new List<BlastLayer>();
+            object returnLock = new object();
+
             if (multithread)
             {
 
-                Task<BlastLayer>[] tasks = new Task<BlastLayer>[cpus];
+                Thread[] threads = new Thread[cpus];
                 for (int i = 0; i < cpus; i++)
-                    tasks[i] = Task.Factory.StartNew(() => Blast(null, splitintensity));
+                {
+                    ParameterizedThreadStart pts = new ParameterizedThreadStart((o) =>
+                    {
+                        lock (returnLock)
+                        {
+                            returns.Add(Blast(null, splitintensity));
+                        }
+                    });
+                    threads[i] = new Thread(pts);
+                }
 
-                Task.WaitAll(tasks);
+                while(true)
+                {
+                    bool allDone = true;
+                    for (int i = 0; i < cpus; i++)
+                        if(threads[i].IsAlive)
+                            allDone = false;
 
-                bl = tasks[0].Result;
+                    if (allDone)
+                        break;
 
-                if (tasks.Length > 1)
-                    for (int i = 1; i < tasks.Length; i++)
-                        bl.Layer.AddRange(tasks[i].Result.Layer);
+
+                }
+
+
+                    /*
+                        Task<BlastLayer>[] tasks = new Task<BlastLayer>[cpus];
+                    for (int i = 0; i < cpus; i++)
+                        tasks[i] = Task.Factory.StartNew(() => Blast(null, splitintensity));
+
+                    Task.WaitAll(tasks);
+                    */
+
+                bl = returns[0];
+
+                if (returns.Count > 1)
+                    for (int i = 1; i < returns.Count; i++)
+                        bl.Layer.AddRange(returns[i].Layer);
 
             }
             else
@@ -431,52 +464,6 @@ namespace WindowsGlitchHarvester
                 ghForm.lbTarget.Text = mfi.ProcessName + "|MemorySize:" + mfi.lastMemorySize.ToString();
             }
             */
-            else if (WGH_Core.ghForm.rbTargetDolphin.Checked)
-            {
-                OpenFileDialog OpenFileDialog1;
-                OpenFileDialog1 = new OpenFileDialog();
-
-                OpenFileDialog1.Title = "Open File";
-                OpenFileDialog1.Filter = "Dolphin Savestates|*.state;*.s01;*.s02;*.s03;*.s04;*.s05;*.s06;*.s07;*.s08;*.s09;*.sav|All Files|*.*";
-                OpenFileDialog1.RestoreDirectory = true;
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    if (OpenFileDialog1.FileName.ToString().Contains("^"))
-                    {
-                        MessageBox.Show("You can't use a file that contains the character ^ ");
-                    }
-
-                    currentTargetId = "Dolphin|" + OpenFileDialog1.FileName.ToString();
-                    currentTargetFullName = OpenFileDialog1.FileName.ToString();
-                }
-                else
-                    return;
-
-                //Disable caching of the previously loaded file if it was enabled
-                if (ghForm.btnEnableCaching.Text.Contains("Disable"))
-                    ghForm.btnEnableCaching.PerformClick();
-
-                if (currentMemoryInterface != null && (currentTargetType == "Dolphin" || currentTargetType == "File" || currentTargetType == "MultipleFiles"))
-                {
-                    WGH_Core.RestoreTarget();
-                    currentMemoryInterface.stream?.Dispose();
-                }
-
-
-                currentTargetType = "Dolphin";
-                var di = new DolphinInterface(currentTargetId);
-                currentTargetName = di.ShortFilename;
-
-                currentMemoryInterface = di;
-                ghForm.lbTarget.Text = currentTargetId + "|MemorySize:" + di.lastMemorySize.ToString();
-                currentDolphinSavestate = di.getCorruptFilename();
-
-                //Cache the new file 
-                ghForm.btnEnableCaching.PerformClick();
-
-                //Update the savestate info. 
-
-            }
             /*
             else if (WGH_Core.ghForm.rbTargetDolphin.Checked)
             {

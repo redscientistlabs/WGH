@@ -46,7 +46,20 @@ namespace WindowsGlitchHarvester
             foreach (BlastUnit bu in sk.BlastLayer.Layer)
                 bu.IsEnabled = true;
 
-            foreach (BlastUnit bu in sk.BlastLayer.Layer.OrderBy(x => WGH_Core.RND.Next()).Take(sk.BlastLayer.Layer.Count / 2))
+            List<BlastUnit> unsortedList = new List<BlastUnit>(sk.BlastLayer.Layer.ToArray());
+            List<BlastUnit> randomizedList = new List<BlastUnit>();
+
+            while (unsortedList.Count>0)
+            {
+                int randomPick = WGH_Core.RND.Next(unsortedList.Count);
+                BlastUnit bu = unsortedList[randomPick];
+                unsortedList.RemoveAt(randomPick);
+                randomizedList.Add(bu);
+            }
+
+            List<BlastUnit> halfList = randomizedList.GetRange(0, (randomizedList.Count / 2));
+
+            foreach (BlastUnit bu in halfList)
                 bu.IsEnabled = false;
 
             RefreshBlastLayer();

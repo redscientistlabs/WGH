@@ -57,8 +57,6 @@
             this.btnStashHistoryUp = new System.Windows.Forms.Button();
             this.btnStashHistoryDown = new System.Windows.Forms.Button();
             this.pnTargetPanel = new System.Windows.Forms.Panel();
-            this.rbTargetDolphin = new System.Windows.Forms.RadioButton();
-            this.savestateInfoButton = new System.Windows.Forms.Button();
             this.rbTargetMultipleFiles = new System.Windows.Forms.RadioButton();
             this.btnClearAllBackups = new System.Windows.Forms.Button();
             this.btnResetBackup = new System.Windows.Forms.Button();
@@ -103,15 +101,15 @@
             this.gbDefaultSettings = new System.Windows.Forms.GroupBox();
             this.pnCorruptionEngine = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.mtb_BlastRange = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
+            this.mtb_StartingAddress = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
+            this.mtb_Intensity = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
             this.label6 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.lbStockpile = new System.Windows.Forms.ListBox();
-            this.mtb_BlastRange = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
-            this.mtb_StartingAddress = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
-            this.mtb_Intensity = new WindowsGlitchHarvester.Components.MultiTrackBar_Comp();
             this.gbNightmareEngineSettings.SuspendLayout();
             this.pnTargetPanel.SuspendLayout();
             this.pnBottom.SuspendLayout();
@@ -568,8 +566,6 @@
             // pnTargetPanel
             // 
             this.pnTargetPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.pnTargetPanel.Controls.Add(this.rbTargetDolphin);
-            this.pnTargetPanel.Controls.Add(this.savestateInfoButton);
             this.pnTargetPanel.Controls.Add(this.rbTargetMultipleFiles);
             this.pnTargetPanel.Controls.Add(this.btnClearAllBackups);
             this.pnTargetPanel.Controls.Add(this.btnResetBackup);
@@ -583,38 +579,6 @@
             this.pnTargetPanel.Size = new System.Drawing.Size(864, 64);
             this.pnTargetPanel.TabIndex = 39;
             this.pnTargetPanel.Tag = "color:darkest";
-            // 
-            // rbTargetDolphin
-            // 
-            this.rbTargetDolphin.AutoSize = true;
-            this.rbTargetDolphin.BackColor = System.Drawing.Color.Transparent;
-            this.rbTargetDolphin.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.rbTargetDolphin.ForeColor = System.Drawing.Color.White;
-            this.rbTargetDolphin.Location = new System.Drawing.Point(219, 9);
-            this.rbTargetDolphin.Name = "rbTargetDolphin";
-            this.rbTargetDolphin.Size = new System.Drawing.Size(101, 17);
-            this.rbTargetDolphin.TabIndex = 36;
-            this.rbTargetDolphin.Text = "Target Dolphin";
-            this.rbTargetDolphin.UseVisualStyleBackColor = false;
-            this.rbTargetDolphin.CheckedChanged += new System.EventHandler(this.rbTargetDolphin_CheckedChanged);
-            // 
-            // savestateInfoButton
-            // 
-            this.savestateInfoButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.savestateInfoButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.savestateInfoButton.FlatAppearance.BorderSize = 0;
-            this.savestateInfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.savestateInfoButton.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.savestateInfoButton.ForeColor = System.Drawing.Color.GreenYellow;
-            this.savestateInfoButton.Location = new System.Drawing.Point(502, 7);
-            this.savestateInfoButton.Name = "savestateInfoButton";
-            this.savestateInfoButton.Size = new System.Drawing.Size(125, 23);
-            this.savestateInfoButton.TabIndex = 35;
-            this.savestateInfoButton.TabStop = false;
-            this.savestateInfoButton.Tag = "color:darker";
-            this.savestateInfoButton.Text = "Dolphin Mod Tools";
-            this.savestateInfoButton.UseVisualStyleBackColor = false;
-            this.savestateInfoButton.Click += new System.EventHandler(this.savestateInfoButton_Click);
             // 
             // rbTargetMultipleFiles
             // 
@@ -1339,6 +1303,49 @@
             this.panel1.TabIndex = 114;
             this.panel1.Tag = "color:darker";
             // 
+            // mtb_BlastRange
+            // 
+            this.mtb_BlastRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.mtb_BlastRange.DisplayCheckbox = true;
+            this.mtb_BlastRange.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.mtb_BlastRange.Label = "Blast Range";
+            this.mtb_BlastRange.Location = new System.Drawing.Point(10, 141);
+            this.mtb_BlastRange.Maximum = ((long)(100));
+            this.mtb_BlastRange.Name = "mtb_BlastRange";
+            this.mtb_BlastRange.Size = new System.Drawing.Size(190, 63);
+            this.mtb_BlastRange.TabIndex = 28;
+            this.mtb_BlastRange.Tag = "color:darker";
+            this.mtb_BlastRange.UncapNumericBox = false;
+            this.mtb_BlastRange.Value = ((long)(0));
+            // 
+            // mtb_StartingAddress
+            // 
+            this.mtb_StartingAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.mtb_StartingAddress.DisplayCheckbox = false;
+            this.mtb_StartingAddress.Label = "Start Address";
+            this.mtb_StartingAddress.Location = new System.Drawing.Point(10, 72);
+            this.mtb_StartingAddress.Maximum = ((long)(100));
+            this.mtb_StartingAddress.Name = "mtb_StartingAddress";
+            this.mtb_StartingAddress.Size = new System.Drawing.Size(190, 63);
+            this.mtb_StartingAddress.TabIndex = 27;
+            this.mtb_StartingAddress.Tag = "color:darker";
+            this.mtb_StartingAddress.UncapNumericBox = false;
+            this.mtb_StartingAddress.Value = ((long)(0));
+            // 
+            // mtb_Intensity
+            // 
+            this.mtb_Intensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.mtb_Intensity.DisplayCheckbox = false;
+            this.mtb_Intensity.Label = "Intensity";
+            this.mtb_Intensity.Location = new System.Drawing.Point(10, 3);
+            this.mtb_Intensity.Maximum = ((long)(500000));
+            this.mtb_Intensity.Name = "mtb_Intensity";
+            this.mtb_Intensity.Size = new System.Drawing.Size(190, 63);
+            this.mtb_Intensity.TabIndex = 26;
+            this.mtb_Intensity.Tag = "color:darker";
+            this.mtb_Intensity.UncapNumericBox = false;
+            this.mtb_Intensity.Value = ((long)(0));
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -1416,49 +1423,6 @@
             this.lbStockpile.Tag = "color:darker";
             this.lbStockpile.SelectedIndexChanged += new System.EventHandler(this.lbStockpile_SelectedIndexChanged);
             this.lbStockpile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbStockpile_MouseDown);
-            // 
-            // mtb_BlastRange
-            // 
-            this.mtb_BlastRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.mtb_BlastRange.DisplayCheckbox = true;
-            this.mtb_BlastRange.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.mtb_BlastRange.Label = "Blast Range";
-            this.mtb_BlastRange.Location = new System.Drawing.Point(10, 141);
-            this.mtb_BlastRange.Maximum = ((long)(100));
-            this.mtb_BlastRange.Name = "mtb_BlastRange";
-            this.mtb_BlastRange.Size = new System.Drawing.Size(190, 63);
-            this.mtb_BlastRange.TabIndex = 28;
-            this.mtb_BlastRange.Tag = "color:darker";
-            this.mtb_BlastRange.UncapNumericBox = false;
-            this.mtb_BlastRange.Value = ((long)(100));
-            // 
-            // mtb_StartingAddress
-            // 
-            this.mtb_StartingAddress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.mtb_StartingAddress.DisplayCheckbox = false;
-            this.mtb_StartingAddress.Label = "Start Address";
-            this.mtb_StartingAddress.Location = new System.Drawing.Point(10, 72);
-            this.mtb_StartingAddress.Maximum = ((long)(100));
-            this.mtb_StartingAddress.Name = "mtb_StartingAddress";
-            this.mtb_StartingAddress.Size = new System.Drawing.Size(190, 63);
-            this.mtb_StartingAddress.TabIndex = 27;
-            this.mtb_StartingAddress.Tag = "color:darker";
-            this.mtb_StartingAddress.UncapNumericBox = false;
-            this.mtb_StartingAddress.Value = ((long)(0));
-            // 
-            // mtb_Intensity
-            // 
-            this.mtb_Intensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.mtb_Intensity.DisplayCheckbox = false;
-            this.mtb_Intensity.Label = "Intensity";
-            this.mtb_Intensity.Location = new System.Drawing.Point(10, 3);
-            this.mtb_Intensity.Maximum = ((long)(500000));
-            this.mtb_Intensity.Name = "mtb_Intensity";
-            this.mtb_Intensity.Size = new System.Drawing.Size(190, 63);
-            this.mtb_Intensity.TabIndex = 26;
-            this.mtb_Intensity.Tag = "color:darker";
-            this.mtb_Intensity.UncapNumericBox = false;
-            this.mtb_Intensity.Value = ((long)(0));
             // 
             // WGH_MainForm
             // 
@@ -1594,7 +1558,6 @@
         public System.Windows.Forms.NumericUpDown vectorOffset;
         private System.Windows.Forms.CheckBox cbVectorAligned;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button savestateInfoButton;
         private System.Windows.Forms.NumericUpDown valueMax;
         private System.Windows.Forms.NumericUpDown valueMin;
         private System.Windows.Forms.CheckBox customWholeNumbers;
@@ -1604,7 +1567,6 @@
         private System.Windows.Forms.NumericUpDown limiterMin;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
-        public System.Windows.Forms.RadioButton rbTargetDolphin;
         public Components.MultiTrackBar_Comp mtb_Intensity;
         public Components.MultiTrackBar_Comp mtb_StartingAddress;
         public Components.MultiTrackBar_Comp mtb_BlastRange;
