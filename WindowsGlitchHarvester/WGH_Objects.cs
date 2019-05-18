@@ -138,18 +138,23 @@ namespace WindowsGlitchHarvester
                 FS.Close();
             }
 
-            /*
-            //7z the temp folder to destination filename
-            string[] stringargs = { "-c", sks.Filename, WGH_Core.currentDir + "\\TEMP2\\" };
-            FastZipProgram.Exec(stringargs);
-            */
-            //string[] stringargs = { "-c", sks.Filename, RTC_Core.rtcDir + "\\TEMP\\" };
-            //FastZipProgram.Exec(stringargs);
+            
+
 
             string tempFilename = sks.Filename + ".temp";
 
+            //7z the temp folder to destination filename
+            string[] stringargs = { "-c", tempFilename, WGH_Core.currentDir + "\\TEMP2\\" };
+            FastZipProgram.Exec(stringargs);
+
+            //string[] stringargs = { "-c", sks.Filename, RTC_Core.rtcDir + "\\TEMP\\" };
+            //FastZipProgram.Exec(stringargs);
+
+
+            /*
             var comp = System.IO.Compression.CompressionLevel.Fastest;
             System.IO.Compression.ZipFile.CreateFromDirectory(WGH_Core.currentDir + "\\TEMP2\\", tempFilename, comp, false);
+            */
 
             if (File.Exists(sks.Filename))
                 File.Delete(sks.Filename);
@@ -192,16 +197,16 @@ namespace WindowsGlitchHarvester
                 return;
             }
 
-            /*
+            
             //7z extract part
 
             string[] stringargs = { "-x", Filename, WGH_Core.currentDir + "\\TEMP2\\" };
 
             FastZipProgram.Exec(stringargs);
-            */
+            
 
 
-            System.IO.Compression.ZipFile.ExtractToDirectory(Filename, WGH_Core.currentDir + "\\TEMP2\\");
+            //System.IO.Compression.ZipFile.ExtractToDirectory(Filename, WGH_Core.currentDir + "\\TEMP2\\");
 
             if (!File.Exists(WGH_Core.currentDir + "\\TEMP2\\master.sk"))
             {
@@ -291,13 +296,13 @@ namespace WindowsGlitchHarvester
             }
 
             //7z extract part
-            /*
-            string[] stringargs = { "-x", Filename, WGH_Core.currentDir + "\\TEMP3\\" };
+            
+            string[] stringargs = { "-x", Filename, WGH_Core.currentDir + "\\TEMP2\\" };
 
             FastZipProgram.Exec(stringargs);
-            */
+            
 
-            System.IO.Compression.ZipFile.ExtractToDirectory(Filename, WGH_Core.currentDir + "\\TEMP2\\");
+            //System.IO.Compression.ZipFile.ExtractToDirectory(Filename, WGH_Core.currentDir + "\\TEMP2\\");
 
             if (!File.Exists(WGH_Core.currentDir + "\\TEMP3\\master.sk"))
             {
