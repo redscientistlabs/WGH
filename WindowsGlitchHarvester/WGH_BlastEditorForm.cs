@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -130,7 +129,7 @@ namespace WindowsGlitchHarvester
 
         private void btnInvertDisabled_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < sk.BlastLayer.Layer.Count(); i++)
+            for (int i = 0; i < sk.BlastLayer.Layer.Count; i++)
                 sk.BlastLayer.Layer[i].IsEnabled = !sk.BlastLayer.Layer[i].IsEnabled;
 
             RefreshBlastLayer();
@@ -332,7 +331,9 @@ namespace WindowsGlitchHarvester
 
         private void btnSanitizeDuplicates_Click(object sender, EventArgs e)
         {
-            List<BlastUnit> bul = new List<BlastUnit>(sk.BlastLayer.Layer.ToArray().Reverse());
+            var arr = sk.BlastLayer.Layer.ToArray();
+            Array.Reverse(arr);
+            List<BlastUnit> bul = new List<BlastUnit>(arr);
             List<long> usedAddresses = new List<long>();
             //This is bad but I'm not refactoring blastunit right now to do it cleaner -Narry
             foreach (BlastUnit bu in bul)

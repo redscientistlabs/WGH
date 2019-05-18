@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using WindowsGlitchHarvester;
 using Newtonsoft.Json;
@@ -135,13 +133,13 @@ namespace WindowsGlitchHarvester
 
         }
 
-        public static void FormExecute(Action<object, EventArgs> action, object[] args = null) => FormExecute(ghForm, action, args);
-        public static void FormExecute(Form f, Action<object, EventArgs> a, object[] args = null)
+        public static void FormExecute(Action<object> action, object[] args = null) => FormExecute(ghForm, action, args);
+        public static void FormExecute(Form f, Action<object> a, object[] args = null)
         {
             if (f.InvokeRequired)
-                f.Invoke(new MethodInvoker(() => { a.Invoke(null, null); }));
+                f.Invoke(new MethodInvoker(() => { a.Invoke(null); }));
             else
-                a.Invoke(null, null);
+                a.Invoke(null);
         }
 
 
@@ -344,7 +342,7 @@ namespace WindowsGlitchHarvester
                 OpenFileDialog1.RestoreDirectory = true;
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    if (OpenFileDialog1.FileName.ToString().Contains('^'))
+                    if (OpenFileDialog1.FileName.ToString().Contains("^"))
                     {
                         MessageBox.Show("You can't use a file that contains the character ^ ");
                         return;
@@ -370,12 +368,12 @@ namespace WindowsGlitchHarvester
 
                 FileInterface fi = null;
 
-                Action<object, EventArgs> action = (ob, ea) =>
+                Action<object> action = (ob) =>
                 {
                     fi = new FileInterface(currentTargetId);
                 };
 
-                Action<object, EventArgs> postAction = (ob, ea) =>
+                Action<object> postAction = (ob) =>
                 {
                     if (fi == null || fi.lastMemorySize == null)
                     {
@@ -443,7 +441,7 @@ namespace WindowsGlitchHarvester
                 OpenFileDialog1.RestoreDirectory = true;
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    if (OpenFileDialog1.FileName.ToString().Contains('^'))
+                    if (OpenFileDialog1.FileName.ToString().Contains("^"))
                     {
                         MessageBox.Show("You can't use a file that contains the character ^ ");
                     }

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsGlitchHarvester
@@ -15,9 +13,11 @@ namespace WindowsGlitchHarvester
         public BackgroundWorker bw = new BackgroundWorker();
         string defaultLabel;
 
-        public static Action<object, EventArgs> postAction = null;
+        public static Action<object> postAction = null;
 
-        public WGH_Progress(string lbText, int maxprogress, Action<object, EventArgs> actionRegistrant, Action<object, EventArgs> postActionRegistrant = null)
+        public Action<object> newActionRegistrant = null;
+
+        public WGH_Progress(string lbText, int maxprogress, Action<object> actionRegistrant, Action<object> postActionRegistrant = null)
         {
             InitializeComponent();
 
@@ -33,7 +33,9 @@ namespace WindowsGlitchHarvester
             pbProgress.Value = 0;
             pbProgress.Maximum = maxprogress;
 
-            bw.DoWork += actionRegistrant.Invoke;
+            bw.DoWork += Bw_DoWork;
+            //bw.DoWork += actionRegistrant.Invoke;
+            newActionRegistrant = actionRegistrant;
             bw.ProgressChanged += Bw_ProgressChanged;
             bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
 
@@ -51,6 +53,11 @@ namespace WindowsGlitchHarvester
 
         }
 
+        private void Bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            newActionRegistrant.Invoke(sender);
+        }
+
         public void Run()
         {
             bw.RunWorkerAsync();
@@ -64,8 +71,8 @@ namespace WindowsGlitchHarvester
 
             if (postAction != null)
             {
-                WGH_Core.FormExecute((o, ea) => {
-                    postAction.Invoke(null, null);
+                WGH_Core.FormExecute((o) => {
+                    postAction.Invoke(null);
                 });
             }
                 

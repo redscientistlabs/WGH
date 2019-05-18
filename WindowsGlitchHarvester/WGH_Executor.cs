@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsGlitchHarvester
@@ -28,7 +26,7 @@ namespace WindowsGlitchHarvester
                 OpenFileDialog1.RestoreDirectory = true;
                 if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    if (OpenFileDialog1.FileName.ToString().Contains('^'))
+                    if (OpenFileDialog1.FileName.ToString().Contains("^"))
                     {
                         MessageBox.Show("You can't use a file that contains the character ^ ");
                         return;
@@ -103,7 +101,7 @@ namespace WindowsGlitchHarvester
                     psi.FileName = Path.GetFileName(fullPath);
                     psi.WorkingDirectory = Path.GetDirectoryName(fullPath);
 
-                    if (!string.IsNullOrWhiteSpace(WGH_Core.ghForm.tbArgs.Text))
+                    if (!string.IsNullOrEmpty(WGH_Core.ghForm.tbArgs.Text?.Trim()))
                         psi.Arguments = WGH_Core.ghForm.tbArgs.Text.Trim(); ;
 
                     Process.Start(psi);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -10,7 +9,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.IO;
-using Ceras;
 
 
 namespace WindowsGlitchHarvester
@@ -72,7 +70,6 @@ namespace WindowsGlitchHarvester
     }
 
     [Serializable()]
-    [Ceras.MemberConfig(TargetMember.All)]
     public class Stockpile
     {
         public List<StashKey> StashKeys = new List<StashKey>();
@@ -343,7 +340,6 @@ namespace WindowsGlitchHarvester
 
 
     [Serializable()]
-    [Ceras.MemberConfig(TargetMember.All)]
     public class StashKey : ICloneable
     {
 
@@ -409,7 +405,6 @@ namespace WindowsGlitchHarvester
 
 
     [Serializable()]
-    [Ceras.MemberConfig(TargetMember.All)]
     public class BlastLayer
     {
         public List<BlastUnit> Layer;
@@ -469,7 +464,6 @@ namespace WindowsGlitchHarvester
     }
 
     [Serializable()]
-    [Ceras.MemberConfig(TargetMember.All)]
     public abstract class BlastUnit
     {
         public abstract bool Apply();
@@ -478,7 +472,6 @@ namespace WindowsGlitchHarvester
     }
 
     [Serializable()]
-    [Ceras.MemberConfig(TargetMember.All)]
     public class BlastByte : BlastUnit
     {
         public string Domain;
@@ -579,7 +572,6 @@ namespace WindowsGlitchHarvester
     }
 
     [Serializable()]
-    [Ceras.MemberConfig(TargetMember.All)]
     public class BlastVector : BlastUnit
     {
         public string Domain;

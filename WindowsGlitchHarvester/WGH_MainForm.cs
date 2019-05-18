@@ -5,10 +5,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsGlitchHarvester
@@ -53,7 +51,7 @@ namespace WindowsGlitchHarvester
             WGH_Core.Start(this);
         }
 
-        public void RunProgressBar(string progressLabel, int maxProgress, Action<object, EventArgs> action, Action<object, EventArgs> postAction = null)
+        public void RunProgressBar(string progressLabel, int maxProgress, Action<object> action, Action<object> postAction = null)
         {
 
             if (WGH_Core.progressForm != null)
@@ -130,7 +128,7 @@ namespace WindowsGlitchHarvester
             bool multithread = WGH_Core.currentMemoryInterface.cacheEnabled;
             var cpus = Environment.ProcessorCount;
 
-            Action<object, EventArgs> action = (ob, ea) => {
+            Action<object> action = (ob) => {
                 BlastTarget(times, untilFound, stashBlastLayer);
             };
 
@@ -190,7 +188,7 @@ namespace WindowsGlitchHarvester
                         DontLoadSelectedStash = true;
 
 
-                        WGH_Core.FormExecute((o, e) => {
+                        WGH_Core.FormExecute((o) => {
                             lbStashHistory.Items.Add(WGH_Core.currentStashkey);
                             lbStashHistory.ClearSelected();
                             lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
@@ -204,7 +202,7 @@ namespace WindowsGlitchHarvester
                         break;
                 }
             }
-            WGH_Core.FormExecute((o, e) => { WGH_Executor.Execute(); });
+            WGH_Core.FormExecute((o) => { WGH_Executor.Execute(); });
         }
 
         private void TerminateIfNeeded()
@@ -451,7 +449,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             StashKey sk = null;
 
 
-            WGH_Core.FormExecute((o, e) =>
+            WGH_Core.FormExecute((o) =>
             {
                 if (lbStashHistory.SelectedIndex != -1)
                 {
@@ -484,7 +482,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 return;
             }
 
-            void action(object ob, EventArgs ea) => WrapInjectSelected();
+            void action(object ob) => WrapInjectSelected();
             RunProgressBar($"Injecting units...", int.MaxValue, action);
 
         }
@@ -543,7 +541,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             }
 
 
-            if (!String.IsNullOrWhiteSpace(Name))
+            if (!String.IsNullOrEmpty(Name))
                 WGH_Core.currentStashkey.Alias = Name;
             else
                 WGH_Core.currentStashkey.Alias = WGH_Core.currentStashkey.Key;
@@ -717,10 +715,19 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         public static byte[] StringToByteArray(string hex)
         {
+            byte[] arr = new byte[hex.Length / 2];
+
+            for (int i = 0; i < hex.Length; i++)
+                if (i % 2 == 0)
+                    arr[i / 2] = Convert.ToByte(hex.Substring(i,2));
+
+            return arr;
+            /*
             return Enumerable.Range(0, hex.Length)
                              .Where(x => x % 2 == 0)
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                              .ToArray();
+            */
         }
 
         private void btnStashHistoryUp_Click(object sender, EventArgs e)
@@ -907,7 +914,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             StashKey sk = null;
 
 
-            WGH_Core.FormExecute((o, e) => {
+            WGH_Core.FormExecute((o) => {
                 if (lbStashHistory.SelectedIndex != -1)
                 {
                     sk = (StashKey)lbStashHistory.SelectedItem;
@@ -925,7 +932,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 newSk.Key = WGH_Core.GetRandomKey();
                 newSk.Alias = null;
 
-                WGH_Core.FormExecute((o, e) => {
+                WGH_Core.FormExecute((o) => {
                     WGH_Core.ghForm.DontLoadSelectedStash = true;
                     WGH_Core.ghForm.lbStashHistory.Items.Add(newSk);
                     WGH_Core.ghForm.lbStashHistory.ClearSelected();
@@ -1009,7 +1016,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
                 int intensity = sk.BlastLayer.Layer.Count;
 
-                Action<object, EventArgs> action = (ob, ea) => {
+                Action<object> action = (ob) => {
                     RerollInject();
                 };
 
@@ -1138,7 +1145,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
 
         private void btnBlastUntilEffect_Click(object sender, EventArgs e)
         {
-            Action<object, EventArgs> action = (ob, ea) => {
+            Action<object> action = (ob) => {
                 BlastTarget(int.MaxValue, true);
             };
 
@@ -1166,7 +1173,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
         private void GuaranteedBlastTarget(int amount)
         {
 
-            Action<object, EventArgs> action = (ob, ea) => {
+            Action<object> action = (ob) => {
                 for (int i = 0; i < amount; i++)
                     BlastTarget(int.MaxValue, true);
             };
