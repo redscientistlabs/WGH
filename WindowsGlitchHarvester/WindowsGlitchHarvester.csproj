@@ -78,6 +78,26 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -162,6 +182,7 @@
     <EmbeddedResource Include="WGH_SelectMultiple.resx">
       <DependentUpon>WGH_SelectMultiple.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="LICENSES\LICENSE" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -178,6 +199,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LICENSES\Ceras License.txt" />
+    <Content Include="LICENSES\DISCLAIMER.TXT" />
+    <Content Include="LICENSES\DOLPHINWARNING.TXT" />
+    <Content Include="LICENSES\Netcore+Vanguard+WGH License.txt" />
+    <Content Include="LICENSES\Newtonsoft Json License.txt" />
+    <Content Include="LICENSES\SevenZip License.txt" />
+    <Content Include="LICENSES\SevenZipSharp License.txt" />
     <Content Include="logo.ico" />
     <None Include="Resources\logortc.png" />
   </ItemGroup>

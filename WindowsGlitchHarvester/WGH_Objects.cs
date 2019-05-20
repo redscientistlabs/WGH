@@ -776,7 +776,7 @@ namespace WindowsGlitchHarvester
             }
         }
 
-        public string getCompositeFilename(string prefix)
+        public string getCompositeFilename(string prezzzzzzfix)
         {
             if (WGH_Core.CompositeFilenameDico.ContainsKey(Filename))
             {

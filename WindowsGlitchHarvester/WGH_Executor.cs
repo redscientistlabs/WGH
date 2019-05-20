@@ -37,10 +37,7 @@ namespace WindowsGlitchHarvester
                 else
                     return;
             }
-            else if (gh.rbExecuteScript.Checked)
-            {
-                MessageBox.Show("UNIMPLEMENTED");
-            }
+
 
             RefreshLabel();
 
@@ -110,10 +107,6 @@ namespace WindowsGlitchHarvester
                 else
                     return;
             }
-            else if (gh.rbExecuteScript.Checked)
-            {
-                MessageBox.Show("UNIMPLEMENTED");
-            }
         }
 
         public static void RefreshLabel()
@@ -152,17 +145,7 @@ namespace WindowsGlitchHarvester
                     gh.lbExecution.Text = otherProgram.Substring(otherProgram.LastIndexOf('\\') + 1) + " will be executed after corruption";
                 }
             }
-            else if (gh.rbExecuteScript.Checked)
-            {
-                if (otherProgram == null)
-                {
-                    gh.lbExecution.Text = "No script loaded";
-                }
-                else
-                {
-                    gh.lbExecution.Text = script;
-                }
-            }
+
 
 
         }

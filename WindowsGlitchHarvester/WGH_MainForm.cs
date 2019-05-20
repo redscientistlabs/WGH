@@ -94,7 +94,6 @@ namespace WindowsGlitchHarvester
                     cbTerminateOnReExec.Visible = true;
                     cbWriteCopyMode.Visible = true;
                     rbExecuteWith.Visible = true;
-                    rbExecuteScript.Visible = true;
                     rbExecuteOtherProgram.Visible = true;
                     rbExecuteCorruptedFile.Visible = true;
                     rbNoExecution.Visible = true;
@@ -207,7 +206,7 @@ namespace WindowsGlitchHarvester
         private void TerminateIfNeeded()
         {
             if (rbExecuteOtherProgram.Checked || rbExecuteWith.Checked || rbExecuteCorruptedFile.Checked)
-                if (WGH_Core.currentTargetType == "File" && cbTerminateOnReExec.Checked && WGH_Executor.otherProgram != null)
+                if ( cbTerminateOnReExec.Checked && WGH_Executor.otherProgram != null)
                 {
                     string otherProgramShortFilename = WGH_Executor.otherProgram.Substring(WGH_Executor.otherProgram.LastIndexOf(@"\") + 1);
 
@@ -225,13 +224,14 @@ namespace WindowsGlitchHarvester
                     try
                     {
                         processTemp.Start();
+                        processTemp.WaitForExit();
                     }
                     catch (Exception ex)
                     {
                         throw ex;
                     }
 
-                    Thread.Sleep(300);
+                    //Thread.Sleep(300);
                 }
         }
 
@@ -261,7 +261,7 @@ namespace WindowsGlitchHarvester
             gbNightmareEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
             gbVectorEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
 
-            this.Text = "WGH : " + WGH_Core.WghVersion;
+            this.Text = "WGH Legacy" + WGH_Core.WghVersion;
 
             mtb_Intensity.ValueChanged += Mtb_Intensity_ValueChanged;
             mtb_StartingAddress.ValueChanged += Mtb_StartingAddress_ValueChanged;
@@ -380,7 +380,7 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
                 rbNoExecution.Checked = true;
 
             rbExecuteWith.Enabled = false;
-            rbExecuteOtherProgram.Enabled = false;
+            rbExecuteOtherProgram.Enabled = true;
         }
 
         /*
@@ -1386,7 +1386,6 @@ Are you sure you want to reset the current target's backup?", "WARNING", Message
             rbExecuteCorruptedFile.Enabled = false;
             rbExecuteWith.Enabled = false;
             rbExecuteOtherProgram.Enabled = false;
-            rbExecuteScript.Enabled = false;
 
             rbNoExecution.Checked = true;
 

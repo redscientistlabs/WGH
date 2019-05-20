@@ -71,7 +71,6 @@
             this.btnBlastUntilEffect = new System.Windows.Forms.Button();
             this.cbTerminateOnReExec = new System.Windows.Forms.CheckBox();
             this.rbExecuteWith = new System.Windows.Forms.RadioButton();
-            this.rbExecuteScript = new System.Windows.Forms.RadioButton();
             this.rbExecuteOtherProgram = new System.Windows.Forms.RadioButton();
             this.btnRerollInject = new System.Windows.Forms.Button();
             this.rbExecuteCorruptedFile = new System.Windows.Forms.RadioButton();
@@ -708,7 +707,6 @@
             this.pnBottom.Controls.Add(this.cbTerminateOnReExec);
             this.pnBottom.Controls.Add(this.cbWriteCopyMode);
             this.pnBottom.Controls.Add(this.rbExecuteWith);
-            this.pnBottom.Controls.Add(this.rbExecuteScript);
             this.pnBottom.Controls.Add(this.rbExecuteOtherProgram);
             this.pnBottom.Controls.Add(this.btnRerollInject);
             this.pnBottom.Controls.Add(this.rbExecuteCorruptedFile);
@@ -816,21 +814,6 @@
             this.rbExecuteWith.TabIndex = 47;
             this.rbExecuteWith.Text = "Execute with";
             this.rbExecuteWith.UseVisualStyleBackColor = true;
-            // 
-            // rbExecuteScript
-            // 
-            this.rbExecuteScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.rbExecuteScript.AutoSize = true;
-            this.rbExecuteScript.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.rbExecuteScript.ForeColor = System.Drawing.Color.White;
-            this.rbExecuteScript.Location = new System.Drawing.Point(739, 7);
-            this.rbExecuteScript.Name = "rbExecuteScript";
-            this.rbExecuteScript.Size = new System.Drawing.Size(52, 17);
-            this.rbExecuteScript.TabIndex = 46;
-            this.rbExecuteScript.Text = "Script";
-            this.rbExecuteScript.UseVisualStyleBackColor = true;
-            this.rbExecuteScript.Visible = false;
-            this.rbExecuteScript.CheckedChanged += new System.EventHandler(this.rbExecuteScript_CheckedChanged);
             // 
             // rbExecuteOtherProgram
             // 
@@ -1531,7 +1514,6 @@
         public System.Windows.Forms.RadioButton rbNoExecution;
         private System.Windows.Forms.Button btnEditExec;
         public System.Windows.Forms.Label lbExecution;
-        public System.Windows.Forms.RadioButton rbExecuteScript;
         public System.Windows.Forms.RadioButton rbExecuteWith;
         private System.Windows.Forms.CheckBox cbTerminateOnReExec;
         public System.Windows.Forms.RadioButton rbTargetMultipleFiles;
