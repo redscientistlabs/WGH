@@ -1,0 +1,5 @@
+To utilize Target Dolphin, you need a special build of Dolphin.
+
+You can download the latest version of Dolphin Narry's Mod from the RTC Launcher.
+
+This message only appears once.

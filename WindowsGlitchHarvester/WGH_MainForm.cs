@@ -261,7 +261,7 @@ namespace WindowsGlitchHarvester
             gbNightmareEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
             gbVectorEngineSettings.Location = new Point(gbDefaultSettings.Location.X, gbDefaultSettings.Location.Y);
 
-            this.Text = "WGH Legacy" + WGH_Core.WghVersion;
+            this.Text = "WGH Legacy " + WGH_Core.WghVersion;
 
             mtb_Intensity.ValueChanged += Mtb_Intensity_ValueChanged;
             mtb_StartingAddress.ValueChanged += Mtb_StartingAddress_ValueChanged;
