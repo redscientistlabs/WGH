@@ -310,7 +310,7 @@ namespace WindowsGlitchHarvester
                     if (allDone)
                         break;
 
-
+                    Thread.Sleep(69);
                 }
 
 
